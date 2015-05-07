@@ -231,7 +231,7 @@ namespace lluitk {
                 event().trigger(&key_press);
             }
             else {
-                event::KeyPress key_release { key_code, modifiers };
+                event::KeyRelease key_release { key_code, modifiers };
                 event().trigger(&key_release);
             }
             //
