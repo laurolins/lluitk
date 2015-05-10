@@ -172,6 +172,19 @@ namespace lluitk {
         char ascii(const KeyCode& code, const Modifiers& modifiers);
         
         //--------------------------------------------
+        // Forward Declarations
+        //--------------------------------------------
+        
+        struct Event;
+        struct MouseMove;
+        struct MouseWheel;
+        struct MousePress;
+        struct MouseRelease;
+        struct WindowResize;
+        struct KeyPress;
+        struct KeyRelease;
+        
+        //--------------------------------------------
         // Event
         //--------------------------------------------
         
@@ -184,6 +197,25 @@ namespace lluitk {
             type(type)
             {}
             EventType getType() const { return type; }
+
+            virtual MouseMove& asMouseMove() { throw std::runtime_error("oops"); }
+            virtual MouseWheel& asMouseWheel() { throw std::runtime_error("oops"); }
+            virtual MousePress& asMousePress() { throw std::runtime_error("oops"); }
+            virtual MouseRelease& asMouseRelease() { throw std::runtime_error("oops"); }
+            virtual WindowResize& asWindowResize() { throw std::runtime_error("oops"); }
+            virtual KeyPress& asKeyPress() { throw std::runtime_error("oops"); }
+            virtual KeyRelease& asKeyRelease() { throw std::runtime_error("oops"); }
+
+            virtual const MouseMove& asMouseMove() const  { throw std::runtime_error("oops"); }
+            virtual const MouseWheel& asMouseWheel() const  { throw std::runtime_error("oops"); }
+            virtual const MousePress& asMousePress() const { throw std::runtime_error("oops"); }
+            virtual const MouseRelease& asMouseRelease() const { throw std::runtime_error("oops"); }
+            virtual const WindowResize& asWindowResize() const { throw std::runtime_error("oops"); }
+            virtual const KeyPress& asKeyPress() const { throw std::runtime_error("oops"); }
+            virtual const KeyRelease& asKeyRelease() const { throw std::runtime_error("oops"); }
+
+            
+            
         protected:
             EventType type { EVENT_NULL };
         };
@@ -191,6 +223,8 @@ namespace lluitk {
         struct MouseMove: public Event {
         public:
             MouseMove(const Point &pos);
+            MouseMove& asMouseMove() { return *this; }
+            const MouseMove& asMouseMove() const { return *this; }
         public:
             Point position;
         };
@@ -198,6 +232,8 @@ namespace lluitk {
         struct MouseWheel: public Event {
         public:
             MouseWheel(const Point &pos, const Modifiers &modifiers);
+            MouseWheel& asMouseWheel() { return *this; }
+            const MouseWheel& asMouseWheel() const { return *this; }
         public:
             Point position;
             Modifiers   modifiers;
@@ -206,6 +242,8 @@ namespace lluitk {
         struct MousePress: public Event {
         public:
             MousePress(MouseButton button, const Modifiers &modifiers);
+            MousePress& asMousePress() { return *this; }
+            const MousePress& asMousePress() const { return *this; }
         public:
             MouseButton button;
             Modifiers   modifiers;
@@ -214,6 +252,8 @@ namespace lluitk {
         struct MouseRelease: public Event {
         public:
             MouseRelease(MouseButton button, const Modifiers &modifiers);
+            MouseRelease& asMouseRelease() { return *this; }
+            const MouseRelease& asMouseRelease() const { return *this; }
             // MouseRelease(MouseButton button, const Modifiers &modifiers);
         public:
             MouseButton button;
@@ -223,6 +263,8 @@ namespace lluitk {
         struct WindowResize: public Event {
         public:
             WindowResize(const Size& new_size);
+            WindowResize& asWindowResize() { return *this; }
+            const WindowResize& asWindowResize() const { return *this; }
         public:
             Size  new_size;
         };
@@ -231,6 +273,8 @@ namespace lluitk {
         public:
             KeyPress();
             KeyPress(KeyCode key, const Modifiers &modifiers);
+            KeyPress& asKeyPress() { return *this; }
+            const KeyPress& asKeyPress() const { return *this; }
         public:
             KeyCode     key;
             Modifiers   modifiers;
@@ -240,6 +284,8 @@ namespace lluitk {
         public:
             KeyRelease();
             KeyRelease(KeyCode key, const Modifiers &modifiers);
+            KeyRelease& asKeyRelease() { return *this; }
+            const KeyRelease& asKeyRelease() const { return *this; }
         public:
             KeyCode     key;
             Modifiers   modifiers;
