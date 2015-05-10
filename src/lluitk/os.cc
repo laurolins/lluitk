@@ -267,8 +267,8 @@ namespace lluitk {
             
             auto p = llsg::Vec2{x,y} * window.window_to_framebuffer_factor;
             p
-            //.x(std::floor(p.x()))
-            //.y(std::floor(p.y()))
+            .x(std::floor(p.x()))
+            .y(std::floor(p.y()))
             .y(window.framebuffer_height - p.y());
             
             // std::cerr << p.x() << "," << p.y() << std::endl;
