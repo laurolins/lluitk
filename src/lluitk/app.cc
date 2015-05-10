@@ -24,8 +24,10 @@ namespace lluitk {
         _locked_widget = w; // _locked_widget is mutable...
     }
 
-    void App::processEvent(event::Event* e) {
+    void App::processEvent(const event::Event& event) {
 
+        const event::Event* e = &event;
+        
         if (!main_widget)
             return;
 
@@ -35,7 +37,7 @@ namespace lluitk {
         
         // window resize is special
         if (e->getType() == event::EVENT_WINDOW_RESIZE) {
-            auto ee = dynamic_cast<event::WindowResize*>(e);
+            auto ee = dynamic_cast<const event::WindowResize*>(e);
             if (main_widget)
                 main_widget->sizeHint(Window { Point {0,0}, ee->new_size } ); // main window gets the new size
             last_event_info = current_event_info;
@@ -43,37 +45,37 @@ namespace lluitk {
         }
 
         if (e->getType() == event::EVENT_MOUSE_MOVE) {
-            auto ee = dynamic_cast<event::MouseMove*>(e);
+            auto ee = dynamic_cast<const event::MouseMove*>(e);
             auto p = ee->position;
             current_event_info.mouse_position    = p;
         }
         else if (e->getType() == event::EVENT_MOUSE_WHEEL) {
-            auto ee = dynamic_cast<event::MouseWheel*>(e);
+            auto ee = dynamic_cast<const event::MouseWheel*>(e);
             current_event_info.modifiers         = ee->modifiers;
             current_event_info.mouse_wheel_delta = ee->position;
         }
         else if (e->getType() == event::EVENT_MOUSE_PRESS) {
-            auto ee = dynamic_cast<event::MousePress*>(e);
+            auto ee = dynamic_cast<const event::MousePress*>(e);
             current_event_info.modifiers = ee->modifiers;
             current_event_info.button    = ee->button;
         }
         else if (e->getType() == event::EVENT_MOUSE_RELEASE) {
-            auto ee = dynamic_cast<event::MouseRelease*>(e);
+            auto ee = dynamic_cast<const event::MouseRelease*>(e);
             current_event_info.modifiers = ee->modifiers;
             current_event_info.button    = ee->button;
         }
         else if (e->getType() == event::EVENT_MOUSE_WHEEL) {
-            auto ee = dynamic_cast<event::MouseWheel*>(e);
+            auto ee = dynamic_cast<const event::MouseWheel*>(e);
             current_event_info.modifiers = ee->modifiers;
             current_event_info.mouse_wheel_delta = ee->position;
         }
         else if (e->getType() == event::EVENT_KEY_PRESS) {
-            auto ee = dynamic_cast<event::KeyPress*>(e);
+            auto ee = dynamic_cast<const event::KeyPress*>(e);
             current_event_info.key_code  = ee->key;
             current_event_info.modifiers = ee->modifiers;
         }
         else if (e->getType() == event::EVENT_KEY_RELEASE) {
-            auto ee = dynamic_cast<event::KeyRelease*>(e);
+            auto ee = dynamic_cast<const event::KeyRelease*>(e);
             current_event_info.key_code  = ee->key;
             current_event_info.modifiers = ee->modifiers;
         }

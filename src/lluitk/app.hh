@@ -33,7 +33,7 @@ namespace lluitk {
     
     struct App {
         void setMainWidget(Widget *w);
-        void processEvent(event::Event *e);
+        void processEvent(const event::Event &event);
         
         void startEventProcessing() const;
         void finishEventProcessing() const;

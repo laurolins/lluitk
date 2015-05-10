@@ -41,6 +41,33 @@ namespace lluitk {
         document_type document(&_canvas.root);
         
         _canvas.root.identity().translate(_window.min());
+        
+        auto style = inheritedStyle();
+
+        // default font etc
+        _canvas.root.style().typeface().reset(style.typeface()());
+        _canvas.root.style().fontSize().reset(style.fontSize()());
+        _canvas.root.style().color().reset(style.fgcolor()());
+        
+        { // text
+            auto sel = document
+            .selectAll(llsg::isRect, llsg::iter(1,1))
+            .data( std::vector<int> { 1 });
+            
+            sel
+            .exit()
+            .remove([](llsg::Element* e) { e->remove(); });
+            
+            sel
+            .enter()
+            .append([](llsg::Element* parent, const int& s) { return &parent->asGroup().rect(); });
+            
+            sel
+            .call([&](llsg::Element* e, const int& s) {
+                auto &r = e->asRectangle();
+                r.pos({0,0}).size(_window.size()).style().color().reset(style.bgcolor()());
+            });
+        }
 
         { // text
             auto sel = document
@@ -58,18 +85,14 @@ namespace lluitk {
             sel
             .call([&](llsg::Element* e, const std::string& s) {
                 auto &t = e->asText();
-                t
-                .str(s)
-                .pos(llsg::Vec2 { 5, 5});
+                t.str(s).pos(_offset);
             });
         }
         
         { // cursor
-            static auto style = llsg::Style::defaultStyle();
-            
             // opengl stuff
             auto &rend = llsg::opengl::getRenderer();
-            auto bbox  = rend.bbox(llsg::Text().str(std::string(_text.begin(),_text.begin()+_cursor)), style);
+            auto bbox  = rend.bbox(llsg::Text().str(std::string(_text.begin(),_text.begin()+_cursor)), _canvas.root.style());
             
             // rend.bbox
             
@@ -89,9 +112,9 @@ namespace lluitk {
             .call([&](llsg::Element* e, double x) {
                 auto &p = e->asPath();
                 p.clear()
-                .moveTo({ 5 + x, 5 - 2.0})
-                .lineTo({ 5 + x, 20})
-                .style().color().reset(_parity ? llsg::Color(0.0f,0.0f,0.0f) : llsg::Color(1.0f));
+                .moveTo(Vec2{ _offset.x() + x, 0} )
+                .lineTo(Vec2{ _offset.x() + x, _window.size().y()})
+                .style().color().reset(_parity ? style.bgcolor()() : style.fgcolor()());
             });
 
         }
@@ -105,6 +128,15 @@ namespace lluitk {
         _canvas.markDirty();
     }
 
+    const Vec2& TextEdit::offset() const {
+        return _offset;
+    }
+    
+    TextEdit&  TextEdit::offset(const Vec2& o) {
+        _offset = o;
+        return *this;
+    }
+    
     void TextEdit::onKeyPress(const App &app) {
         auto code = app.current_event_info.key_code;
         auto &modifiers = app.current_event_info.modifiers;
@@ -127,7 +159,7 @@ namespace lluitk {
             }
         }
         else if (code == event::KEY_RIGHT) {
-            if (_cursor < _text.size()-1) {
+            if (_cursor < _text.size()) {
                 if (modifiers.control || modifiers.alt)
                     _cursor = _text.size();
                 else

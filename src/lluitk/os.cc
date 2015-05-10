@@ -93,9 +93,11 @@ namespace lluitk {
                 throw std::runtime_error("oops");
             }
             
-            glfwWindowHint(GLFW_SAMPLES, 8);
+            glfwWindowHint(GLFW_SAMPLES, 2);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+//            glfwWindowHint(GLFW_RESIZABLE,0);
+//            glfwWindowHint(GLFW_DECORATED,0);
             //    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             
             // glfwSwapInterval(0); // vsync?
@@ -162,7 +164,7 @@ namespace lluitk {
             return *this;
         }
         
-        EventLayer& EventLayer::trigger(event::Event *e) {
+        EventLayer& EventLayer::trigger(const event::Event &e) {
             if (_callback)
                 _callback(e);
             return *this;
@@ -206,9 +208,8 @@ namespace lluitk {
             window.framebuffer_width  = width  * window.window_to_framebuffer_factor;
             window.framebuffer_height = height * window.window_to_framebuffer_factor;
             
-            event::WindowResize resize_event ({ (double) width, (double) height });
-            
-            event().trigger(&resize_event);
+            event().trigger( event::WindowResize { { (double) window.framebuffer_width, (double) window.framebuffer_height } });
+
         }
         
         void key_callback(GLFWwindow* glfwwindow, int key, int scancode, int action, int mods)
@@ -227,12 +228,10 @@ namespace lluitk {
             auto key_code = (event::KeyCode) key;
             
             if (action == GLFW_PRESS) {
-                event::KeyPress key_press { key_code, modifiers };
-                event().trigger(&key_press);
+                event().trigger(event::KeyPress { key_code, modifiers });
             }
             else {
-                event::KeyRelease key_release { key_code, modifiers };
-                event().trigger(&key_release);
+                event().trigger(event::KeyRelease { key_code, modifiers });
             }
             //
             //        auto e_type = action == GLFW_PRESS ? event::EVENT_KEY_PRESS : event::EVENT_KEY_RELEASE;
@@ -258,13 +257,23 @@ namespace lluitk {
             //            x /= opengl_context.window_to_framebuffer_factor;
             //            y /= opengl_context.window_to_framebuffer_factor;
             
-            event::MouseMove mouse_move ( { std::floor(x), window.height - 1 - std::floor(y) } );
+            ;
             //
             //        event::MouseEvent e({ (int) x, (int) opengl_context.height - 1 - (int) y });
             //
             //        main_instance.signal_mouse_move.trigger(opengl_context, e);
             
-            event().trigger(&mouse_move);
+            // std::cout << mouse_move.position.x() << ", " << mouse_move.position.y() << std::endl;
+            
+            auto p = llsg::Vec2{x,y} * window.window_to_framebuffer_factor;
+            p
+            //.x(std::floor(p.x()))
+            //.y(std::floor(p.y()))
+            .y(window.framebuffer_height - p.y());
+            
+            // std::cerr << p.x() << "," << p.y() << std::endl;
+            
+            event().trigger(event::MouseMove { p });
         }
         
         void wheel_callback(GLFWwindow *glfwwindow, double x, double y) {
@@ -285,9 +294,9 @@ namespace lluitk {
             Point delta {
                 (x > 0 ? 1.0 : (x < 0 ? -1.0 : 0.0)),
                 (y > 0 ? 1.0 : (y < 0 ? -1.0 : 0.0)) };
-            event::MouseWheel wheel_event { delta, modifiers };
+            ;
             
-            event().trigger(&wheel_event);
+            event().trigger(event::MouseWheel { delta, modifiers });
             // event::WheelEvent e(event::WHEEL_EVENT, modifiers, pos, delta);
             // main_instance.signal_wheel.trigger(opengl_context, e);
             
@@ -307,14 +316,12 @@ namespace lluitk {
                                         event::MOUSE_BUTTON_MIDDLE);
 
             if (action == GLFW_PRESS) {
-                event::MousePress mouse_press { btn, modifiers };
-                event().trigger(&mouse_press);
+                event().trigger(event::MousePress { btn, modifiers });
             }
             else {
-                event::MouseRelease mouse_release { btn, modifiers };
-                event().trigger(&mouse_release);
+                event().trigger(event::MouseRelease { btn, modifiers });
             }
-            
+//
 //            auto e_type = (action == GLFW_PRESS) ? event::MOUSE_PRESS_EVENT : event::;
 //            auto e_btn  = (button == GLFW_MOUSE_BUTTON_LEFT) ?
 //            event::mouse::LeftButton : ((button == GLFW_MOUSE_BUTTON_RIGHT) ? event::mouse::RightButton :

@@ -64,6 +64,16 @@
             value = "/Users/llins/projects/nc_cpp_viewer/resources/fonts/ttf"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "LLSG_TYPEFACES"
+            value = "/System/Library/Fonts"
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "LLSG_TYPEFACES"
+            value = "/Library/Fonts"
+            isEnabled = "NO">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>

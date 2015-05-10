@@ -295,6 +295,14 @@ namespace lluitk {
         
     }
 
+    bool Grid::movableSplitters() const {
+        return _movable_splitters;
+    }
+    
+    Grid& Grid::movableSplitters(bool flag) {
+        _movable_splitters = flag;
+        return *this;
+    }
     void Grid::applyGesture() {
         
         if (!gesture.resizing)
@@ -527,6 +535,9 @@ namespace lluitk {
     void Grid::onMousePress(const App &app) {
         // std::lock_guard<std::mutex> lock(mutex);
         
+        if (!movableSplitters())
+            return;
+        
         auto mouse_pos = app.current_event_info.mouse_position;
         // auto modifiers = app.current_event_info.modifiers;
         
@@ -569,7 +580,7 @@ namespace lluitk {
             }
             canvas.markDirty();
         }
-        else {
+        else if (movableSplitters()) {
             llsg::GeometricTests g;
             auto e = g.firstHit(llsg::Vec2{(double)mouse_pos.x(), (double)mouse_pos.y()}, canvas.root);
             

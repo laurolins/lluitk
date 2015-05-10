@@ -47,8 +47,13 @@ namespace lluitk {
         
         virtual bool           contains(const Point& p) const = 0;
         virtual WidgetIterator children() const { return WidgetIterator(new BaseWidgetIterator()); }
-        virtual Widget*        getParent() const = 0;
-        virtual void           setParent(Widget* parent) = 0;
+        virtual Widget*        parent() const = 0;
+        virtual void           parent(Widget* parent) = 0;
+        
+        template <typename T>
+        T* as() {
+            return dynamic_cast<T*>(this);
+        }
         
     public: // on event methods (should be overriden by subclasses)
         
@@ -73,45 +78,5 @@ namespace lluitk {
 
     };
 
-    //------------------------------------------------------------------------------
-    // WidgetWithParent
-    //------------------------------------------------------------------------------
-    
-    struct WidgetWithParent: public Widget {
-    public: // on event methods (should be overriden by subclasses)
-        virtual Widget*        getParent() const;
-        virtual void           setParent(Widget* parent);
-    protected:
-        Widget* parent { nullptr };
-    };
-
-    
-    //------------------------------------------------------------------------------
-    // Container
-    //------------------------------------------------------------------------------
-    
-    struct Container: public Widget {
-    public:
-        struct iterator: public BaseWidgetIterator {
-        public:
-            using container_type = std::vector<Widget*>;
-            using base_iter_type = decltype(std::declval<container_type>().cbegin());
-        public:
-            iterator()=default;
-            iterator(const container_type &container);
-            bool next(Widget* &next_widget);
-        public:
-            base_iter_type current;
-            base_iter_type end;
-        };
-    public:
-        WidgetIterator children() const;
-        
-        virtual void addWidget(Widget* widget);
-        virtual void removeWidget(Widget* widget);
-        
-    public:
-        std::vector<Widget*> _children;
-    };
     
 }

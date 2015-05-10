@@ -68,7 +68,7 @@ namespace os {
     // EventsLayer
     //--------------------------------------------------------------------------
     
-    using EventCallbackType = std::function<void(event::Event*)>;
+    using EventCallbackType = std::function<void(const event::Event&)>;
     
     struct EventLayer {
     public:
@@ -77,7 +77,7 @@ namespace os {
     public:
         EventLayer& poll();
         EventLayer& callback(EventCallbackType cb);
-        EventLayer& trigger(event::Event *e);
+        EventLayer& trigger(const event::Event &e);
     private:
         EventCallbackType _callback;
     };

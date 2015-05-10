@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "widget.hh"
+#include "simple_widget.hh"
 #include "canvas.hh"
 
 #include "llsg.hh"
@@ -117,7 +117,7 @@ namespace lluitk {
     //---------------------------------------------------------
     
     
-    struct Grid: public WidgetWithParent {
+    struct Grid: public SimpleWidget {
     public:
         
         //
@@ -153,7 +153,10 @@ namespace lluitk {
         
         void render(); // assuming opengl context in pixel
                        // correct coordinates
-
+        
+        bool movableSplitters() const;
+        Grid& movableSplitters(bool flag);
+        
         void pre_render();
 
     public:
@@ -181,6 +184,8 @@ namespace lluitk {
         std::vector<Segment> vertical_segments;
         
         Canvas canvas;
+        
+        bool _movable_splitters { true };
         
         struct {
             bool         resizing { false };

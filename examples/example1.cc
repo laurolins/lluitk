@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 
+#include "lluitk/base.hh"
 #include "lluitk/app.hh"
 #include "lluitk/textedit.hh"
 #include "lluitk/event.hh"
@@ -14,11 +15,11 @@
 
 int main() {
 
-    auto &window = lluitk::os::graphics().window(640,480);
+    auto &window = lluitk::os::graphics().window(200,200);
     
     auto app = lluitk::App();
     
-    lluitk::os::event().callback([&app](lluitk::event::Event* e) {
+    lluitk::os::event().callback([&app](const lluitk::event::Event& e) {
         app.processEvent(e);
     });
     
@@ -29,15 +30,21 @@ int main() {
     // grid widget
     lluitk::Grid     grid({1,3});
     
+    textedits[0].style().fontSize().reset(lluitk::FontSize{24});
+    // textedits[0].style().typeface().reset(lluitk::Typeface{"Monaco"});
+    
     //
     grid.setCellWidget({0,0}, &textedits[0]);
     grid.setCellWidget({0,1}, &textedits[1]);
     grid.setCellWidget({0,2}, &textedits[2]);
     
-    grid.setExternalHandleFixedSize(5).setInternalHandleFixedSize(10);
+    grid.setExternalHandleFixedSize(30).setInternalHandleFixedSize(30);
+    
+    
+    grid.movableSplitters(false);
     
     // create a container widget
-    grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{640,480}});
+    // grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{200,200}});
 
     // set main window
     app.setMainWidget(&grid);
@@ -45,7 +52,15 @@ int main() {
     // bind window to current thread
     window.bind_to_thread();
     
+    // signal app to resize widgets
+    app.processEvent(lluitk::event::WindowResize(
+                                                 lluitk::Size {
+                                                     (double)window.framebuffer_width,
+                                                     (double)window.framebuffer_height
+                                                 } ) );
 
+    // set coef for retina display
+    llsg::opengl::getRenderer()._resolution_factor = window.window_to_framebuffer_factor;
     
     
     
@@ -62,7 +77,7 @@ int main() {
         glClearColor(0.0f,0.0f,0.0f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        glViewport(0,0,window.width,window.height);
+        glViewport(0,0,window.framebuffer_width,window.framebuffer_height);
         
         glShadeModel(GL_SMOOTH);
         glEnable(GL_MULTISAMPLE);
@@ -72,13 +87,12 @@ int main() {
         
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0, window.width,
-                0, window.height,
+        glOrtho(0, window.framebuffer_width,
+                0, window.framebuffer_height,
                 0, 1);
         
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
