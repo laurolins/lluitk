@@ -258,7 +258,7 @@ namespace lluitk {
             //            x /= opengl_context.window_to_framebuffer_factor;
             //            y /= opengl_context.window_to_framebuffer_factor;
             
-            event::MouseMove mouse_move ( { x, window.height - 1 - y } );
+            event::MouseMove mouse_move ( { std::floor(x), window.height - 1 - std::floor(y) } );
             //
             //        event::MouseEvent e({ (int) x, (int) opengl_context.height - 1 - (int) y });
             //

@@ -142,6 +142,10 @@ namespace lluitk {
             KEY_RIGHT_SUPER=347,
             KEY_MENU=348
         };
+
+        //--------------------------------------------
+        // Modifiers
+        //--------------------------------------------
         
         struct Modifiers {
         public:
@@ -152,6 +156,24 @@ namespace lluitk {
             bool         control { false };
             bool         alt     { false };
         };
+        
+        //--------------------------------------------
+        // Modifiers
+        //--------------------------------------------
+
+        bool isprint(KeyCode code);
+        
+        bool ismodifier(KeyCode code);
+        
+        bool isalpha(KeyCode code);
+
+        bool isnum(KeyCode code);
+
+        char ascii(const KeyCode& code, const Modifiers& modifiers);
+        
+        //--------------------------------------------
+        // Event
+        //--------------------------------------------
         
         struct Event {
         public:

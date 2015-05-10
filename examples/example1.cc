@@ -6,8 +6,11 @@
 #include "lluitk/app.hh"
 #include "lluitk/textedit.hh"
 #include "lluitk/event.hh"
+#include "lluitk/grid.hh"
 
 #include "os.hh"
+
+#include "transition.hh"
 
 int main() {
 
@@ -19,19 +22,44 @@ int main() {
         app.processEvent(e);
     });
     
+
     // create a container widget
-    lluitk::TextEdit textedit;
-    textedit.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{640,480}});
+    lluitk::TextEdit textedits[3];
+
+    // grid widget
+    lluitk::Grid     grid({1,3});
+    
+    //
+    grid.setCellWidget({0,0}, &textedits[0]);
+    grid.setCellWidget({0,1}, &textedits[1]);
+    grid.setCellWidget({0,2}, &textedits[2]);
+    
+    grid.setExternalHandleFixedSize(5).setInternalHandleFixedSize(10);
+    
+    // create a container widget
+    grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{640,480}});
+
     // set main window
-    app.setMainWidget(&textedit);
+    app.setMainWidget(&grid);
     
     // bind window to current thread
     window.bind_to_thread();
     
+
+    
+    
+    
+    
+    // schedule transition
+
+    
+    bool update_cursor = true;
+    int  parity        = 0;
+    
     while (!window.done()) {
         
         /* Render here */
-        glClearColor(1.0f,0.0f,0.0f,1.0f);
+        glClearColor(0.0f,0.0f,0.0f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         glViewport(0,0,window.width,window.height);
@@ -60,6 +88,22 @@ int main() {
         window.swap_buffers();
         
         lluitk::os::event().poll(); // poll events
+        
+        transition::getTransitionEngine().update();
+
+        if (update_cursor) {
+            transition::getTransitionEngine()
+            .addTransitionToStandByList(transition::Transition([&](double t) {
+                if (t == 1.0) {
+                    parity = 1 - parity;
+                    textedits[0].blink(parity);
+                    update_cursor = true;
+                }
+            }).duration(transition::Duration{500})).startStandByTransitions();
+            update_cursor = false;
+        }
+
+        
         
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     
