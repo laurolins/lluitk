@@ -137,6 +137,11 @@ namespace lluitk {
         return *this;
     }
     
+    TextEdit& TextEdit::triggerFunction(TriggerFunction t) {
+        _trigger = t;
+        return *this;
+    }
+    
     void TextEdit::onKeyPress(const App &app) {
         auto code = app.current_event_info.key_code;
         auto &modifiers = app.current_event_info.modifiers;
@@ -165,6 +170,9 @@ namespace lluitk {
                 else
                     ++_cursor;
             }
+        }
+        else if (code == event::KEY_ENTER) {
+            _trigger(std::string(_text.begin(),_text.end()));
         }
         _canvas.markDirty();
     }

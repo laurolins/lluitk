@@ -55,6 +55,9 @@ namespace lluitk {
         Length weight() const;
         Length fixed() const;
         
+        bool isFixed() const;
+        bool isWeighted() const;
+        
     public:
         Type        type { FIXED_SIZE };
         Length      length { 0.0f };

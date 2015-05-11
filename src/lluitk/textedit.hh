@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "llsg.hh"
 #include "simple_widget.hh"
 #include "canvas.hh"
@@ -25,6 +27,10 @@ namespace lluitk {
     
     struct TextEdit: public SimpleWidget {
     public:
+        
+        using TriggerFunction = std::function<void(const std::string&)>;
+        
+    public:
         TextEdit() = default;
         void render(); // assuming opengl context in pixel
     private:
@@ -37,6 +43,8 @@ namespace lluitk {
         const Vec2& offset() const;
         TextEdit&   offset(const Vec2& o);
         
+        TextEdit& triggerFunction(TriggerFunction t); // set trigger function
+        
         void blink(int parity); // message indicating to update cursor
                                 // if it is indeed in focus show transition to
                                 // another state
@@ -47,8 +55,7 @@ namespace lluitk {
         Window            _window;
         Canvas            _canvas;
         int               _parity { 0 };
-        
-        
+        TriggerFunction   _trigger;
         llsg::Vec2        _offset { 5, 5 };
     };
 

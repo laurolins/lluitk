@@ -83,6 +83,15 @@ namespace lluitk {
         throw std::runtime_error("oops");
     }
     
+    bool Spring::isFixed() const {
+        return type == FIXED_SIZE;
+    }
+    
+    bool Spring::isWeighted() const {
+        return type == WEIGHT;
+    }
+
+    
     //--------------------------------------------------------------------------
     // Segment
     //--------------------------------------------------------------------------
@@ -421,12 +430,12 @@ namespace lluitk {
         
         std::vector<Splitter> splitters;
         for (auto &h: horizontal_segments) {
-            if (h.type == Segment::HANDLE && h.spring().fixed() > 0) {
+            if (h.type == Segment::HANDLE && h.spring().isFixed() && h.spring().fixed() > 0) {
                 splitters.push_back(Splitter(h.index,Splitter::VERTICAL));
             }
         }
         for (auto &v: vertical_segments) {
-            if (v.type == Segment::HANDLE && v.spring().fixed() > 0) {
+            if (v.type == Segment::HANDLE && v.spring().isFixed() && v.spring().fixed() > 0) {
                 splitters.push_back(Splitter(v.index,Splitter::HORIZONTAL));
             }
         }
