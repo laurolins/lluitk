@@ -284,7 +284,7 @@ namespace lluitk {
                     segment.size(spring.fixed());
                 }
                 else { // relative
-                    segment.size(conversion_factor * spring.weight());
+                    segment.size(std::floor(conversion_factor * spring.weight()));
                 }
                 pos = pos + segment.size();
             }

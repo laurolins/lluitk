@@ -9,7 +9,7 @@ namespace  lluitk {
     WidgetStyle WidgetStyle::defaultStyle() {
         WidgetStyle style;
         style.fgcolor().reset(Color(0.0f));
-        style.bgcolor().reset(Color(0.8f));
+        style.bgcolor().reset(Color(0.85f));
         style.fontMode().reset(FontMode());
         style.fontSize().reset(FontSize());
         style.typeface().reset(Typeface());
