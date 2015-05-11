@@ -88,7 +88,7 @@ namespace lluitk {
     //--------------------------------------------------------------------------
 
     Segment::Segment(Type type, int index, const Spring& spring):
-        type(type), index(index), spring(spring)
+        type(type), index(index), _spring(spring)
     {}
     
     Segment& Segment::p0(const Length &len) {
@@ -111,6 +111,19 @@ namespace lluitk {
 
     Length Segment::size() const {
         return _size;
+    }
+    
+    Spring& Segment::spring() {
+        return _spring;
+    }
+
+    const Spring& Segment::spring() const {
+        return _spring;
+    }
+
+    Segment& Segment::spring(const Spring& spring) {
+        _spring = spring;
+        return *this;
     }
 
     
@@ -219,12 +232,12 @@ namespace lluitk {
     Grid& Grid::setInternalHandleFixedSize(int fixed_size) {
         for (auto it=vertical_segments.begin()+1;it!= vertical_segments.end()-1;++it) {
             if (it->type == Segment::HANDLE) {
-                it->spring = Spring().fixed(fixed_size);
+                it->spring().fixed(fixed_size);
             }
         }
         for (auto it=horizontal_segments.begin()+1;it!= horizontal_segments.end()-1;++it) {
             if (it->type == Segment::HANDLE) {
-                it->spring = Spring().fixed(fixed_size);
+                it->spring().fixed(fixed_size);
             }
         }
         canvas.markDirty();
@@ -233,15 +246,23 @@ namespace lluitk {
 
     Grid& Grid::setExternalHandleFixedSize(int fixed_size) {
         if (vertical_segments.size()) {
-            vertical_segments.front().spring.fixed(fixed_size);
-            vertical_segments.back().spring.fixed(fixed_size);
+            vertical_segments.front().spring().fixed(fixed_size);
+            vertical_segments.back().spring().fixed(fixed_size);
         }
         if (horizontal_segments.size()) {
-            horizontal_segments.front().spring.fixed(fixed_size);
-            horizontal_segments.back().spring.fixed(fixed_size);
+            horizontal_segments.front().spring().fixed(fixed_size);
+            horizontal_segments.back().spring().fixed(fixed_size);
         }
         canvas.markDirty();
         return *this;
+    }
+    
+    Segment& Grid::hseg(int index) {
+        return horizontal_segments.at(index);
+    }
+
+    Segment& Grid::vseg(int index) {
+        return vertical_segments.at(index);
     }
 
     bool Grid::contains(const Point &p) const {
@@ -261,7 +282,7 @@ namespace lluitk {
             double sum_relative = 0.0f;
             
             for (auto& segment: segments) {
-                auto &spring = segment.spring;
+                auto &spring = segment.spring();
                 if (spring.type == Spring::FIXED_SIZE) {
                     sum_absolute += spring.fixed();
                 }
@@ -279,7 +300,7 @@ namespace lluitk {
             Length pos { 0 };
             for (auto& segment: segments) {
                 segment.p0(pos);
-                auto &spring = segment.spring;
+                auto &spring = segment.spring();
                 if (spring.type == Spring::FIXED_SIZE) {
                     segment.size(spring.fixed());
                 }
@@ -336,13 +357,13 @@ namespace lluitk {
         //
         
         // w1 + w2 ==
-        if (cell1.spring.type != Spring::WEIGHT ||
-            cell2.spring.type != Spring::WEIGHT) {
+        if (cell1.spring().type != Spring::WEIGHT ||
+            cell2.spring().type != Spring::WEIGHT) {
             std::cerr << "Warning: don't know how to apply gesture" << std::endl;
         }
             
 
-        auto w1 = cell1.spring.weight();
+        auto w1 = cell1.spring().weight();
         // auto w2 = cell2.spring.weight;
         auto l1 = (double) cell1.size();
         auto l2 = (double) cell2.size();
@@ -359,8 +380,8 @@ namespace lluitk {
         auto ww1 = ll1 / c;
         auto ww2 = ll2 / c;
         
-        cell1.spring.weight(ww1);
-        cell2.spring.weight(ww2);
+        cell1.spring().weight(ww1);
+        cell2.spring().weight(ww2);
 
         //
         // w1 = c * l1
@@ -400,12 +421,12 @@ namespace lluitk {
         
         std::vector<Splitter> splitters;
         for (auto &h: horizontal_segments) {
-            if (h.type == Segment::HANDLE && h.spring.fixed() > 0) {
+            if (h.type == Segment::HANDLE && h.spring().fixed() > 0) {
                 splitters.push_back(Splitter(h.index,Splitter::VERTICAL));
             }
         }
         for (auto &v: vertical_segments) {
-            if (v.type == Segment::HANDLE && v.spring.fixed() > 0) {
+            if (v.type == Segment::HANDLE && v.spring().fixed() > 0) {
                 splitters.push_back(Splitter(v.index,Splitter::HORIZONTAL));
             }
         }

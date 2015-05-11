@@ -77,11 +77,16 @@ namespace lluitk {
 
         Segment& p0(const Length &len);
         Segment& size(const Length& len);
+        
+        Spring&  spring();
+        Segment& spring(const Spring& spring); // set spring
 
+        const Spring& spring() const;
+        
     public:
         Type         type  { HANDLE };
         int          index { -1 };
-        Spring       spring;
+        Spring       _spring;
         Length       _p0;
         Length       _size;
     };
@@ -136,13 +141,17 @@ namespace lluitk {
     
     public:
         
+        Grid() = default;
         Grid(const GridSize& size);
         
     public: // overload the children service
         
         Grid& setInternalHandleFixedSize(int fixed_size);
         Grid& setExternalHandleFixedSize(int fixed_size);
-        
+
+        Segment& hseg(int index);
+        Segment& vseg(int index);
+
         bool contains(const Point& p) const;
         
         WidgetIterator children() const;
@@ -171,6 +180,7 @@ namespace lluitk {
         void applyGesture();
         
         llsg::AxisAlignedBox handleRect(const Splitter& splitter) const;
+        
 
     public:
 
@@ -178,10 +188,7 @@ namespace lluitk {
         
         std::map<GridPoint, Widget*> cell_map;
     
-        GridSize size; // rows and columns
-        
-        std::vector<Segment> horizontal_segments;
-        std::vector<Segment> vertical_segments;
+        GridSize size { 0, 0 }; // rows and columns
         
         Canvas canvas;
         
@@ -194,6 +201,11 @@ namespace lluitk {
             Splitter     splitter;
             Splitter     hover_splitter { 0, Splitter::NONE };
         } gesture ;
+
+    private:
+        std::vector<Segment> horizontal_segments;
+        std::vector<Segment> vertical_segments;
+
     };
     
 }
