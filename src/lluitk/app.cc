@@ -25,7 +25,6 @@ namespace lluitk {
     }
 
     void App::processEvent(const event::Event& event) {
-
         const event::Event* e = &event;
         
         if (!main_widget)

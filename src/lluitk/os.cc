@@ -251,13 +251,17 @@ namespace lluitk {
         }
         
         void cursor_callback(GLFWwindow *glfwwindow, double x, double y) {
+
+//            std::cerr << "cursor_callback: " << x << ", " << y << std::endl;
+//            std::cerr.flush();
+            
             auto &window = graphics().window(handle(glfwwindow));
+            
             
             // x and y comes in framebuffer coords
             //            x /= opengl_context.window_to_framebuffer_factor;
             //            y /= opengl_context.window_to_framebuffer_factor;
             
-            ;
             //
             //        event::MouseEvent e({ (int) x, (int) opengl_context.height - 1 - (int) y });
             //

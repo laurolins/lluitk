@@ -275,6 +275,8 @@ namespace lluitk {
     }
 
     bool Grid::contains(const Point &p) const {
+//        std::cerr << "Grid::contains(...): p=" << p << " is in " << window << (window.contains(p) ? " yes" : " no") << std::endl;
+//        std::cerr.flush();
         return window.contains(p);
     }
 

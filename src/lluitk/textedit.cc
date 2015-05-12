@@ -15,6 +15,8 @@ namespace lluitk {
     //--------------------------------------------------------------------------
     
     bool TextEdit::contains(const Point& p) const {
+//        std::cerr << "TextEdit::contains: p=" << p << " is in " << _window << (_window.contains(p) ? " yes" : " no") << std::endl;
+//        std::cerr.flush();
         return _window.contains(p);
     }
 
@@ -141,7 +143,12 @@ namespace lluitk {
         _trigger = t;
         return *this;
     }
-    
+
+    void TextEdit::onMouseMove(const App &app) {
+//        auto mouse_pos = app.current_event_info.mouse_position;
+//        std::cerr << "TextEdit::onMouseMove: " << mouse_pos.x() << "," << mouse_pos.y() << std::endl;
+    }
+
     void TextEdit::onKeyPress(const App &app) {
         auto code = app.current_event_info.key_code;
         auto &modifiers = app.current_event_info.modifiers;

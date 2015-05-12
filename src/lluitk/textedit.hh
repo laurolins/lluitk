@@ -39,6 +39,7 @@ namespace lluitk {
         bool contains(const Point& p) const;
         void sizeHint(const Window &window);
         void onKeyPress(const App &app);
+        void onMouseMove(const App &app);
         
         const Vec2& offset() const;
         TextEdit&   offset(const Vec2& o);
