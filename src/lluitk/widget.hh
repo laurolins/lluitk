@@ -72,6 +72,11 @@ namespace lluitk {
         virtual void onMouseMove(const App &app) {}
         virtual void onMouseWheel(const App &app) {}
 
+        virtual bool acceptsKeyEvents() const { return false; }
+        virtual void setKeyFocus(bool focused) { }
+        
+        virtual void blink(int parity) {};
+        
         virtual void sizeHint(const Window &new_window) {} // message that might be used
                                                                  // to redefine boundaries of the
                                                                  // children widget etc.

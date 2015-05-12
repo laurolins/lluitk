@@ -43,8 +43,11 @@ namespace lluitk {
     public:
         // keep a key_focus, hover, drag-n-drop model
         Widget* main_widget { nullptr };
+        
         mutable Widget* _locked_widget { nullptr };
+        mutable Widget* _key_focus_widget { nullptr };
         mutable bool event_done { false };
+
         EventInfo  last_event_info;
         EventInfo  current_event_info;
     };

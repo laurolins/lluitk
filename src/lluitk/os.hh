@@ -63,12 +63,15 @@ namespace os {
         std::vector<std::unique_ptr<Window>> _windows;
     };
 
-
+    //--------------------------------------------------------------------------
+    // EventsCallbackType
+    //--------------------------------------------------------------------------
+    
+    using EventCallbackType = std::function<void(const ::lluitk::event::Event&)>;
+    
     //--------------------------------------------------------------------------
     // EventsLayer
     //--------------------------------------------------------------------------
-    
-    using EventCallbackType = std::function<void(const event::Event&)>;
     
     struct EventLayer {
     public:

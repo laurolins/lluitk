@@ -106,42 +106,66 @@ namespace lluitk {
             break;
             }
         };
-
-        this->startEventProcessing();
-
-        Widget *active_widget = nullptr;
-
-        auto p = current_event_info.mouse_position;
-
-        if (_locked_widget) {
-            active_widget = _locked_widget;
+        
+        if (e->getType() == event::EVENT_KEY_PRESS || e->getType() == event::EVENT_KEY_RELEASE) {
+            if (_key_focus_widget) {
+                send_message(*_key_focus_widget, e->getType());
+            }
         }
-        else if (main_widget->contains(p)) {
-            active_widget = main_widget;
-        }
-
-        if (active_widget) {
-            bool update = true;
-            while (update) {
-
-                send_message(*active_widget, e->getType());
-                
-                if (event_done)
-                    break;
-                
-                // update
-                update = false;
-                Widget *child = nullptr;
-                auto it = active_widget->children();
-                while (it.next(child)) {
-                    if (child->contains(p)) {
-                        active_widget = child;
-                        update = true;
+        else {
+            this->startEventProcessing();
+            
+            Widget *active_widget = nullptr;
+            
+            auto p = current_event_info.mouse_position;
+            
+            if (_locked_widget) {
+                active_widget = _locked_widget;
+            }
+            else if (main_widget->contains(p)) {
+                active_widget = main_widget;
+            }
+            
+            if (active_widget) {
+                bool update = true;
+                while (update) {
+                    
+                    send_message(*active_widget, e->getType());
+                    
+                    if (event_done)
                         break;
+                    
+                    // update
+                    update = false;
+                    Widget *child = nullptr;
+                    auto it = active_widget->children();
+                    while (it.next(child)) {
+                        if (child->contains(p)) {
+                            active_widget = child;
+                            update = true;
+                            break;
+                        }
                     }
                 }
             }
+
+            
+            //
+            // change key focused widget
+            //
+            if (e->getType() == event::EVENT_MOUSE_PRESS) {
+                if (active_widget && active_widget->acceptsKeyEvents()) {
+                    if (_key_focus_widget) {
+                        _key_focus_widget->setKeyFocus(false);
+                    }
+                    _key_focus_widget = active_widget;
+                    _key_focus_widget->setKeyFocus(true);
+                }
+            }
+
         }
+        
+        
         
         last_event_info = current_event_info;
 
