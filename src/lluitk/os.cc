@@ -138,9 +138,9 @@ namespace lluitk {
             throw std::runtime_error("no glcontext with given window");
         }
         
-        
+
         //--------------------------------------------------------------------------
-        // EventsLayer
+        // Forward Decl.
         //--------------------------------------------------------------------------
         
         void window_size_callback(GLFWwindow* window, int width, int height);
@@ -148,6 +148,10 @@ namespace lluitk {
         void cursor_callback(GLFWwindow *window, double x, double y);
         void wheel_callback(GLFWwindow *window, double x, double y);
         void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
+        
+        //--------------------------------------------------------------------------
+        // EventsLayer
+        //--------------------------------------------------------------------------
         
         EventLayer& EventLayer::registerWindowCallbacks(const Window& window) {
             auto glfw_window = glfwwin(window.handle);

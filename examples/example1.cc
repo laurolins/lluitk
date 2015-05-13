@@ -8,8 +8,7 @@
 #include "lluitk/textedit.hh"
 #include "lluitk/event.hh"
 #include "lluitk/grid.hh"
-
-#include "os.hh"
+#include "lluitk/os.hh"
 
 #include "transition.hh"
 
@@ -19,11 +18,10 @@ int main() {
     
     auto app = lluitk::App();
     
-    lluitk::os::event().callback([&app](const lluitk::event::Event& e) {
+    lluitk::os::event().callback([&app]( const ::lluitk::event::Event& e) {
         app.processEvent(e);
     });
     
-
     // create a container widget
     lluitk::TextEdit textedits[3];
 
@@ -60,7 +58,7 @@ int main() {
                                                  } ) );
 
     // set coef for retina display
-    llsg::opengl::getRenderer()._resolution_factor = window.window_to_framebuffer_factor;
+    // llsg::opengl::getRenderer()._resolution_factor = window.window_to_framebuffer_factor;
     
     
     
@@ -110,14 +108,14 @@ int main() {
             .addTransitionToStandByList(transition::Transition([&](double t) {
                 if (t == 1.0) {
                     parity = 1 - parity;
-                    textedits[0].blink(parity);
+                    if (app._key_focus_widget) {
+                        app._key_focus_widget->blink(parity);
+                    }
                     update_cursor = true;
                 }
             }).duration(transition::Duration{500})).startStandByTransitions();
             update_cursor = false;
         }
-
-        
         
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     

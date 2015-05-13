@@ -41,6 +41,10 @@ namespace lluitk {
         void onKeyPress(const App &app);
         void onMouseMove(const App &app);
         
+        bool acceptsKeyEvents() const { return true; }
+        void setKeyFocus(bool focused);
+
+
         const Vec2& offset() const;
         TextEdit&   offset(const Vec2& o);
         
@@ -58,6 +62,7 @@ namespace lluitk {
         int               _parity { 0 };
         TriggerFunction   _trigger;
         llsg::Vec2        _offset { 5, 5 };
+        bool              _is_focused { false };
     };
 
 }

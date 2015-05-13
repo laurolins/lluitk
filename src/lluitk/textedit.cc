@@ -100,7 +100,7 @@ namespace lluitk {
             
             auto sel = document
             .selectAll(llsg::isPath, llsg::iter(1,1))
-            .data( std::vector<double> { bbox.max().x() + 1 });
+            .data( _is_focused ? std::vector<double> { bbox.max().x() + 1 } : std::vector<double> {});
 
             sel
             .exit()
@@ -149,6 +149,13 @@ namespace lluitk {
 //        std::cerr << "TextEdit::onMouseMove: " << mouse_pos.x() << "," << mouse_pos.y() << std::endl;
     }
 
+    void TextEdit::setKeyFocus(bool focused) {
+        if (focused != _is_focused) {
+            _is_focused = focused;
+            _canvas.markDirty();
+        }
+    }
+    
     void TextEdit::onKeyPress(const App &app) {
         auto code = app.current_event_info.key_code;
         auto &modifiers = app.current_event_info.modifiers;
@@ -179,7 +186,8 @@ namespace lluitk {
             }
         }
         else if (code == event::KEY_ENTER) {
-            _trigger(std::string(_text.begin(),_text.end()));
+            if (_trigger)
+                _trigger(std::string(_text.begin(),_text.end()));
         }
         _canvas.markDirty();
     }

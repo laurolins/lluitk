@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		ED5535B61AFEBF960043F8C6 /* grid.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B51AFEBF960043F8C6 /* grid.cc */; };
 		ED5535B91AFECF620043F8C6 /* canvas.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B81AFECF620043F8C6 /* canvas.cc */; };
+		ED5535BA1B02B88B0043F8C6 /* os.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FE1AFC0098007D6CF6 /* os.cc */; };
 		ED5562C91AFBD907007D6CF6 /* event.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562C81AFBD907007D6CF6 /* event.cc */; };
 		ED5562D81AFBD985007D6CF6 /* utf8.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562CC1AFBD985007D6CF6 /* utf8.cc */; };
 		ED5562D91AFBD985007D6CF6 /* transition.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562CE1AFBD985007D6CF6 /* transition.cc */; };
@@ -24,7 +25,6 @@
 		ED5562F61AFBE222007D6CF6 /* app.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F41AFBE222007D6CF6 /* app.cc */; };
 		ED5562F91AFBE9F2007D6CF6 /* example1.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F81AFBE9F2007D6CF6 /* example1.cc */; };
 		ED5562FC1AFBEB2C007D6CF6 /* textedit.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FB1AFBEB2C007D6CF6 /* textedit.cc */; };
-		ED5562FF1AFC0098007D6CF6 /* os.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FE1AFC0098007D6CF6 /* os.cc */; };
 		EDA6E00E1AFFB08C00D63075 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDA6E00D1AFFB08C00D63075 /* libglfw3.3.1.dylib */; };
 		EDA6E0111AFFDA4900D63075 /* style.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0101AFFDA4900D63075 /* style.cc */; };
 		EDA6E0151AFFDF3900D63075 /* simple_widget.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0141AFFDF3900D63075 /* simple_widget.cc */; };
@@ -272,7 +272,7 @@
 				ED5562D91AFBD985007D6CF6 /* transition.cc in Sources */,
 				EDA6E0151AFFDF3900D63075 /* simple_widget.cc in Sources */,
 				ED5535B61AFEBF960043F8C6 /* grid.cc in Sources */,
-				ED5562FF1AFC0098007D6CF6 /* os.cc in Sources */,
+				ED5535BA1B02B88B0043F8C6 /* os.cc in Sources */,
 				ED5562D81AFBD985007D6CF6 /* utf8.cc in Sources */,
 				ED5562DC1AFBD985007D6CF6 /* llsg_opengl.cc in Sources */,
 				ED5562DB1AFBD985007D6CF6 /* llsg.cc in Sources */,
