@@ -120,6 +120,27 @@ namespace lluitk {
         int  index { 0 }; // index of segment
     };
 
+    
+    //------------------------------------------------------------------------------
+    // GridStyle
+    //------------------------------------------------------------------------------
+    
+    struct GridStyle {
+    public:
+        GridStyle() = default;
+    public:
+        Color focused_splitter_color() const;
+        Color live_splitter_color() const;
+        Color phantom_splitter_color() const;
+        GridStyle& focused_splitter_color(const Color& p);
+        GridStyle& live_splitter_color(const Color& p);
+        GridStyle& phantom_splitter_color(const Color& p);
+    private:
+        Color _focused_splitter_color { 0.6f };
+        Color _live_splitter_color { 0.8f };
+        Color _phantom_splitter_color { 0.4f };
+    };
+    
     //---------------------------------------------------------
     // Grid
     //---------------------------------------------------------
@@ -170,6 +191,9 @@ namespace lluitk {
         Grid& movableSplitters(bool flag);
         
         void pre_render();
+        
+        GridStyle& grid_style();
+        const GridStyle& grid_style() const;
 
     public:
         
@@ -208,7 +232,8 @@ namespace lluitk {
     private:
         std::vector<Segment> horizontal_segments;
         std::vector<Segment> vertical_segments;
-
+        
+        GridStyle _grid_style;
     };
     
 }

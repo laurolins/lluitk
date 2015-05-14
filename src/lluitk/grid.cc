@@ -158,6 +158,37 @@ namespace lluitk {
         return kind == VERTICAL;
     }
     
+    //------------------------------------------------------------------------------
+    // GridStyle Impl.
+    //------------------------------------------------------------------------------
+    
+    Color GridStyle::focused_splitter_color() const {
+        return _focused_splitter_color;
+    }
+    
+    Color GridStyle::live_splitter_color() const {
+        return _live_splitter_color;
+    }
+    
+    Color GridStyle::phantom_splitter_color() const {
+        return _phantom_splitter_color;
+    }
+    
+    GridStyle& GridStyle::focused_splitter_color(const Color& p) {
+        _focused_splitter_color = p;
+        return *this;
+    }
+    
+    GridStyle& GridStyle::live_splitter_color(const Color& p) {
+        _live_splitter_color = p;
+        return *this;
+    }
+    
+    GridStyle& GridStyle::phantom_splitter_color(const Color& p) {
+        _phantom_splitter_color = p;
+        return *this;
+    }
+    
     //--------------------------------------------------------------------------
     // Grid
     //--------------------------------------------------------------------------
@@ -335,6 +366,15 @@ namespace lluitk {
         _movable_splitters = flag;
         return *this;
     }
+    
+    GridStyle& Grid::grid_style() {
+        return _grid_style;
+    }
+
+    const GridStyle& Grid::grid_style() const {
+        return _grid_style;
+    }
+    
     void Grid::applyGesture() {
         
         if (!gesture.resizing)
@@ -429,6 +469,7 @@ namespace lluitk {
         // handle x cell
         // cell   x handle
         //
+        // auto style = this->
         
         std::vector<Splitter> splitters;
         for (auto &h: horizontal_segments) {
@@ -540,10 +581,10 @@ namespace lluitk {
                 r.size(bounds.size());
                 
                 if (s == that.gesture.hover_splitter) {
-                    r.style().color().reset(llsg::Color(1.0f));
+                    r.style().color().reset(that.grid_style().focused_splitter_color());
                 }
                 else {
-                    r.style().color().reset(llsg::Color(0.5f));
+                    r.style().color().reset(that.grid_style().live_splitter_color());
                 }
             }
             else {
@@ -556,7 +597,7 @@ namespace lluitk {
                 
                 r.pos(bounds.min());
                 r.size(bounds.size());
-                r.style().color().reset(llsg::Color(0.2f));
+                r.style().color().reset(that.grid_style().phantom_splitter_color());
             }
         });
         
