@@ -32,6 +32,8 @@ namespace os {
         bool done();
         
         void setTitle(const std::string& title);
+        void setPosition(const Point& p);
+
         
     public:
         WindowHandle   handle            { nullptr };

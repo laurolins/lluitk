@@ -70,6 +70,12 @@ namespace lluitk {
             glfwSetWindowTitle(window, title.c_str());
         }
         
+        void Window::setPosition(const Point& p) {
+            auto window = static_cast<GLFWwindow*>(handle);
+            glfwSetWindowPos(window, (int)p.x(), (int)p.y());
+        }
+
+        
         void Window::swap_buffers() {
             auto window = static_cast<GLFWwindow*>(handle);
             glfwSwapBuffers(window);
