@@ -111,6 +111,7 @@ namespace lluitk {
         bool operator==(const Splitter& other) const;
         
         
+        bool valid() const;
         bool horizontal() const;
         bool vertical() const;
         
@@ -181,7 +182,9 @@ namespace lluitk {
         WidgetIterator children() const;
 
         void setCellWidget(const GridPoint& cell, Widget* widget);
-        
+
+        void swapWidget(const GridPoint& cell0, const GridPoint& cell1);
+
         void sizeHint(const Window &window);
         
         void render(); // assuming opengl context in pixel
@@ -197,6 +200,8 @@ namespace lluitk {
 
     public:
         
+        bool acceptsKeyEvents() const;
+        void onKeyPress(const App &app);
         void onMousePress(const App &app);
         void onMouseMove(const App &app);
         void onMouseRelease(const App &app);

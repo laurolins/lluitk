@@ -150,6 +150,10 @@ namespace lluitk {
         return index == other.index && kind == other.kind;
     }
     
+    bool Splitter::valid() const {
+        return kind != NONE;
+    }
+
     bool Splitter::horizontal() const {
         return kind == HORIZONTAL;
     }
@@ -193,7 +197,9 @@ namespace lluitk {
     // Grid
     //--------------------------------------------------------------------------
 
-    Grid::Grid(const GridSize& size) {
+    Grid::Grid(const GridSize& size):
+        size(size)
+    {
 
         if (size.x() == 0 || size.y() == 0)
             throw std::runtime_error("grid needs at leas one cell");
@@ -215,6 +221,10 @@ namespace lluitk {
     
     void Grid::setCellWidget(const GridPoint& cell, Widget* widget) {
         cell_map[cell] = widget;
+    }
+    
+    void Grid::swapWidget(const GridPoint& cell0, const GridPoint& cell1) {
+        std::swap(cell_map[cell0],cell_map[cell1]);
     }
 
     void Grid::sizeHint(const Window &window) {
@@ -603,6 +613,31 @@ namespace lluitk {
         
         canvas.markDirty(false);
         
+    }
+
+    bool Grid::acceptsKeyEvents() const {
+        return  gesture.hover_splitter.valid();
+    }
+
+    void Grid::onKeyPress(const App &app) {
+        if (app.current_event_info.key_code == lluitk::event::KEY_S) {
+            if (gesture.hover_splitter.valid()) {
+                auto index1 = (gesture.hover_splitter.index+1)/2;
+                auto index0 = (gesture.hover_splitter.index-1)/2;
+                if (gesture.hover_splitter.vertical() && index0 >= 0 && index1 < size.x()) {
+                    for (auto r=0;r<size.y();++r) {
+                        swapWidget(GridPoint{index0,r},GridPoint{index1,r});
+                    }
+                    sizeHint(this->window);
+                }
+                else if (gesture.hover_splitter.horizontal() && index0 >= 0 && index1 < size.y()) {
+                    for (auto c=0;c<size.x();++c) {
+                        swapWidget(GridPoint{c,index0},GridPoint{c,index1});
+                    }
+                    sizeHint(this->window);
+                }
+            }
+        }
     }
     
     void Grid::onMousePress(const App &app) {
