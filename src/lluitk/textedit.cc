@@ -8,6 +8,8 @@
 #include "app.hh"
 #include "transition.hh"
 
+#include "os.hh"
+
 namespace lluitk {
 
     //--------------------------------------------------------------------------
@@ -159,7 +161,16 @@ namespace lluitk {
     void TextEdit::onKeyPress(const App &app) {
         auto code = app.current_event_info.key_code;
         auto &modifiers = app.current_event_info.modifiers;
-        if ( event::isprint(code) ) {
+        
+        
+        if (code == event::KEY_V && modifiers.super) { // check for OS for swapping super/control
+            auto st = lluitk::os::clipboard();
+            for (auto c: st) {
+                _text.insert(_text.begin() + _cursor, ascii((event::KeyCode)c, modifiers));
+                ++_cursor;
+            }
+        }
+        else if ( event::isprint(code) ) {
             _text.insert(_text.begin() + _cursor, ascii(code, modifiers));
             ++_cursor;
         }

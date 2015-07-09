@@ -150,11 +150,12 @@ namespace lluitk {
         struct Modifiers {
         public:
             Modifiers() = default;
-            Modifiers(bool shift, bool control, bool alt): shift(shift), control(control), alt(alt) {};
+            Modifiers(bool shift, bool control, bool alt, bool super): shift(shift), control(control), alt(alt), super(super) {};
         public:
             bool         shift   { false };
             bool         control { false };
             bool         alt     { false };
+            bool         super   { false };
         };
         
         //--------------------------------------------

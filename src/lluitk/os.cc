@@ -144,6 +144,13 @@ namespace lluitk {
             throw std::runtime_error("no glcontext with given window");
         }
         
+        /*!
+         * Get window by its creation order (0 == default)
+         */
+        Window& GraphicsLayer::window(int index) const {
+            return *_windows.at(index).get();
+        }
+
 
         //--------------------------------------------------------------------------
         // Forward Decl.
@@ -232,7 +239,8 @@ namespace lluitk {
             
             event::Modifiers modifiers(GLFW_MOD_SHIFT   & mods,
                                        GLFW_MOD_CONTROL & mods,
-                                       GLFW_MOD_ALT     & mods);
+                                       GLFW_MOD_ALT     & mods,
+                                       GLFW_MOD_SUPER   & mods);
             
             
             auto key_code = (event::KeyCode) key;
@@ -323,7 +331,8 @@ namespace lluitk {
 
             event::Modifiers modifiers(GLFW_MOD_SHIFT   & mods,
                                        GLFW_MOD_CONTROL & mods,
-                                       GLFW_MOD_ALT     & mods);
+                                       GLFW_MOD_ALT     & mods,
+                                       GLFW_MOD_SUPER   & mods);
 
             auto btn  = (button == GLFW_MOUSE_BUTTON_LEFT) ?
             event::MOUSE_BUTTON_LEFT : ((button == GLFW_MOUSE_BUTTON_RIGHT) ? event::MOUSE_BUTTON_RIGHT :
@@ -357,6 +366,11 @@ namespace lluitk {
 //            main_instance.signal_mouse_button.trigger(opengl_context, e);
         }
         
-    } // namespace lluitk
+        std::string clipboard() {
+            auto &g = graphics();
+            return std::string(glfwGetClipboardString((GLFWwindow*)g.window().handle));
+        }
+        
+    } // namespace os
     
-} // namespace os
+} // namespace lluitk

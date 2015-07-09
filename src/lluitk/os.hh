@@ -59,6 +59,11 @@ namespace os {
     public:
         Window& window(int width, int height, bool visible=true, Window *parent=nullptr);
         Window& window(WindowHandle handle) const;
+        
+        /*!
+         * Get window by its creation order (0 == default)
+         */
+        Window& window(int index=0) const;
     public:
         friend GraphicsLayer& graphics();
     private:
@@ -94,6 +99,8 @@ namespace os {
     GraphicsLayer& graphics();
     EventLayer&    event();
     
+    
+    std::string clipboard();
     
     
     
