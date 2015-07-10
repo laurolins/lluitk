@@ -18,6 +18,7 @@ def build(ctx):
 ../../submodules/llsg/submodules/d3cpp/src
 /usr/local/include/freetype2 
 /usr/local/include 
+/usr/include/freetype2 
 /usr/include 
 ''')) \
         .Libpath(parse(". /usr/local/lib /usr/lib"))                                           \
@@ -70,7 +71,7 @@ def build(ctx):
         .Kind("program")                  \
         .Use(sources)                     \
         .Source( parse("example1.cc"))   \
-        .Lib(parse("m GLEW curl freeimage AntTweakBar freetype"))     \
+        .Lib(parse("m GLEW freeimage freetype"))     \
         .Subtarget("Darwin")                                          \
             .Lib(parse("glfw3 boost_system-mt boost_filesystem-mt"))     \
             .Framework(parse("OpenGL IOKit Cocoa CoreVideo"))         \

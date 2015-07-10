@@ -77,11 +77,11 @@ int main() {
         
         glViewport(0,0,window.framebuffer_width,window.framebuffer_height);
         
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_MULTISAMPLE);
-        glEnable( GL_POLYGON_SMOOTH );
-        glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-        glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
+        // glShadeModel(GL_SMOOTH);
+        // glEnable(GL_MULTISAMPLE);
+        // glEnable( GL_POLYGON_SMOOTH );
+        // glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+        // glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
         
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
