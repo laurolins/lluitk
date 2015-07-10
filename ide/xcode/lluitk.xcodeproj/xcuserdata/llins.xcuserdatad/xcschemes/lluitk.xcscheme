@@ -61,7 +61,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "LLSG_TYPEFACES"
-            value = "/Users/llins/projects/nc_cpp_viewer/resources/fonts/ttf"
+            value = "/Users/llins/projects/nc_cpp_viewer/resources/fonts"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable

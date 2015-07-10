@@ -66,11 +66,11 @@ def build(ctx):
     # Program: polycover
     ################################################################################
     
-    lluitk-example1 = Target(base, "lluitk-example1") \
+    example1 = Target(base, "lluitk-example1") \
         .Kind("program")                  \
         .Use(sources)                     \
         .Source( parse("example1.cc"))   \
-        .Lib(parse("m"))     \
+        .Lib(parse("m GLEW curl freeimage AntTweakBar freetype"))     \
         .Subtarget("Darwin")                                          \
             .Lib(parse("glfw3 boost_system-mt boost_filesystem-mt"))     \
             .Framework(parse("OpenGL IOKit Cocoa CoreVideo"))         \
@@ -83,7 +83,7 @@ def build(ctx):
     # targets
     ################################################################################
     
-    targets = [lluitk-example1]
+    targets = [example1]
 
 
     ################################################################################
