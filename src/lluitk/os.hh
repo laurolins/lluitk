@@ -24,7 +24,7 @@ namespace os {
     struct Window {
     public:
 
-        Window(int width, int height, bool visible=true, Window *parent=nullptr);
+        Window(int width, int height, bool visible=true, bool decorated=true, Window *parent=nullptr);
         ~Window();
         
         void bind_to_thread();
@@ -39,6 +39,7 @@ namespace os {
         WindowHandle   handle            { nullptr };
         Window        *parent            { nullptr };
         bool visible                     { false };
+        bool decorated                   { true };
         int width                        { 0 };
         int height                       { 0 };
         int framebuffer_width            { 0 };
@@ -57,7 +58,8 @@ namespace os {
     private:
         GraphicsLayer();
     public:
-        Window& window(int width, int height, bool visible=true, Window *parent=nullptr);
+        // Window& window(int width, int height, bool visible=true, Window *parent=nullptr);
+        Window& window(int width, int height, bool visible=true, bool decorated=true, Window *parent=nullptr);
         Window& window(WindowHandle handle) const;
         
         /*!

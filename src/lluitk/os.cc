@@ -22,14 +22,16 @@ namespace lluitk {
         // OpenGL Context and Window (which might be visible or not)
         //------------------------------------------------------------------------------
         
-        Window::Window(int width, int height, bool visible, Window *parent):
+        Window::Window(int width, int height, bool visible, bool decorated, Window *parent):
         width(width),
         height(height),
         visible(visible),
+        decorated(decorated),
         parent(parent)
         {
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, visible ? GL_TRUE : GL_FALSE);
+            glfwWindowHint(GLFW_DECORATED, decorated ? GL_TRUE : GL_FALSE);
             
             auto window = glfwCreateWindow(width, height, "", NULL, (parent ? glfwwin(parent->handle) : NULL));
             if (!window) {
@@ -116,8 +118,8 @@ namespace lluitk {
             glfwTerminate();
         }
         
-        Window& GraphicsLayer::window(int width, int height, bool visible, Window *parent) {
-            _windows.push_back(std::unique_ptr<Window>(new Window(width, height, visible, parent)));
+        Window& GraphicsLayer::window(int width, int height, bool visible, bool decorated, Window *parent) {
+            _windows.push_back(std::unique_ptr<Window>(new Window(width, height, visible, decorated, parent)));
             auto &window = *_windows.back().get();
             
             

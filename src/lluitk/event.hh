@@ -215,9 +215,7 @@ namespace lluitk {
             virtual const KeyPress& asKeyPress() const { throw std::runtime_error("oops"); }
             virtual const KeyRelease& asKeyRelease() const { throw std::runtime_error("oops"); }
 
-            
-            
-        protected:
+        public:
             EventType type { EVENT_NULL };
         };
         
@@ -291,6 +289,14 @@ namespace lluitk {
             KeyCode     key;
             Modifiers   modifiers;
         };
+        
+        //---------------
+        // Serialization
+        //---------------
+        
+        void writeEvent(std::ostream& os, const Event& event);
+        std::unique_ptr<Event> readEvent(std::istream& is);
+        
         
     } // event
     

@@ -1,5 +1,9 @@
 #include "event.hh"
 
+#include <sstream>
+#include <iostream>
+#include <string>
+
 namespace lluitk {
     
     //------------------------------------------------------------------------------
@@ -165,8 +169,179 @@ namespace lluitk {
         modifiers{modifiers}
         {}
         
-    }
-    
+        //------------------------------------------------------------------------------
+        // KeyRelease
+        //------------------------------------------------------------------------------
 
-    
+        std::ostream& write(std::ostream& os, const EventType &t) {
+            os << "e:" << (int) t << ";";
+            return os;
+        }
+        
+        std::ostream& write(std::ostream& os, const MouseButton &b) {
+            os << "mb:" << (int) b << ";";
+            return os;
+        }
+
+        std::ostream& write(std::ostream& os, const KeyCode &code) {
+            os << "k:" << (int) code << ";";
+            return os;
+        }
+        
+        std::ostream& write(std::ostream& os, const Modifiers &m) {
+            int modifier =
+            (m.alt      ? 1 : 0) +
+            ((m.control ? 1 : 0) << 1) +
+            ((m.shift   ? 1 : 0) << 2) +
+            ((m.super   ? 1 : 0) << 3);
+            os << "mod:" << (int) modifier << ";";
+            return os;
+        }
+
+        std::ostream& write(std::ostream& os, const Point &p) {
+            os << "p:" << p.x() << "," << p.y() << ";";
+            return os;
+        }
+
+        EventType read_EventType(std::istream& is) {
+            std::string lbl;
+            std::getline(is,lbl,':');
+            if (lbl.compare("e") != 0)
+                throw std::runtime_error("ooops");
+            std::getline(is,lbl,';');
+            return (EventType) std::stoi(lbl);
+        }
+
+        KeyCode read_KeyCode(std::istream& is) {
+            std::string lbl;
+            std::getline(is,lbl,':');
+            if (lbl.compare("k") != 0)
+                throw std::runtime_error("ooops");
+            std::getline(is,lbl,';');
+            return (KeyCode) std::stoi(lbl);
+        }
+
+        Point read_Point(std::istream& is) {
+            std::string lbl;
+            std::getline(is,lbl,':');
+            if (lbl.compare("p") != 0)
+                throw std::runtime_error("ooops");
+            std::getline(is,lbl,',');
+            double x = std::stod(lbl);
+            std::getline(is,lbl,';');
+            double y = std::stod(lbl);
+            return Point {x,y};
+        }
+
+        MouseButton read_MouseButton(std::istream& is) {
+            std::string lbl;
+            std::getline(is,lbl,':');
+            if (lbl.compare("mb") != 0)
+                throw std::runtime_error("ooops");
+            std::getline(is,lbl,';');
+            return (MouseButton) std::stoi(lbl);
+        }
+
+        Modifiers read_Modifiers(std::istream& is) {
+            std::string lbl;
+            std::getline(is,lbl,':');
+            if (lbl.compare("mod") != 0)
+                throw std::runtime_error("ooops");
+            std::getline(is,lbl,';');
+            
+            auto modifiers = std::stoi(lbl);
+            
+            bool alt     = modifiers & 0x1;
+            bool control = modifiers & 0x2;
+            bool shift   = modifiers & 0x4;
+            bool super   = modifiers & 0x8;
+
+            return Modifiers {
+                shift,
+                control,
+                alt,
+                super
+            };
+        }
+
+        //------------------------------------------------------------------------------
+        // KeyRelease
+        //------------------------------------------------------------------------------
+        
+        void writeEvent(std::ostream& os, const Event& e) {
+            auto etype = e.getType();
+            write(os, etype);
+            if (etype == EVENT_MOUSE_PRESS) {
+                auto &ee = e.asMousePress();
+                write(os,ee.button);
+                write(os,ee.modifiers);
+            }
+            else if (etype == EVENT_MOUSE_RELEASE) {
+                auto &ee = e.asMouseRelease();
+                write(os,ee.button);
+                write(os,ee.modifiers);
+            }
+            else if (etype == EVENT_MOUSE_MOVE) {
+                auto &ee = e.asMouseMove();
+                write(os,ee.position);
+            }
+            else if (etype == EVENT_MOUSE_WHEEL) {
+                auto &ee = e.asMouseWheel();
+                write(os,ee.position);
+                write(os,ee.modifiers);
+            }
+            else if (etype == EVENT_KEY_PRESS) {
+                auto &ee = e.asKeyPress();
+                write(os,ee.key);
+                write(os,ee.modifiers);
+            }
+            else if (etype == EVENT_KEY_RELEASE) {
+                auto &ee = e.asKeyRelease();
+                write(os,ee.key);
+                write(os,ee.modifiers);
+            }
+            else {
+                // pass
+            }
+            
+        }
+        
+        std::unique_ptr<Event> readEvent(std::istream& is) {
+            auto etype = read_EventType(is);
+            if (etype == EVENT_MOUSE_PRESS) {
+                return std::unique_ptr<Event> {
+                    new MousePress { read_MouseButton(is), read_Modifiers(is) }
+                };
+            }
+            else if (etype == EVENT_MOUSE_RELEASE) {
+                return std::unique_ptr<Event> {
+                    new MouseRelease { read_MouseButton(is), read_Modifiers(is) }
+                };
+            }
+            else if (etype == EVENT_MOUSE_MOVE) {
+                return std::unique_ptr<Event> {
+                    new MouseMove { read_Point(is) }
+                };
+            }
+            else if (etype == EVENT_MOUSE_WHEEL) {
+                return std::unique_ptr<Event> {
+                    new MouseWheel { read_Point(is), read_Modifiers(is) }
+                };
+            }
+            else if (etype == EVENT_KEY_PRESS) {
+                return std::unique_ptr<Event> {
+                    new KeyPress { read_KeyCode(is), read_Modifiers(is) }
+                };
+            }
+            else if (etype == EVENT_KEY_RELEASE) {
+                return std::unique_ptr<Event> {
+                    new KeyRelease { read_KeyCode(is), read_Modifiers(is) }
+                };
+            }
+            else {
+                // pass
+            }
+            return std::unique_ptr<Event>();
+        }
+    }
 }
