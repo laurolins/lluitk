@@ -4,4 +4,12 @@
     <LocalDebuggerEnvironment>LLSG_TYPEFACES="C:\Users\IEUser\llins\code\nc_cpp_viewer\resources\fonts"</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerEnvironment>LLSG_TYPEFACES=C:\cygwin64\home\llins\code\nc_cpp_viewer\resources\fonts</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerEnvironment>LLSG_TYPEFACES=C:\cygwin64\home\llins\code\nc_cpp_viewer\resources\fonts</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

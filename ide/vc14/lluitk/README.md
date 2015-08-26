@@ -11,12 +11,42 @@
 /D"_CRT_SECURE_NO_WARNINGS"
 
 
-# link flags
+# virtual machine at home - link flags
 
 /DYNAMICBASE "opengl32.lib"
 /LIBPATH:".\lib\glew-1.13.0\lib\Release\Win32" /DYNAMICBASE "glew32.lib"
 /LIBPATH:".\lib\glfw-3.1.1\build\src\Release" /DYNAMICBASE "glfw3dll.lib"
 /LIBPATH:".\lib\freetype-2.6\objs\vc2010\Win32" /DYNAMICBASE "freetype26.lib"
+
+
+# recife
+
+/DYNAMICBASE "opengl32.lib"
+/LIBPATH:".\lib\glew-1.13.0\lib\Release\x64" /DYNAMICBASE "glew32.lib"
+/LIBPATH:".\lib\glfw-3.1.1\build\x64\Release" /DYNAMICBASE "glfw3dll.lib"
+/LIBPATH:".\lib\freetype-2.6\objs\vc2010\x64" /DYNAMICBASE "freetype26.lib"
+
+
+
+./glfw-3.1.1/build/x64/Release/glfw3.dll
+
+
+./freetype-2.6/objs/vc2010/x64/freetype26.dll
+
+
+
+
+
+./build/src/Release/glfw3.dll
+
+
+
+
+llins@recife ~/code/lluitk/ide/vc14/lluitk/lib/glfw-3.1.1
+$ find . | grep lib$
+./build/CMakeFiles/Export/lib
+
+
 
 
 

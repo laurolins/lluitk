@@ -106,9 +106,24 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/I"..\..\..\src"
+/I"..\..\..\submodules\llsg\src"
+/I"..\..\..\submodules\llsg\submodules\tmfont\src"
+/I"..\..\..\submodules\llsg\submodules\d3cpp\src"
+/I".\lib\glew-1.13.0\include"
+/I".\lib\glfw-3.1.1\include"
+/I".\lib\freetype-2.6\include"
+/D"_USE_MATH_DEFINES"
+/D"_CRT_SECURE_NO_WARNINGS"
+ %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/DYNAMICBASE "opengl32.lib"
+/LIBPATH:".\lib\glew-1.13.0\lib\Release\x64" /DYNAMICBASE "glew32.lib"
+/LIBPATH:".\lib\glfw-3.1.1\build\src\Release" /DYNAMICBASE "glfw3dll.lib"
+/LIBPATH:".\lib\freetype-2.6\objs\vc2010\x64" /DYNAMICBASE "freetype26.lib"
+ %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -140,11 +155,22 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/I "..\..\..\src"
+/I "..\..\..\submodules\llsg\src"
+/I "..\..\..\submodules\llsg\submodules\tmfont\src"
+/I "..\..\..\submodules\llsg\submodules\d3cpp\src"
+ /D "_USE_MATH_INCLUDES" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/DYNAMICBASE "opengl32.lib"
+/LIBPATH:".\lib\glew-1.13.0\lib\Release\x64" /DYNAMICBASE "glew32.lib"
+/LIBPATH:".\lib\glfw-3.1.1\build\x64\Release" /DYNAMICBASE "glfw3dll.lib"
+/LIBPATH:".\lib\freetype-2.6\objs\vc2010\x64" /DYNAMICBASE "freetype26.lib"
+
+ %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
