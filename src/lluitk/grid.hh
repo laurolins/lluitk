@@ -5,8 +5,8 @@
 #include "simple_widget.hh"
 #include "canvas.hh"
 
-#include "llsg.hh"
-#include "llsg_opengl.hh"
+#include "llsg/llsg.hh"
+#include "llsg/llsg_opengl.hh"
 
 namespace lluitk {
     

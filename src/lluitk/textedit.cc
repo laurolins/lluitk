@@ -2,11 +2,11 @@
 
 #include <algorithm>
 
-#include "llsg_opengl.hh"
+#include "llsg/llsg_opengl.hh"
+#include "llsg/transition.hh"
 
 #include "d3cpp.hh"
 #include "app.hh"
-#include "transition.hh"
 
 #include "os.hh"
 

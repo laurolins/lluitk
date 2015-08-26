@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="llsg">
+      <UniqueIdentifier>{fb3566fd-b9d4-4b45-8f3f-15c56eb680bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tmfont">
+      <UniqueIdentifier>{0688a874-0086-4c9d-b828-ea78c2ca4916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{affa982a-e332-416e-afa0-f13865f90a3c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\lluitk\grid.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\os.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\simple_widget.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\style.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\textedit.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\widget.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\app.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\canvas.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lluitk\event.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\llsg_opengl.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\opengl.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\transition.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\utf8.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\any.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\src\llsg\llsg.cc">
+      <Filter>llsg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\submodules\llsg\submodules\tmfont\src\tmfont.cc">
+      <Filter>tmfont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\examples\example1.cc">
+      <Filter>main</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

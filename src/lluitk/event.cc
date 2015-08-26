@@ -1,6 +1,7 @@
 #include "event.hh"
 
 #include <sstream>
+#include <locale>
 #include <iostream>
 #include <string>
 
@@ -35,11 +36,12 @@ namespace lluitk {
         }
         
         char ascii(const KeyCode& code, const Modifiers& modifiers) {
+			std::locale loc;
             if (!isprint(code)) {
                 return (char) code;
             }
             else if (isalpha(code)) {
-                return modifiers.shift ? (char) code : std::tolower((char) code);
+                return modifiers.shift ? (char) code : std::tolower((char) code, loc);
             }
             else if (!modifiers.shift) {
                 return (char) code;

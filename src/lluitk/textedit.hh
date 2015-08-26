@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "llsg.hh"
+#include "llsg/llsg.hh"
 #include "simple_widget.hh"
 #include "canvas.hh"
 

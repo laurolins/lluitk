@@ -1,6 +1,6 @@
 #pragma once
 
-#include "llsg.hh"
+#include "llsg/llsg.hh"
 
 namespace lluitk {
     

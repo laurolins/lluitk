@@ -10,7 +10,7 @@
 #include "lluitk/grid.hh"
 #include "lluitk/os.hh"
 
-#include "transition.hh"
+#include "llsg/transition.hh"
 
 int main() {
 
