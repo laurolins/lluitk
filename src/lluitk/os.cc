@@ -33,6 +33,7 @@ namespace lluitk {
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_VISIBLE, visible ? GL_TRUE : GL_FALSE);
             glfwWindowHint(GLFW_DECORATED, decorated ? GL_TRUE : GL_FALSE);
+			glfwWindowHint(GLFW_RESIZABLE, decorated ? GL_TRUE : GL_FALSE);
             
             auto window = glfwCreateWindow(width, height, "", NULL, (parent ? glfwwin(parent->handle) : NULL));
             if (!window) {
@@ -105,6 +106,10 @@ namespace lluitk {
             glfwWindowHint(GLFW_SAMPLES, 2);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+			glfwWindowHint(GLFW_DECORATED, GL_TRUE);
 
 			//    glfwWindowHint(GLFW_RESIZABLE,0);
 			//    glfwWindowHint(GLFW_DECORATED,0);
