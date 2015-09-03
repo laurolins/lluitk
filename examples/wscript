@@ -50,12 +50,12 @@ def build(ctx):
 ../src/lluitk/style.cc
 ../src/lluitk/textedit.cc
 ../src/lluitk/widget.cc
-../submodules/llsg/src/any.cc
-../submodules/llsg/src/llsg.cc
-../submodules/llsg/src/llsg_opengl.cc
-../submodules/llsg/src/opengl.cc
-../submodules/llsg/src/transition.cc
-../submodules/llsg/src/utf8.cc
+../submodules/llsg/src/llsg/any.cc
+../submodules/llsg/src/llsg/llsg.cc
+../submodules/llsg/src/llsg/llsg_opengl.cc
+../submodules/llsg/src/llsg/opengl.cc
+../submodules/llsg/src/llsg/transition.cc
+../submodules/llsg/src/llsg/utf8.cc
 ../submodules/llsg/submodules/tmfont/src/tmfont.cc
     ''')
     
