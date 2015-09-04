@@ -7,6 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED341C6A1B99E62800CF5F25 /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C691B99E62800CF5F25 /* libfreeimage.dylib */; };
+		ED341C6C1B99E63B00CF5F25 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C6B1B99E63B00CF5F25 /* libglfw3.3.1.dylib */; };
+		ED341C6E1B99E77600CF5F25 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C6D1B99E77600CF5F25 /* libfreetype.dylib */; };
+		ED341C711B99E80400CF5F25 /* list.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED341C6F1B99E80400CF5F25 /* list.cc */; };
+		ED341C761B99F0CF00CF5F25 /* any.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562D71AFBD985007D6CF6 /* any.cc */; };
+		ED341C771B99F0CF00CF5F25 /* transition.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562CE1AFBD985007D6CF6 /* transition.cc */; };
+		ED341C781B99F0CF00CF5F25 /* simple_widget.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0141AFFDF3900D63075 /* simple_widget.cc */; };
+		ED341C791B99F0CF00CF5F25 /* grid.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B51AFEBF960043F8C6 /* grid.cc */; };
+		ED341C7A1B99F0CF00CF5F25 /* os.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FE1AFC0098007D6CF6 /* os.cc */; };
+		ED341C7B1B99F0CF00CF5F25 /* utf8.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562CC1AFBD985007D6CF6 /* utf8.cc */; };
+		ED341C7C1B99F0CF00CF5F25 /* llsg_opengl.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562D51AFBD985007D6CF6 /* llsg_opengl.cc */; };
+		ED341C7D1B99F0CF00CF5F25 /* llsg.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562D31AFBD985007D6CF6 /* llsg.cc */; };
+		ED341C7E1B99F0CF00CF5F25 /* opengl.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562D01AFBD985007D6CF6 /* opengl.cc */; };
+		ED341C7F1B99F0CF00CF5F25 /* event.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562C81AFBD907007D6CF6 /* event.cc */; };
+		ED341C801B99F0CF00CF5F25 /* list.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED341C6F1B99E80400CF5F25 /* list.cc */; };
+		ED341C811B99F0CF00CF5F25 /* tmfont.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562E81AFBDB4B007D6CF6 /* tmfont.cc */; };
+		ED341C821B99F0CF00CF5F25 /* app.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F41AFBE222007D6CF6 /* app.cc */; };
+		ED341C831B99F0CF00CF5F25 /* widget.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F21AFBE222007D6CF6 /* widget.cc */; };
+		ED341C841B99F0CF00CF5F25 /* style.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0101AFFDA4900D63075 /* style.cc */; };
+		ED341C851B99F0CF00CF5F25 /* canvas.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B81AFECF620043F8C6 /* canvas.cc */; };
+		ED341C861B99F0CF00CF5F25 /* textedit.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FB1AFBEB2C007D6CF6 /* textedit.cc */; };
+		ED341C881B99F0CF00CF5F25 /* libGLEW.1.11.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED5562EC1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib */; };
+		ED341C891B99F0CF00CF5F25 /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C691B99E62800CF5F25 /* libfreeimage.dylib */; };
+		ED341C8A1B99F0CF00CF5F25 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C6B1B99E63B00CF5F25 /* libglfw3.3.1.dylib */; };
+		ED341C8B1B99F0CF00CF5F25 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED5562EA1AFBDCEF007D6CF6 /* OpenGL.framework */; };
+		ED341C8C1B99F0CF00CF5F25 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C6D1B99E77600CF5F25 /* libfreetype.dylib */; };
+		ED341C921B99F0FA00CF5F25 /* example-list.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED341C721B99F0AD00CF5F25 /* example-list.cc */; };
 		ED5535B61AFEBF960043F8C6 /* grid.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B51AFEBF960043F8C6 /* grid.cc */; };
 		ED5535B91AFECF620043F8C6 /* canvas.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5535B81AFECF620043F8C6 /* canvas.cc */; };
 		ED5535BA1B02B88B0043F8C6 /* os.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FE1AFC0098007D6CF6 /* os.cc */; };
@@ -20,17 +47,24 @@
 		ED5562E91AFBDB4B007D6CF6 /* tmfont.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562E81AFBDB4B007D6CF6 /* tmfont.cc */; };
 		ED5562EB1AFBDCEF007D6CF6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED5562EA1AFBDCEF007D6CF6 /* OpenGL.framework */; };
 		ED5562ED1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED5562EC1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib */; };
-		ED5562EF1AFBDD1C007D6CF6 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED5562EE1AFBDD1C007D6CF6 /* libfreetype.6.dylib */; };
 		ED5562F51AFBE222007D6CF6 /* widget.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F21AFBE222007D6CF6 /* widget.cc */; };
 		ED5562F61AFBE222007D6CF6 /* app.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F41AFBE222007D6CF6 /* app.cc */; };
-		ED5562F91AFBE9F2007D6CF6 /* example1.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F81AFBE9F2007D6CF6 /* example1.cc */; };
+		ED5562F91AFBE9F2007D6CF6 /* example-textedit.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562F81AFBE9F2007D6CF6 /* example-textedit.cc */; };
 		ED5562FC1AFBEB2C007D6CF6 /* textedit.cc in Sources */ = {isa = PBXBuildFile; fileRef = ED5562FB1AFBEB2C007D6CF6 /* textedit.cc */; };
-		EDA6E00E1AFFB08C00D63075 /* libglfw3.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EDA6E00D1AFFB08C00D63075 /* libglfw3.3.1.dylib */; };
 		EDA6E0111AFFDA4900D63075 /* style.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0101AFFDA4900D63075 /* style.cc */; };
 		EDA6E0151AFFDF3900D63075 /* simple_widget.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDA6E0141AFFDF3900D63075 /* simple_widget.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		ED341C8D1B99F0CF00CF5F25 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		ED5562B91AFBD8C0007D6CF6 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -43,6 +77,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		ED341C691B99E62800CF5F25 /* libfreeimage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreeimage.dylib; path = /usr/local/lib/libfreeimage.dylib; sourceTree = "<absolute>"; };
+		ED341C6B1B99E63B00CF5F25 /* libglfw3.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.1.dylib; path = /usr/local/lib/libglfw3.3.1.dylib; sourceTree = "<absolute>"; };
+		ED341C6D1B99E77600CF5F25 /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = ../../../../../../../../usr/local/lib/libfreetype.dylib; sourceTree = "<group>"; };
+		ED341C6F1B99E80400CF5F25 /* list.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = list.cc; sourceTree = "<group>"; };
+		ED341C701B99E80400CF5F25 /* list.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = list.hh; sourceTree = "<group>"; };
+		ED341C721B99F0AD00CF5F25 /* example-list.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "example-list.cc"; sourceTree = "<group>"; };
+		ED341C911B99F0CF00CF5F25 /* lluitk copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "lluitk copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED5535B41AFEBF960043F8C6 /* grid.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = grid.hh; sourceTree = "<group>"; };
 		ED5535B51AFEBF960043F8C6 /* grid.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = grid.cc; sourceTree = "<group>"; };
 		ED5535B71AFECF620043F8C6 /* canvas.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = canvas.hh; sourceTree = "<group>"; };
@@ -68,17 +109,15 @@
 		ED5562E81AFBDB4B007D6CF6 /* tmfont.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tmfont.cc; sourceTree = "<group>"; };
 		ED5562EA1AFBDCEF007D6CF6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		ED5562EC1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.11.0.dylib; path = /usr/local/Cellar/glew/1.11.0/lib/libGLEW.1.11.0.dylib; sourceTree = "<absolute>"; };
-		ED5562EE1AFBDD1C007D6CF6 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = /usr/local/Cellar/freetype/2.5.5/lib/libfreetype.6.dylib; sourceTree = "<absolute>"; };
 		ED5562F11AFBE222007D6CF6 /* widget.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = widget.hh; sourceTree = "<group>"; };
 		ED5562F21AFBE222007D6CF6 /* widget.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = widget.cc; sourceTree = "<group>"; };
 		ED5562F31AFBE222007D6CF6 /* app.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = app.hh; sourceTree = "<group>"; };
 		ED5562F41AFBE222007D6CF6 /* app.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = app.cc; sourceTree = "<group>"; };
-		ED5562F81AFBE9F2007D6CF6 /* example1.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = example1.cc; sourceTree = "<group>"; };
+		ED5562F81AFBE9F2007D6CF6 /* example-textedit.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "example-textedit.cc"; sourceTree = "<group>"; };
 		ED5562FA1AFBEB2C007D6CF6 /* textedit.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = textedit.hh; sourceTree = "<group>"; };
 		ED5562FB1AFBEB2C007D6CF6 /* textedit.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = textedit.cc; sourceTree = "<group>"; };
 		ED5562FD1AFC0098007D6CF6 /* os.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = os.hh; sourceTree = "<group>"; };
 		ED5562FE1AFC0098007D6CF6 /* os.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = os.cc; sourceTree = "<group>"; };
-		EDA6E00D1AFFB08C00D63075 /* libglfw3.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.1.dylib; path = /usr/local/Cellar/glfw3/3.1.1/lib/libglfw3.3.1.dylib; sourceTree = "<absolute>"; };
 		EDA6E00F1AFFDA4900D63075 /* style.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = style.hh; sourceTree = "<group>"; };
 		EDA6E0101AFFDA4900D63075 /* style.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = style.cc; sourceTree = "<group>"; };
 		EDA6E0121AFFDB4400D63075 /* base.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = base.hh; sourceTree = "<group>"; };
@@ -88,14 +127,27 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		ED341C871B99F0CF00CF5F25 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED341C881B99F0CF00CF5F25 /* libGLEW.1.11.0.dylib in Frameworks */,
+				ED341C891B99F0CF00CF5F25 /* libfreeimage.dylib in Frameworks */,
+				ED341C8A1B99F0CF00CF5F25 /* libglfw3.3.1.dylib in Frameworks */,
+				ED341C8B1B99F0CF00CF5F25 /* OpenGL.framework in Frameworks */,
+				ED341C8C1B99F0CF00CF5F25 /* libfreetype.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ED5562B81AFBD8C0007D6CF6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EDA6E00E1AFFB08C00D63075 /* libglfw3.3.1.dylib in Frameworks */,
-				ED5562EF1AFBDD1C007D6CF6 /* libfreetype.6.dylib in Frameworks */,
 				ED5562ED1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib in Frameworks */,
+				ED341C6A1B99E62800CF5F25 /* libfreeimage.dylib in Frameworks */,
+				ED341C6C1B99E63B00CF5F25 /* libglfw3.3.1.dylib in Frameworks */,
 				ED5562EB1AFBDCEF007D6CF6 /* OpenGL.framework in Frameworks */,
+				ED341C6E1B99E77600CF5F25 /* libfreetype.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				ED5562BB1AFBD8C0007D6CF6 /* lluitk */,
+				ED341C911B99F0CF00CF5F25 /* lluitk copy */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +199,8 @@
 				ED5562F41AFBE222007D6CF6 /* app.cc */,
 				ED5562C71AFBD907007D6CF6 /* event.hh */,
 				ED5562C81AFBD907007D6CF6 /* event.cc */,
+				ED341C6F1B99E80400CF5F25 /* list.cc */,
+				ED341C701B99E80400CF5F25 /* list.hh */,
 			);
 			name = lluitk;
 			path = ../../src/lluitk;
@@ -169,7 +224,7 @@
 				ED5562D71AFBD985007D6CF6 /* any.cc */,
 			);
 			name = llsg;
-			path = ../../submodules/llsg/src;
+			path = ../../submodules/llsg/src/llsg;
 			sourceTree = "<group>";
 		};
 		ED5562DE1AFBDAA1007D6CF6 /* tmfont */ = {
@@ -194,8 +249,9 @@
 		ED5562F01AFBDDF5007D6CF6 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				EDA6E00D1AFFB08C00D63075 /* libglfw3.3.1.dylib */,
-				ED5562EE1AFBDD1C007D6CF6 /* libfreetype.6.dylib */,
+				ED341C6D1B99E77600CF5F25 /* libfreetype.dylib */,
+				ED341C6B1B99E63B00CF5F25 /* libglfw3.3.1.dylib */,
+				ED341C691B99E62800CF5F25 /* libfreeimage.dylib */,
 				ED5562EC1AFBDD05007D6CF6 /* libGLEW.1.11.0.dylib */,
 				ED5562EA1AFBDCEF007D6CF6 /* OpenGL.framework */,
 			);
@@ -205,7 +261,8 @@
 		ED5562F71AFBE993007D6CF6 /* examples */ = {
 			isa = PBXGroup;
 			children = (
-				ED5562F81AFBE9F2007D6CF6 /* example1.cc */,
+				ED5562F81AFBE9F2007D6CF6 /* example-textedit.cc */,
+				ED341C721B99F0AD00CF5F25 /* example-list.cc */,
 			);
 			name = examples;
 			path = ../../examples;
@@ -214,9 +271,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		ED5562BA1AFBD8C0007D6CF6 /* lluitk */ = {
+		ED341C731B99F0CF00CF5F25 /* example-list */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ED5562C21AFBD8C0007D6CF6 /* Build configuration list for PBXNativeTarget "lluitk" */;
+			buildConfigurationList = ED341C8E1B99F0CF00CF5F25 /* Build configuration list for PBXNativeTarget "example-list" */;
+			buildPhases = (
+				ED341C741B99F0CF00CF5F25 /* Sources */,
+				ED341C871B99F0CF00CF5F25 /* Frameworks */,
+				ED341C8D1B99F0CF00CF5F25 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "example-list";
+			productName = lluitk;
+			productReference = ED341C911B99F0CF00CF5F25 /* lluitk copy */;
+			productType = "com.apple.product-type.tool";
+		};
+		ED5562BA1AFBD8C0007D6CF6 /* example-textedit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED5562C21AFBD8C0007D6CF6 /* Build configuration list for PBXNativeTarget "example-textedit" */;
 			buildPhases = (
 				ED5562B71AFBD8C0007D6CF6 /* Sources */,
 				ED5562B81AFBD8C0007D6CF6 /* Frameworks */,
@@ -226,7 +300,7 @@
 			);
 			dependencies = (
 			);
-			name = lluitk;
+			name = "example-textedit";
 			productName = lluitk;
 			productReference = ED5562BB1AFBD8C0007D6CF6 /* lluitk */;
 			productType = "com.apple.product-type.tool";
@@ -257,17 +331,43 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				ED5562BA1AFBD8C0007D6CF6 /* lluitk */,
+				ED5562BA1AFBD8C0007D6CF6 /* example-textedit */,
+				ED341C731B99F0CF00CF5F25 /* example-list */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		ED341C741B99F0CF00CF5F25 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED341C761B99F0CF00CF5F25 /* any.cc in Sources */,
+				ED341C771B99F0CF00CF5F25 /* transition.cc in Sources */,
+				ED341C781B99F0CF00CF5F25 /* simple_widget.cc in Sources */,
+				ED341C921B99F0FA00CF5F25 /* example-list.cc in Sources */,
+				ED341C791B99F0CF00CF5F25 /* grid.cc in Sources */,
+				ED341C7A1B99F0CF00CF5F25 /* os.cc in Sources */,
+				ED341C7B1B99F0CF00CF5F25 /* utf8.cc in Sources */,
+				ED341C7C1B99F0CF00CF5F25 /* llsg_opengl.cc in Sources */,
+				ED341C7D1B99F0CF00CF5F25 /* llsg.cc in Sources */,
+				ED341C7E1B99F0CF00CF5F25 /* opengl.cc in Sources */,
+				ED341C7F1B99F0CF00CF5F25 /* event.cc in Sources */,
+				ED341C801B99F0CF00CF5F25 /* list.cc in Sources */,
+				ED341C811B99F0CF00CF5F25 /* tmfont.cc in Sources */,
+				ED341C821B99F0CF00CF5F25 /* app.cc in Sources */,
+				ED341C831B99F0CF00CF5F25 /* widget.cc in Sources */,
+				ED341C841B99F0CF00CF5F25 /* style.cc in Sources */,
+				ED341C851B99F0CF00CF5F25 /* canvas.cc in Sources */,
+				ED341C861B99F0CF00CF5F25 /* textedit.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ED5562B71AFBD8C0007D6CF6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED5562F91AFBE9F2007D6CF6 /* example1.cc in Sources */,
+				ED5562F91AFBE9F2007D6CF6 /* example-textedit.cc in Sources */,
 				ED5562DD1AFBD985007D6CF6 /* any.cc in Sources */,
 				ED5562D91AFBD985007D6CF6 /* transition.cc in Sources */,
 				EDA6E0151AFFDF3900D63075 /* simple_widget.cc in Sources */,
@@ -278,6 +378,7 @@
 				ED5562DB1AFBD985007D6CF6 /* llsg.cc in Sources */,
 				ED5562DA1AFBD985007D6CF6 /* opengl.cc in Sources */,
 				ED5562C91AFBD907007D6CF6 /* event.cc in Sources */,
+				ED341C711B99E80400CF5F25 /* list.cc in Sources */,
 				ED5562E91AFBDB4B007D6CF6 /* tmfont.cc in Sources */,
 				ED5562F61AFBE222007D6CF6 /* app.cc in Sources */,
 				ED5562F51AFBE222007D6CF6 /* widget.cc in Sources */,
@@ -290,6 +391,50 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		ED341C8F1B99F0CF00CF5F25 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+					"$(SRCROOT)/../../submodules/llsg/src",
+					/usr/local/Cellar/freetype/2.5.5/include/freetype2,
+					"$(SRCROOT)/../../src",
+					/usr/local/Cellar/glfw3/3.1/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "lluitk copy";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		ED341C901B99F0CF00CF5F25 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+					"$(SRCROOT)/../../submodules/llsg/src",
+					/usr/local/Cellar/freetype/2.5.5/include/freetype2,
+					"$(SRCROOT)/../../src",
+					/usr/local/Cellar/glfw3/3.1/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "lluitk copy";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
 		ED5562C01AFBD8C0007D6CF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -328,6 +473,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -363,6 +509,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -381,10 +528,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/glew/1.11.0/lib,
-					/usr/local/Cellar/freetype/2.5.5/lib,
-					/usr/local/Cellar/glfw3/3.1/lib,
-					/usr/local/Cellar/glfw3/3.1.1/lib,
+					/usr/local/lib,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -406,10 +550,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/glew/1.11.0/lib,
-					/usr/local/Cellar/freetype/2.5.5/lib,
-					/usr/local/Cellar/glfw3/3.1/lib,
-					/usr/local/Cellar/glfw3/3.1.1/lib,
+					/usr/local/lib,
 				);
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -420,6 +561,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		ED341C8E1B99F0CF00CF5F25 /* Build configuration list for PBXNativeTarget "example-list" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ED341C8F1B99F0CF00CF5F25 /* Debug */,
+				ED341C901B99F0CF00CF5F25 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		ED5562B61AFBD8C0007D6CF6 /* Build configuration list for PBXProject "lluitk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -429,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		ED5562C21AFBD8C0007D6CF6 /* Build configuration list for PBXNativeTarget "lluitk" */ = {
+		ED5562C21AFBD8C0007D6CF6 /* Build configuration list for PBXNativeTarget "example-textedit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ED5562C31AFBD8C0007D6CF6 /* Debug */,
