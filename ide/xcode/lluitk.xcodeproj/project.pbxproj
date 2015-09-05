@@ -88,7 +88,7 @@
 		ED5535B51AFEBF960043F8C6 /* grid.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = grid.cc; sourceTree = "<group>"; };
 		ED5535B71AFECF620043F8C6 /* canvas.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = canvas.hh; sourceTree = "<group>"; };
 		ED5535B81AFECF620043F8C6 /* canvas.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = canvas.cc; sourceTree = "<group>"; };
-		ED5562BB1AFBD8C0007D6CF6 /* lluitk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lluitk; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED5562BB1AFBD8C0007D6CF6 /* example-textedit */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "example-textedit"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED5562C71AFBD907007D6CF6 /* event.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = event.hh; sourceTree = "<group>"; };
 		ED5562C81AFBD907007D6CF6 /* event.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = event.cc; sourceTree = "<group>"; };
 		ED5562CB1AFBD985007D6CF6 /* utf8.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = utf8.hh; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 		ED5562BC1AFBD8C0007D6CF6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ED5562BB1AFBD8C0007D6CF6 /* lluitk */,
+				ED5562BB1AFBD8C0007D6CF6 /* example-textedit */,
 				ED341C911B99F0CF00CF5F25 /* lluitk copy */,
 			);
 			name = Products;
@@ -302,7 +302,7 @@
 			);
 			name = "example-textedit";
 			productName = lluitk;
-			productReference = ED5562BB1AFBD8C0007D6CF6 /* lluitk */;
+			productReference = ED5562BB1AFBD8C0007D6CF6 /* example-textedit */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */

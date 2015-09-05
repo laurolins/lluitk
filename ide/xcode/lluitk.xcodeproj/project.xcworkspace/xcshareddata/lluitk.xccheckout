@@ -26,15 +26,15 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>83E1082A5E86E125EC728B469AB7091DB946D76A</key>
-		<string>../../../..submodules/llsg/submodules/d3cpp/</string>
+		<string>../../../..submodules/llsg/submodules/d3cpp</string>
 		<key>86FB321C3A8DE1D18CC0541022C49F26AD4012CE</key>
-		<string>../../../..submodules/llsg/</string>
+		<string>../../../..submodules/llsg</string>
 		<key>B714CB995E27B4E021D92A06F663EDB182C76011</key>
 		<string>../../../..</string>
 		<key>D4AB9FDDCD9B5F58DE02CE0D90C3E9E352E037B5</key>
-		<string>../../../..submodules/llsg/submodules/tmfont/</string>
+		<string>../../../..submodules/llsg/submodules/tmfont</string>
 		<key>E06E8B697757ACCE957AFF18B3D76B2BCEE6549B</key>
-		<string>../../../../../..</string>
+		<string>../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/laurolins/lluitk</string>
@@ -50,7 +50,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>E06E8B697757ACCE957AFF18B3D76B2BCEE6549B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>..</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

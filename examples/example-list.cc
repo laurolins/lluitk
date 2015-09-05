@@ -61,7 +61,6 @@ namespace list {
     
    
     /*!
-     * Notion of
      *
      */
     template <typename Item, typename Model>
@@ -69,7 +68,7 @@ namespace list {
     public:
         using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const Item&,
                                                                                Index,
-                                                                               const ListConfig&,
+                                                                               const List&,
                                                                                bool)>;
     public:
         List() = default;
@@ -102,6 +101,50 @@ namespace list {
         llsg::Group       _root;
         Index             _selectedIndex { -1 };
     };
+    
+
+    
+    
+//    struct Scroller: public lluitk::SimpleWidget {
+//    public:
+//        Scroller() = default;
+//        Scroller& model(Model *model) {
+//            _model = model;
+//            _dirty = true;
+//            return *this;
+//        }
+//        List& geometryMap(geometry_map_type f) {
+//            _geometry_map = f;
+//            _dirty = true;
+//            return *this;
+//        }
+//        
+//    public:
+//        void onMouseWheel(const lluitk::App &app);
+//        void onMousePress(const lluitk::App &app);
+//    public:
+//        void render();
+//        void prepare();
+//        bool contains(const lluitk::Point& p) const;
+//        void sizeHint(const lluitk::Window &window);
+//    public:
+//        Model*            _model { nullptr };
+//        geometry_map_type _geometry_map; // not defined at first
+//        llsg::Vec2        _position; // count from the top left
+//        lluitk::Window    _window;   // current visible area
+//        ListConfig        _config;
+//        bool              _dirty { true };
+//        llsg::Group       _root;
+//        Index             _selectedIndex { -1 };
+//    };
+
+    
+    
+    
+    
+    
+    
+    
 
     //
     // List Implementation
@@ -170,12 +213,12 @@ namespace list {
             }
             else {
                 auto dt = current_ts - _ts;
-                if (dt < 100000000ULL) { // 25ms
-                    if ((_repeats % 10) == 0) {
-                        if (_factor < 128) {
-                            _factor *= 2;
+                if (dt < 1000000000ULL) { // 25ms
+                    if ((_repeats % 1) == 0) {
+                        //if (_factor < 128) {
+                            _factor += 1;
                             std::cout << "speed up " << _factor << " reps: " << _repeats << std::endl;
-                        }
+                        //}
                     }
                     _ts = current_ts;
                     ++_repeats;
@@ -273,7 +316,7 @@ namespace list {
         for (auto i=i0;i<=i1;++i) {
             // std::cout << i << std::endl;
             auto item   = _model->operator[](i);
-            auto elem_p = _geometry_map(item, i, _config, i == _selectedIndex);
+            auto elem_p = _geometry_map(item, i, *this, i == _selectedIndex);
             auto &g     = _root.g();
             g.transform(llsg::Transform().translate(_config.vertical ?
                                                     llsg::Vec2(0, _window.height() - (i+1) * _config.width) :
@@ -301,13 +344,13 @@ int main() {
     using GeomMap = Lst::geometry_map_type;
     using Index   = list::Index;
     
-    GeomMap geomMap = [](const Item& item, Index index, const list::ListConfig& config, bool selected) {
+    GeomMap geomMap = [](const Item& item, Index index, const Lst& list, bool selected) {
         std::unique_ptr<llsg::Element> result;
         result.reset(new llsg::Group());
         auto &g = result.get()->asGroup();
         g
         .rect()
-        .size({1000,config.width})
+        .size({list._window.width(),list._config.width})
         .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
         g.text().str(item).pos({5, 5});
         return std::move(result);
