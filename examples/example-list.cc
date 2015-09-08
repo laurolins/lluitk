@@ -60,29 +60,18 @@ namespace list {
      */
     
    
-    /*!
-     *
-     */
+    //----------------------------------------------------------------------------
+    // List
+    //----------------------------------------------------------------------------
+
     template <typename Item, typename Model>
     struct List: public lluitk::SimpleWidget {
     public:
-        using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const Item&,
-                                                                               Index,
-                                                                               const List&,
-                                                                               bool)>;
+        using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const Item&, Index, const List&, bool)>;
     public:
         List() = default;
-        List& model(Model *model) {
-            _model = model;
-            _dirty = true;
-            return *this;
-        }
-        List& geometryMap(geometry_map_type f) {
-            _geometry_map = f;
-            _dirty = true;
-            return *this;
-        }
-        
+        List& model(Model *model);
+        List& geometryMap(geometry_map_type f);
     public:
         void onMouseWheel(const lluitk::App &app);
         void onMousePress(const lluitk::App &app);
@@ -102,53 +91,48 @@ namespace list {
         Index             _selectedIndex { -1 };
     };
     
-
     
     
-//    struct Scroller: public lluitk::SimpleWidget {
-//    public:
-//        Scroller() = default;
-//        Scroller& model(Model *model) {
-//            _model = model;
-//            _dirty = true;
-//            return *this;
-//        }
-//        List& geometryMap(geometry_map_type f) {
-//            _geometry_map = f;
-//            _dirty = true;
-//            return *this;
-//        }
-//        
-//    public:
-//        void onMouseWheel(const lluitk::App &app);
-//        void onMousePress(const lluitk::App &app);
-//    public:
-//        void render();
-//        void prepare();
-//        bool contains(const lluitk::Point& p) const;
-//        void sizeHint(const lluitk::Window &window);
-//    public:
-//        Model*            _model { nullptr };
-//        geometry_map_type _geometry_map; // not defined at first
-//        llsg::Vec2        _position; // count from the top left
-//        lluitk::Window    _window;   // current visible area
-//        ListConfig        _config;
-//        bool              _dirty { true };
-//        llsg::Group       _root;
-//        Index             _selectedIndex { -1 };
-//    };
-
+    //----------------------------------------------------------------------------
+    // Scroller
+    //----------------------------------------------------------------------------
     
+#if 0
     
+    struct Scroller: public lluitk::SimpleWidget {
+    public:
+        Scroller() = default;
+    public:
+        void onMouseWheel(const lluitk::App &app);
+        void onMousePress(const lluitk::App &app);
+    public:
+        void render();
+        void prepare();
+        bool contains(const lluitk::Point& p) const;
+        void sizeHint(const lluitk::Window &window);
+    public:
+        lluitk::SimpleWidget *_widget { nullptr };
+        llsg::Vec2            _position; // count from the top left
+        lluitk::Window        _window;   // current visible area
+        ListConfig            _config;
+        bool                  _dirty { true };
+        llsg::Group           _root;
+    };
     
-    
-    
-    
-    
-
     //
+    // Scrollable Widget
+    //
+    // - we can access its content size
+    // - we think in positive terms: window size at position
+    //
+
+#endif
+    
+    
+    
+    //---------------------------------------------------------------------------
     // List Implementation
-    //
+    //---------------------------------------------------------------------------
 
     template <typename I, typename M>
     bool List<I,M>::contains(const lluitk::Point& p) const {
@@ -171,9 +155,21 @@ namespace list {
             _dirty = true;
         }
     }
+    
+    template <typename I, typename M>
+    auto List<I,M>::model(M *model) -> List& {
+        _model = model;
+        _dirty = true;
+        return *this;
+    }
 
-    
-    
+    template <typename I, typename M>
+    auto List<I,M>::geometryMap(geometry_map_type f) -> List& {
+        _geometry_map = f;
+        _dirty = true;
+        return *this;
+    }
+
     std::ofstream& wheelos() {
         static std::unique_ptr<std::ofstream> ptr;
         if (!ptr) {
@@ -328,6 +324,58 @@ namespace list {
         _dirty = false;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 int main() {
