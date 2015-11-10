@@ -13,7 +13,8 @@ namespace lluitk {
     
     namespace list {
         
-        using Index = int;
+        using Size  = std::int64_t;
+        using Index = std::int64_t;
         
         //----------------
         // SpeedupWheel
@@ -34,8 +35,24 @@ namespace lluitk {
         //----------------
         
         struct ListConfig {
-            bool   vertical { true };
-            float  width    { 20.0f };
+            ListConfig() = default;
+            
+            bool                  vertical() const { return _vertical; }
+            float                 width()    const { return _width; }
+
+            const llsg::Vec2&     position() const { return _position; }
+            const lluitk::Window& window() const { return _window; }
+
+            llsg::Vec2&           position() { return _position; }
+            lluitk::Window&       window() { return _window; }
+
+            ListConfig&           position(const llsg::Vec2& pos) { _position = pos; return *this; }
+            ListConfig&           window(const lluitk::Window& window) { _window = window; return *this; }
+            
+            bool            _vertical { true };
+            float           _width    { 20.0f };
+            llsg::Vec2      _position;
+            lluitk::Window  _window;   // current visible area
         };
         
         /*!
@@ -67,15 +84,27 @@ namespace lluitk {
          *
          */
         
+        //
+        // A model has to have the following
+        //
+        // item type should be a lightweight copy friendly "key"
+        //
+        // typename Model::item_type;
+        //
+        // Model::item_type get(Index index) const;
+        //             Size size()           const;
+        //
+        //
         
         //----------------------------------------------------------------------------
         // List
         //----------------------------------------------------------------------------
         
-        template <typename Item, typename Model>
+        template <typename Model>
         struct List: public lluitk::SimpleWidget {
         public:
-            using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const Item&, Index, const List&, bool)>;
+            using key_type          = typename Model::key_type; // more
+            using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const key_type&, Index, const ListConfig&, bool)>;
         public:
             List() = default;
             List& model(Model *model);
@@ -94,8 +123,6 @@ namespace lluitk {
             
             Model*            _model { nullptr };
             geometry_map_type _geometry_map; // not defined at first
-            llsg::Vec2        _position; // count from the top left
-            lluitk::Window    _window;   // current visible area
             ListConfig        _config;
             bool              _dirty { true };
             llsg::Group       _root;
@@ -106,56 +133,57 @@ namespace lluitk {
         // List Implementation
         //---------------------------------------------------------------------------
         
-        template <typename I, typename M>
-        bool List<I,M>::contains(const lluitk::Point& p) const {
-            return _window.contains(p);
+        template <typename M>
+        bool List<M>::contains(const lluitk::Point& p) const {
+            return _config.window().contains(p);
         }
         
-        template <typename I, typename M>
-        void List<I,M>::sizeHint(const lluitk::Window &window) {
+        template <typename M>
+        void List<M>::sizeHint(const lluitk::Window &window) {
             _dirty  = true;
-            _window = window;
+            _config.window(window);
         }
         
-        template <typename I, typename M>
-        void List<I,M>::onMousePress(const lluitk::App &app) {
-            auto window_pos = app.current_event_info.mouse_position - _window.min();
-            if (_config.vertical) {
-                auto y = (_window.height() - window_pos.y()) - _position.y();
-                Index i = static_cast<Index>(y / _config.width);
+        template <typename M>
+        void List<M>::onMousePress(const lluitk::App &app) {
+            auto &window = _config.window();
+            auto window_pos = app.current_event_info.mouse_position - window.min();
+            if (_config.vertical()) {
+                auto y = (window.height() - window_pos.y()) - _config.position().y();
+                Index i = static_cast<Index>(y / _config.width());
                 _selectedIndex = i;
                 _dirty = true;
             }
         }
         
-        template <typename I, typename M>
-        auto List<I,M>::model(M *model) -> List& {
+        template <typename M>
+        auto List<M>::model(M *model) -> List& {
             _model = model;
             _dirty = true;
             return *this;
         }
         
-        template <typename I, typename M>
-        auto List<I,M>::geometryMap(geometry_map_type f) -> List& {
+        template <typename M>
+        auto List<M>::geometryMap(geometry_map_type f) -> List& {
             _geometry_map = f;
             _dirty = true;
             return *this;
         }
         
-        template <typename I, typename M>
-        void List<I,M>::render() {
+        template <typename M>
+        void List<M>::render() {
             if (_dirty)
                 prepare();
             
             // get llsg renderer and
             // _scene.img().key(resloc::getResourcePath("logo/nanocubes-blue-name-logo.png")).coords(llsg::Quad{0.0f,0.0f,600.0f,180.0f});
-            llsg::opengl::getRenderer().render(_root, llsg::Transform{}.translate(_window.min()), _window, false);
+            llsg::opengl::getRenderer().render(_root, llsg::Transform{}.translate(_config.window().min()), _config.window(), false);
         }
         
-        template <typename I, typename M>
-        void List<I,M>::onMouseWheel(const lluitk::App &app) {
+        template <typename M>
+        void List<M>::onMouseWheel(const lluitk::App &app) {
             auto delta = app.current_event_info.mouse_wheel_delta;
-            if (_config.vertical) {
+            if (_config.vertical()) {
                 
                 auto factor = _speedup_wheel.speedup(delta);
                 
@@ -169,46 +197,39 @@ namespace lluitk {
                 //
                 
                 
-                _position.yinc(dy);
+                _config.position().yinc(dy);
                 // max position on y is
-                float miny = -(_model->size() * _config.width - _window.height());
-                if (_position.y() < miny) {
-                    _position.y(miny);
+                float miny = -(_model->size() * _config.width() - _config.window().height());
+                if (_config.position().y() < miny) {
+                    _config.position().y(miny);
                 }
-                if (_position.y() > 0) {
-                    _position.y(0);
+                if (_config.position().y() > 0) {
+                    _config.position().y(0);
                 }
                 _dirty = true;
             }
             
         }
         
-        template <typename I, typename M>
-        void List<I,M>::prepare() {
+        template <typename M>
+        void List<M>::prepare() {
             //
             _root.removeAll();
             
             if (!_model || _model->size() == 0)
                 return;
             
-            
-            
+            //
             // regenerate all the geometry from scratch (improve this later)
-            
-            //
+
             // figure out item range
-            //
-            
             Index i0 = static_cast<Index>(
-                                          (_config.vertical ?
-                                           -_position.y() :
-                                           _position.x()) / _config.width);
-            
-            Index i1 = static_cast<Index>((_config.vertical ?
-                                           _window.height() - _position.y() :
-                                           _window.width()  + _position.x()) / _config.width);
-            
-            //
+                                          (_config.vertical() ?
+                                           -_config.position().y() :
+                                           _config.position().x()) / _config.width());
+            Index i1 = static_cast<Index>((_config.vertical() ?
+                                           _config.window().height() - _config.position().y() :
+                                           _config.window().width()  + _config.position().x()) / _config.width());
             if (i1 > _model->size()) {
                 i1 = static_cast<Index>(_model->size()) - 1;
             }
@@ -218,19 +239,20 @@ namespace lluitk {
             //
             // all right
             //
-            std::vector<I> items;
-            items.reserve(i1-i0+1);
+            // std::vector<I> items;
+            // items.reserve(i1-i0+1);
             for (auto i=i0;i<=i1;++i) {
                 // std::cout << i << std::endl;
-                auto item   = _model->operator[](i);
-                auto elem_p = _geometry_map(item, i, *this, i == _selectedIndex);
-                auto &g     = _root.g();
-                g.transform(llsg::Transform().translate(_config.vertical ?
-                                                        llsg::Vec2(0, _window.height() - (i+1) * _config.width) :
-                                                        llsg::Vec2(i * _config.width, 0)));
+                auto key = _model->get(i);
+                auto elem_p = _geometry_map(key, i, _config, i == _selectedIndex);
+                auto &g = _root.g();
+                g.data(key); // associate key
+                g.transform(llsg::Transform().translate(_config.vertical() ?
+                                                        llsg::Vec2(0, _config.window().height() - (i+1) * _config.width()) :
+                                                        llsg::Vec2(i * _config.width(), 0)));
                 g.append(std::move(elem_p));
             }
-            _root.identity().translate({-_position.x(),-_position.y()});
+            _root.identity().translate({-_config.position().x(),-_config.position().y()});
             
             _dirty = false;
         }

@@ -20,34 +20,46 @@
 
 
 
+struct Model {
+    using key_type = std::string;
+
+    using Size  = typename lluitk::list::Size;
+    using Index = typename lluitk::list::Index;
+    Model() {
+        for (int i=0;i<1000;++i) {
+            _items.push_back(std::string("item ") + std::to_string(i+1));
+        }
+    }
+    lluitk::list::Size size() const { return static_cast<Size>(_items.size()); }
+    key_type           get(Index index) const { return _items.at(static_cast<size_t>(index)); }
+    std::vector<std::string> _items;
+};
+
+
 int main() {
 
-    std::vector<std::string> items;
+    Model model;
+
+    using Key        = typename Model::key_type;
+    using Lst        = lluitk::list::List<Model>;
+    using Index      = lluitk::list::Index;
+    using ListConfig = lluitk::list::ListConfig;
+    using GeomMap    = Lst::geometry_map_type;
     
-    for (int i=0;i<1000;++i) {
-        items.push_back(std::string("item ") + std::to_string(i+1));
-    }
-    
-    using Item    = std::string;
-    using Model   = std::vector<Item>;
-    using Lst     = lluitk::list::List<Item, Model>;
-    using Index   = lluitk::list::Index;
-    using GeomMap = Lst::geometry_map_type;
-    
-    GeomMap geomMap = [](const Item& item, Index index, const Lst& list, bool selected) {
+    GeomMap geomMap = [](const Key& key, Index index, const ListConfig& config, bool selected) {
         std::unique_ptr<llsg::Element> result;
         result.reset(new llsg::Group());
         auto &g = result.get()->asGroup();
         g
         .rect()
-        .size({list._window.width(),list._config.width})
+        .size({config.window().width(),config.width()})
         .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
-        g.text().str(item).pos({5, 5});
+        g.text().str(key).pos({5, 5});
         return std::move(result);
     };
     
     Lst lst;
-    lst.geometryMap(geomMap).model(&items);
+    lst.geometryMap(geomMap).model(&model);
 
     auto &window = lluitk::os::graphics().window(200,200);
     
