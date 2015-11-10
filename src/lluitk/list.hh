@@ -37,8 +37,10 @@ namespace lluitk {
         struct ListConfig {
             ListConfig() = default;
             
-            bool                  vertical() const { return _vertical; }
-            float                 width()    const { return _width; }
+            bool                  vertical()    const { return _vertical; }
+            float                 item_weight() const { return _item_weight; }
+            
+            ListConfig&           item_weight(float w) { _item_weight = w; return *this; }
 
             const llsg::Vec2&     position() const { return _position; }
             const lluitk::Window& window() const { return _window; }
@@ -50,7 +52,7 @@ namespace lluitk {
             ListConfig&           window(const lluitk::Window& window) { _window = window; return *this; }
             
             bool            _vertical { true };
-            float           _width    { 20.0f };
+            float           _item_weight { 20.0f };
             llsg::Vec2      _position;
             lluitk::Window  _window;   // current visible area
         };
@@ -113,10 +115,18 @@ namespace lluitk {
             void onMouseWheel(const lluitk::App &app);
             void onMousePress(const lluitk::App &app);
         public:
+            
             void render();
             void prepare();
+
             bool contains(const lluitk::Point& p) const;
             void sizeHint(const lluitk::Window &window);
+            
+            llsg::Group& root() { return _root; }
+            ListConfig&  config() { return _config; }
+            
+            void item_weight(float w) { _config.item_weight(w); _dirty = true; }
+            
         public:
             
             SpeedupWheel      _speedup_wheel;
@@ -150,7 +160,7 @@ namespace lluitk {
             auto window_pos = app.current_event_info.mouse_position - window.min();
             if (_config.vertical()) {
                 auto y = (window.height() - window_pos.y()) - _config.position().y();
-                Index i = static_cast<Index>(y / _config.width());
+                Index i = static_cast<Index>(y / _config.item_weight());
                 _selectedIndex = i;
                 _dirty = true;
             }
@@ -199,7 +209,7 @@ namespace lluitk {
                 
                 _config.position().yinc(dy);
                 // max position on y is
-                float miny = -(_model->size() * _config.width() - _config.window().height());
+                float miny = -(_model->size() * _config.item_weight() - _config.window().height());
                 if (_config.position().y() < miny) {
                     _config.position().y(miny);
                 }
@@ -226,10 +236,10 @@ namespace lluitk {
             Index i0 = static_cast<Index>(
                                           (_config.vertical() ?
                                            -_config.position().y() :
-                                           _config.position().x()) / _config.width());
+                                           _config.position().x()) / _config.item_weight());
             Index i1 = static_cast<Index>((_config.vertical() ?
                                            _config.window().height() - _config.position().y() :
-                                           _config.window().width()  + _config.position().x()) / _config.width());
+                                           _config.window().width()  + _config.position().x()) / _config.item_weight());
             if (i1 > _model->size()) {
                 i1 = static_cast<Index>(_model->size()) - 1;
             }
@@ -247,8 +257,8 @@ namespace lluitk {
                 auto &g = _root.g();
                 g.data(_model->key(i)); // associate key
                 g.transform(llsg::Transform().translate(_config.vertical() ?
-                                                        llsg::Vec2(0, _config.window().height() - (i+1) * _config.width()) :
-                                                        llsg::Vec2(i * _config.width(), 0)));
+                                                        llsg::Vec2(0, _config.window().height() - (i+1) * _config.item_weight()) :
+                                                        llsg::Vec2(i * _config.item_weight(), 0)));
                 g.append(std::move(elem_p));
             }
             _root.identity().translate({-_config.position().x(),-_config.position().y()});

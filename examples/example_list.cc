@@ -46,7 +46,7 @@ struct Model {
         auto &g = result.get()->asGroup();
         g
         .rect()
-        .size({config.window().width(),config.width()})
+        .size({config.window().width(),config.item_weight()})
         .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
         g.text().str(k).pos({5, 5});
         return std::move(result);
@@ -72,6 +72,9 @@ int main() {
     };
     
     Lst lst;
+    lst.root().style().fontSize().reset(20);
+    lst.item_weight(30);
+    
     lst.geometryMap(geomMap).model(&model);
 
     auto &window = lluitk::os::graphics().window(200,200);
