@@ -91,7 +91,7 @@ namespace lluitk {
         //
         // typename Model::item_type;
         //
-        // Model::item_type get(Index index) const;
+        // Model::item_type key(Index index) const;
         //             Size size()           const;
         //
         //
@@ -104,7 +104,7 @@ namespace lluitk {
         struct List: public lluitk::SimpleWidget {
         public:
             using key_type          = typename Model::key_type; // more
-            using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(const key_type&, Index, const ListConfig&, bool)>;
+            using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(Index, const ListConfig&, bool)>;
         public:
             List() = default;
             List& model(Model *model);
@@ -243,10 +243,9 @@ namespace lluitk {
             // items.reserve(i1-i0+1);
             for (auto i=i0;i<=i1;++i) {
                 // std::cout << i << std::endl;
-                auto key = _model->get(i);
-                auto elem_p = _geometry_map(key, i, _config, i == _selectedIndex);
+                auto elem_p = _geometry_map(i, _config, i == _selectedIndex);
                 auto &g = _root.g();
-                g.data(key); // associate key
+                g.data(_model->key(i)); // associate key
                 g.transform(llsg::Transform().translate(_config.vertical() ?
                                                         llsg::Vec2(0, _config.window().height() - (i+1) * _config.width()) :
                                                         llsg::Vec2(i * _config.width(), 0)));

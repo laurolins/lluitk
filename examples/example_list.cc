@@ -21,17 +21,38 @@
 
 
 struct Model {
+    
     using key_type = std::string;
 
     using Size  = typename lluitk::list::Size;
+    
     using Index = typename lluitk::list::Index;
+    
     Model() {
         for (int i=0;i<1000;++i) {
             _items.push_back(std::string("item ") + std::to_string(i+1));
         }
     }
+    
     lluitk::list::Size size() const { return static_cast<Size>(_items.size()); }
-    key_type           get(Index index) const { return _items.at(static_cast<size_t>(index)); }
+    
+    key_type           key(Index index) const { return _items.at(static_cast<size_t>(index)); }
+    
+    // map index into a geometrical element
+    std::unique_ptr<llsg::Element> geometry(Index index, const lluitk::list::ListConfig& config, bool selected) const {
+        auto k = key(index);
+        std::unique_ptr<llsg::Element> result;
+        result.reset(new llsg::Group());
+        auto &g = result.get()->asGroup();
+        g
+        .rect()
+        .size({config.window().width(),config.width()})
+        .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
+        g.text().str(k).pos({5, 5});
+        return std::move(result);
+    }
+    
+    
     std::vector<std::string> _items;
 };
 
@@ -46,16 +67,8 @@ int main() {
     using ListConfig = lluitk::list::ListConfig;
     using GeomMap    = Lst::geometry_map_type;
     
-    GeomMap geomMap = [](const Key& key, Index index, const ListConfig& config, bool selected) {
-        std::unique_ptr<llsg::Element> result;
-        result.reset(new llsg::Group());
-        auto &g = result.get()->asGroup();
-        g
-        .rect()
-        .size({config.window().width(),config.width()})
-        .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
-        g.text().str(key).pos({5, 5});
-        return std::move(result);
+    GeomMap geomMap = [&model](Index index, const ListConfig& config, bool selected) {
+        return model.geometry(index, config, selected);
     };
     
     Lst lst;
