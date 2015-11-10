@@ -2,11 +2,22 @@
 
 #include "widget.hh"
 
+#include <chrono>
+
 namespace lluitk {
 
+    static Microseconds now() {
+        return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    }
+    
     //------------------------------------------------------------------------------
     // App
     //------------------------------------------------------------------------------
+    
+    App::App() {
+        _start_time = now();
+    }
+
     
     void App::setMainWidget(Widget *w) {
         main_widget = w;
@@ -44,6 +55,7 @@ namespace lluitk {
     }
     
     void App::processEvent(const event::Event& event) {
+
         const event::Event* e = &event;
         
         if (!main_widget)
@@ -51,7 +63,7 @@ namespace lluitk {
 
         current_event_info            = last_event_info;
         current_event_info.event_type = e->getType();
-
+        current_event_info.timestamp(now() - _start_time);
         
         // window resize is special
         if (e->getType() == event::EVENT_WINDOW_RESIZE) {
@@ -182,8 +194,6 @@ namespace lluitk {
             }
 
         }
-        
-        
         
         last_event_info = current_event_info;
 

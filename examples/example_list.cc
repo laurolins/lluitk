@@ -88,6 +88,11 @@ int main() {
     lst.root().style().fontSize().reset(20);
     lst.item_weight(30);
     
+    lst.register_trigger_function([](const Lst& list) {
+        if (list.selectect_index() >= 0)
+            std::cout << list.model()->key(list.selectect_index()) << std::endl;
+    });
+    
     lst.geometryMap(geomMap).model(&model);
 
     auto &window = lluitk::os::graphics().window(200,200);

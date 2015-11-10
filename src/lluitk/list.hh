@@ -106,18 +106,38 @@ namespace lluitk {
         struct List: public lluitk::SimpleWidget {
         public:
             using key_type          = typename Model::key_type; // more
+
             using geometry_map_type = std::function<std::unique_ptr<llsg::Element>(Index, const ListConfig&, bool)>;
+        
+            using trigger_function_type = std::function<void(const List& list)>;
+
         public:
+
             List() = default;
             List& model(Model *model);
             List& geometryMap(geometry_map_type f);
+            
+            Index selectect_index() const { return _selectedIndex; }
+
+            const Model* model() const { return _model; }
+            
+            Model* model() { return _model; }
+        
         public:
             void onMouseWheel(const lluitk::App &app);
             void onMousePress(const lluitk::App &app);
+
         public:
             
             void render();
             void prepare();
+            
+            //
+            // if double click the same item or
+            // press enter with a selected item
+            //
+            void register_trigger_function(trigger_function_type f);
+            void remove_trigger_function();
 
             bool contains(const lluitk::Point& p) const;
             void sizeHint(const lluitk::Window &window);
@@ -126,22 +146,43 @@ namespace lluitk {
             ListConfig&  config() { return _config; }
             
             void item_weight(float w) { _config.item_weight(w); _dirty = true; }
+
+        private:
             
-        public:
+            void _trigger();
             
+        private:
+            trigger_function_type _trigger_function;
             SpeedupWheel      _speedup_wheel;
-            
             Model*            _model { nullptr };
             geometry_map_type _geometry_map; // not defined at first
             ListConfig        _config;
             bool              _dirty { true };
             llsg::Group       _root;
             Index             _selectedIndex { -1 };
+            Microseconds      _last_press_timestamp { 0 };
         };
         
         //---------------------------------------------------------------------------
         // List Implementation
         //---------------------------------------------------------------------------
+
+        template <typename M>
+        void List<M>::remove_trigger_function() {
+            trigger_function_type f;
+            _trigger_function = f;
+        }
+
+        template <typename M>
+        void List<M>::_trigger() {
+            if (_trigger_function)
+                _trigger_function(*this);
+        }
+        
+        template <typename M>
+        void List<M>::register_trigger_function(trigger_function_type f) {
+            _trigger_function = f;
+        }
         
         template <typename M>
         bool List<M>::contains(const lluitk::Point& p) const {
@@ -158,12 +199,24 @@ namespace lluitk {
         void List<M>::onMousePress(const lluitk::App &app) {
             auto &window = _config.window();
             auto window_pos = app.current_event_info.mouse_position - window.min();
+            
+            auto t1    = app.current_event_info.timestamp();
+            auto delta = t1 - _last_press_timestamp;
+            // std::cerr << delta << std::endl;
+            
+            
             if (_config.vertical()) {
                 auto y = (window.height() - window_pos.y()) - _config.position().y();
                 Index i = static_cast<Index>(y / _config.item_weight());
-                _selectedIndex = i;
-                _dirty = true;
+                if (i != _selectedIndex) {
+                    _selectedIndex = (i < _model->size()) ? i : -1;
+                    _dirty = true;
+                }
+                else if (delta < 200000)  { // 0.2 seconds
+                    _trigger();
+                }
             }
+            _last_press_timestamp = app.current_event_info.timestamp();
         }
         
         template <typename M>

@@ -5,6 +5,12 @@
 namespace lluitk {
 
     //------------------------------------------------------------------------------
+    // Timestamp: unix time
+    //------------------------------------------------------------------------------
+    
+    using Microseconds = std::uint64_t;
+    
+    //------------------------------------------------------------------------------
     // Forward Decl.
     //------------------------------------------------------------------------------
     
@@ -16,6 +22,10 @@ namespace lluitk {
     
     struct EventInfo {
         EventInfo() = default;
+        
+        Microseconds timestamp() const { return _timestamp; }
+        EventInfo& timestamp(Microseconds t) { _timestamp = t; return *this; }
+        
         event::EventType event_type;
         Point  mouse_press_position;
         Point  mouse_release_position;
@@ -25,6 +35,11 @@ namespace lluitk {
         event::Modifiers    modifiers;
         event::MouseButton  button;
         event::KeyCode      key_code;
+        
+        
+        
+        // event time is the number of microseconds elapsed since the creation of App object
+        Microseconds        _timestamp { 0 };
     };
 
     //------------------------------------------------------------------------------
@@ -32,6 +47,8 @@ namespace lluitk {
     //------------------------------------------------------------------------------
     
     struct App {
+        App();
+
         void setMainWidget(Widget *w);
         void processEvent(const event::Event &event);
         
@@ -41,6 +58,8 @@ namespace lluitk {
         void lock(Widget *w=nullptr) const; // without argument or null it unlocks
         
         void setKeyFocus(Widget *w);
+        
+        Microseconds start_time() const { return _start_time; }
         
     public:
         // keep a key_focus, hover, drag-n-drop model
@@ -52,6 +71,8 @@ namespace lluitk {
 
         EventInfo  last_event_info;
         EventInfo  current_event_info;
+        
+        Microseconds _start_time { 0 };
     };
 
 }
