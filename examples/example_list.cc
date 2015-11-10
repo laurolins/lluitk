@@ -29,7 +29,7 @@ struct Model {
     using Index = typename lluitk::list::Index;
     
     Model() {
-        for (int i=0;i<1000;++i) {
+        for (int i=0;i<3;++i) {
             _items.push_back(std::string("item ") + std::to_string(i+1));
         }
     }
@@ -40,15 +40,28 @@ struct Model {
     
     // map index into a geometrical element
     std::unique_ptr<llsg::Element> geometry(Index index, const lluitk::list::ListConfig& config, bool selected) const {
+
         auto k = key(index);
+        
         std::unique_ptr<llsg::Element> result;
+        
         result.reset(new llsg::Group());
+        
         auto &g = result.get()->asGroup();
+        
         g
         .rect()
         .size({config.window().width(),config.item_weight()})
-        .style().color().reset(llsg::Color{selected ? 0.5f : 0.0f});
-        g.text().str(k).pos({5, 5});
+        .style()
+        .color()
+        .reset(llsg::Color{selected ? 0.5f : 1.0f});
+
+        g
+        .text()
+        .str(k)
+        .pos({5, 5})
+        .style().color().reset({0.0f});
+        
         return std::move(result);
     }
     
@@ -97,6 +110,7 @@ int main() {
     
     
     grid.movableSplitters(false);
+    grid.grid_style().clear(true).clear_color({1.0f});
     
     // create a container widget
     // grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{200,200}});
@@ -129,7 +143,7 @@ int main() {
     while (!window.done()) {
         
         /* Render here */
-        glClearColor(0.0f,0.0f,0.0f,1.0f);
+        glClearColor(1.0f,1.0f,1.0f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         glViewport(0,0,window.framebuffer_width,window.framebuffer_height);

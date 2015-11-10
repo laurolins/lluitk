@@ -133,13 +133,20 @@ namespace lluitk {
         Color focused_splitter_color() const;
         Color live_splitter_color() const;
         Color phantom_splitter_color() const;
+        Color clear_color() const { return _clear_color; }
+        bool  clear() const { return _clear; }
+
         GridStyle& focused_splitter_color(const Color& p);
         GridStyle& live_splitter_color(const Color& p);
         GridStyle& phantom_splitter_color(const Color& p);
+        GridStyle& clear_color(const Color& p) { _clear_color = p; return *this; }
+        GridStyle& clear(bool f) { _clear = f; return *this; }
     private:
         Color _focused_splitter_color { 0.6f };
         Color _live_splitter_color { 0.8f };
         Color _phantom_splitter_color { 0.4f };
+        Color _clear_color            { 0.0f };
+        bool  _clear                  { false };
     };
     
     //---------------------------------------------------------

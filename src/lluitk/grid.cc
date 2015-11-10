@@ -262,6 +262,13 @@ namespace lluitk {
     }
 
     void Grid::render() {
+        auto &renderer = llsg::opengl::getRenderer();
+        bool clear = _grid_style.clear();
+        if (clear) {
+            renderer.clear_color(_grid_style.clear_color());
+            renderer.clear(window);
+        }
+        
         auto it = children();
         Widget* child;
         while (it.next(child)) {
@@ -275,7 +282,6 @@ namespace lluitk {
         if (canvas.dirty) {
             prepareCanvas();
         }
-        auto &renderer = llsg::opengl::getRenderer();
         renderer.render(canvas.root, llsg::Transform(), window);
     }
 
