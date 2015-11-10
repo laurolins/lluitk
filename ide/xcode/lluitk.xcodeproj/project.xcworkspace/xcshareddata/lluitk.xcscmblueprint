@@ -1,0 +1,51 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B714CB995E27B4E021D92A06F663EDB182C76011",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "83E1082A5E86E125EC728B469AB7091DB946D76A" : 0,
+    "86FB321C3A8DE1D18CC0541022C49F26AD4012CE" : 0,
+    "D4AB9FDDCD9B5F58DE02CE0D90C3E9E352E037B5" : 0,
+    "E06E8B697757ACCE957AFF18B3D76B2BCEE6549B" : 0,
+    "B714CB995E27B4E021D92A06F663EDB182C76011" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1B4E1655-1097-4F73-9621-C98BDA232B82",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "83E1082A5E86E125EC728B469AB7091DB946D76A" : "lluitksubmodules\/llsg\/submodules\/d3cpp",
+    "86FB321C3A8DE1D18CC0541022C49F26AD4012CE" : "lluitksubmodules\/llsg",
+    "D4AB9FDDCD9B5F58DE02CE0D90C3E9E352E037B5" : "lluitksubmodules\/llsg\/submodules\/tmfont",
+    "E06E8B697757ACCE957AFF18B3D76B2BCEE6549B" : "",
+    "B714CB995E27B4E021D92A06F663EDB182C76011" : "lluitk"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "lluitk",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ide\/xcode\/lluitk.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:laurolins\/d3cpp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "83E1082A5E86E125EC728B469AB7091DB946D76A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:laurolins\/llsg",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "86FB321C3A8DE1D18CC0541022C49F26AD4012CE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/laurolins\/lluitk",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B714CB995E27B4E021D92A06F663EDB182C76011"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/laurolins\/tmfont",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D4AB9FDDCD9B5F58DE02CE0D90C3E9E352E037B5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:laurolins\/nc_cpp_viewer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E06E8B697757ACCE957AFF18B3D76B2BCEE6549B"
+    }
+  ]
+}
