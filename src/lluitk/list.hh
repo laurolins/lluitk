@@ -293,7 +293,7 @@ namespace lluitk {
             Index i1 = static_cast<Index>((_config.vertical() ?
                                            _config.window().height() - _config.position().y() :
                                            _config.window().width()  + _config.position().x()) / _config.item_weight());
-            if (i1 > _model->size()) {
+            if (i1 >= _model->size()) {
                 i1 = static_cast<Index>(_model->size()) - 1;
             }
             
