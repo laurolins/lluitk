@@ -3,6 +3,7 @@ include_directories(../../submodules/llsg/src)
 include_directories(../../submodules/llsg/submodules/d3cpp/src)
 
 add_library (lluitk_core STATIC
+list.cc
 app.cc
 canvas.cc
 event.cc

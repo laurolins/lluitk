@@ -1,9 +1,9 @@
 #pragma once
 
-#include "lluitk/base.hh"
-#include "lluitk/event.hh"
-#include "lluitk/app.hh"
-#include "lluitk/simple_widget.hh"
+#include "base.hh"
+#include "event.hh"
+#include "app.hh"
+#include "simple_widget.hh"
 
 #include "llsg/llsg.hh"
 #include "llsg/llsg_opengl.hh"
