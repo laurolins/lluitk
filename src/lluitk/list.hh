@@ -211,8 +211,20 @@ namespace lluitk {
         template <typename M>
         void List<M>::sizeHint(const lluitk::Window &window) {
             _dirty  = true;
+            
+            assert(_config.vertical());
+            
             std::cerr << "new list size: " << window << std::endl;
+            
             _config.window(window);
+
+
+            
+            auto offset = -_config.position().y();
+            auto length = _model->size() * _config.item_weight();
+            auto max_offset = std::max(0.0,static_cast<double>((length - _config.window().height())));
+            _config.position().y(-std::min(std::max(0.0, offset),max_offset));
+
         }
         
         template <typename M>
@@ -227,15 +239,19 @@ namespace lluitk {
             // std::cerr << delta << std::endl;
             
             llsg::GeometricTests g;
-            auto e = g.firstHit(llsg::Vec2{ (double) window_pos.x(), (double) window_pos.y() }, 
-                                _scroller_root);
+            auto e = g.firstHit(llsg::Vec2{ (double) window_pos.x(), (double) window_pos.y() }, _scroller_root);
             if (e && any::can_cast<std::string>(e->data())) {
                 auto command = any::any_cast<std::string>(e->data());
                 auto y = (window.height() - window_pos.y())/window.height();
                 auto i_mid = static_cast<Index>(std::round(y * _model->size()));
                 auto rows_per_window = (window.height() / _config.item_weight());
-                auto candidates_pos = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
-                _config.position().y(-std::max(0.0,candidates_pos));
+
+                
+                auto candidate_offset = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
+                auto max_offset = static_cast<double>((_model->size() * _config.item_weight() - _config.window().height()));
+                _config.position().y(-std::min(std::max(0.0,candidate_offset),max_offset));
+                
+                _dirty    = true;
                 _dragging = true;
                 app.lock(this);
             }
@@ -260,12 +276,10 @@ namespace lluitk {
                 auto y = (_config.window().height() - window_pos.y())/_config.window().height();
                 auto i_mid = static_cast<Index>(std::round(y * _model->size()));
                 auto rows_per_window = (_config.window().height() / _config.item_weight());
-                auto candidates_pos = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
 
-                
-                auto miny = static_cast<double>((_model->size() * _config.item_weight() - _config.window().height()));
-                _config.position().y(-std::min(std::max(0.0,candidates_pos),miny));
-                
+                auto candidate_offset = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
+                auto max_offset = static_cast<double>((_model->size() * _config.item_weight() - _config.window().height()));
+                _config.position().y(-std::min(std::max(0.0,candidate_offset),max_offset));
                 
                 _dirty = true;
             }
