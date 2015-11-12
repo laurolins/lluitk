@@ -218,8 +218,6 @@ namespace lluitk {
             
             _config.window(window);
 
-
-            
             auto offset = -_config.position().y();
             auto length = _model->size() * _config.item_weight();
             auto max_offset = std::max(0.0,static_cast<double>((length - _config.window().height())));
