@@ -53,7 +53,8 @@ namespace lluitk {
             
             bool            _vertical { true };
             float           _item_weight { 20.0f };
-            llsg::Vec2      _position;
+
+            llsg::Vec2      _position; // tranlate the items rectangle
             lluitk::Window  _window;   // current visible area
         };
         
@@ -210,6 +211,7 @@ namespace lluitk {
         template <typename M>
         void List<M>::sizeHint(const lluitk::Window &window) {
             _dirty  = true;
+            std::cerr << "new list size: " << window << std::endl;
             _config.window(window);
         }
         
@@ -259,7 +261,12 @@ namespace lluitk {
                 auto i_mid = static_cast<Index>(std::round(y * _model->size()));
                 auto rows_per_window = (_config.window().height() / _config.item_weight());
                 auto candidates_pos = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
-                _config.position().y(-std::max(0.0,candidates_pos));
+
+                
+                auto miny = static_cast<double>((_model->size() * _config.item_weight() - _config.window().height()));
+                _config.position().y(-std::min(std::max(0.0,candidates_pos),miny));
+                
+                
                 _dirty = true;
             }
         }
@@ -345,11 +352,11 @@ namespace lluitk {
         
             // regenerate all the geometry from scratch (improve this later)
         
-            // figure out item range
-            Index i0 = static_cast<Index>(
-                (vertical ?
-                 -position.y() :
-                 position.x()) / _config.item_weight());
+            //
+            // given the current position,
+            // figure out item range that is visible
+            //
+            Index i0 = static_cast<Index>( (vertical ? -position.y() : position.x()) / _config.item_weight());
             Index i1 = static_cast<Index>((vertical ?
                                            window.height() - position.y() :
                                            window.width()  + position.x()) / _config.item_weight());
@@ -380,13 +387,19 @@ namespace lluitk {
         
             { // prepare scroller (draw two rectangles if needed)
                 _scroller_root.removeAll();
-                auto length         = _model->size() * _config.item_weight();
-                auto visible_length = (i1 - i0 + 1)  * _config.item_weight();
-                if (visible_length < length) {
-                    auto active_length    = (vertical ? window.height() : window.width());
                 
-                    auto cursor_length    = std::floor(visible_length/length * active_length);
-                    auto cursor_pos       = (i0 * _config.item_weight())/length * active_length;
+                //
+                // length == n * w
+                // visible_length = window.height
+                // cursor length
+                
+                auto length         = _model->size() * _config.item_weight();
+                auto visible_length = (vertical ? window.height() : window.width());
+                // (vertical ? window.height() : window.width());
+                if (visible_length < length) {
+
+                    auto cursor_length    = std::floor(visible_length/length * visible_length);
+                    auto cursor_pos       = std::floor(-position.y()/length * visible_length);// (i0 * _config.item_weight())/length * active_length;
                     auto cursor_width     = 6.0f;
                 
                     auto bar_width        = 10.0f;
