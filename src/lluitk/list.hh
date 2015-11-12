@@ -126,6 +126,8 @@ namespace lluitk {
         public:
             void onMouseWheel(const lluitk::App &app);
             void onMousePress(const lluitk::App &app);
+            void onMouseMove(const lluitk::App &app);
+            void onMouseRelease(const lluitk::App &app);
 
         public:
             
@@ -147,6 +149,12 @@ namespace lluitk {
             
             void item_weight(float w) { _config.item_weight(w); _dirty = true; }
 
+            llsg::Color scrollbar_bar_color() const { return _scrollbar_bar_color; }
+            llsg::Color scrollbar_cursor_color() const { return _scrollbar_cursor_color; }
+
+            List& scrollbar_bar_color(const llsg::Color& c) { _scrollbar_bar_color = c; return *this; }
+            List& scrollbar_cursor_color(const llsg::Color& c) { _scrollbar_cursor_color = c; return *this; }
+            
         private:
             
             void _trigger();
@@ -154,13 +162,23 @@ namespace lluitk {
         private:
             trigger_function_type _trigger_function;
             SpeedupWheel      _speedup_wheel;
+
             Model*            _model { nullptr };
             geometry_map_type _geometry_map; // not defined at first
+
             ListConfig        _config;
             bool              _dirty { true };
+            
             llsg::Group       _root;
+            llsg::Group       _scroller_root;
+            
             Index             _selectedIndex { -1 };
             Microseconds      _last_press_timestamp { 0 };
+            bool              _dragging { false };
+            
+            
+            llsg::Color       _scrollbar_bar_color    { 0.8f };
+            llsg::Color       _scrollbar_cursor_color { 1.0f };
         };
         
         //---------------------------------------------------------------------------
@@ -199,13 +217,27 @@ namespace lluitk {
         void List<M>::onMousePress(const lluitk::App &app) {
             auto &window = _config.window();
             auto window_pos = app.current_event_info.mouse_position - window.min();
+
+            assert(_config.vertical());
             
             auto t1    = app.current_event_info.timestamp();
             auto delta = t1 - _last_press_timestamp;
             // std::cerr << delta << std::endl;
             
-            
-            if (_config.vertical()) {
+            llsg::GeometricTests g;
+            auto e = g.firstHit(llsg::Vec2{ (double) window_pos.x(), (double) window_pos.y() }, 
+                                _scroller_root);
+            if (e && any::can_cast<std::string>(e->data())) {
+                auto command = any::any_cast<std::string>(e->data());
+                auto y = (window.height() - window_pos.y())/window.height();
+                auto i_mid = static_cast<Index>(std::round(y * _model->size()));
+                auto rows_per_window = (window.height() / _config.item_weight());
+                auto candidates_pos = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
+                _config.position().y(-std::max(0.0,candidates_pos));
+                _dragging = true;
+                app.lock(this);
+            }
+            else {
                 auto y = (window.height() - window_pos.y()) - _config.position().y();
                 Index i = static_cast<Index>(y / _config.item_weight());
                 if (i != _selectedIndex) {
@@ -219,6 +251,27 @@ namespace lluitk {
             _last_press_timestamp = app.current_event_info.timestamp();
         }
         
+        template <typename M>
+        void List<M>::onMouseMove(const lluitk::App &app) {
+            if (_dragging) {
+                auto window_pos = app.current_event_info.mouse_position - _config.window().min();
+                auto y = (_config.window().height() - window_pos.y())/_config.window().height();
+                auto i_mid = static_cast<Index>(std::round(y * _model->size()));
+                auto rows_per_window = (_config.window().height() / _config.item_weight());
+                auto candidates_pos = std::floor((i_mid - rows_per_window/2.0f) * _config.item_weight());
+                _config.position().y(-std::max(0.0,candidates_pos));
+                _dirty = true;
+            }
+        }
+
+        template <typename M>
+        void List<M>::onMouseRelease(const lluitk::App &app) {
+            if (_dragging) {
+                _dragging = false;
+                app.lock();
+            }
+        }
+    
         template <typename M>
         auto List<M>::model(M *model) -> List& {
             _model = model;
@@ -235,12 +288,15 @@ namespace lluitk {
         
         template <typename M>
         void List<M>::render() {
+            auto& window = _config.window();
+
             if (_dirty)
                 prepare();
             
             // get llsg renderer and
             // _scene.img().key(resloc::getResourcePath("logo/nanocubes-blue-name-logo.png")).coords(llsg::Quad{0.0f,0.0f,600.0f,180.0f});
-            llsg::opengl::getRenderer().render(_root, llsg::Transform{}.translate(_config.window().min()), _config.window(), false);
+            llsg::opengl::getRenderer().render(_root, llsg::Transform{}.translate(window.min()), window, false);
+            llsg::opengl::getRenderer().render(_scroller_root, llsg::Transform{}.translate(window.min()), window, false);
         }
         
         template <typename M>
@@ -276,48 +332,102 @@ namespace lluitk {
         
         template <typename M>
         void List<M>::prepare() {
+
+            auto &window   = _config.window();
+            auto &position = _config.position();
+            auto  vertical = _config.vertical();
+              
             //
             _root.removeAll();
-            
+        
             if (!_model || _model->size() == 0)
                 return;
-            
-            //
+        
             // regenerate all the geometry from scratch (improve this later)
-
+        
             // figure out item range
             Index i0 = static_cast<Index>(
-                                          (_config.vertical() ?
-                                           -_config.position().y() :
-                                           _config.position().x()) / _config.item_weight());
-            Index i1 = static_cast<Index>((_config.vertical() ?
-                                           _config.window().height() - _config.position().y() :
-                                           _config.window().width()  + _config.position().x()) / _config.item_weight());
+                (vertical ?
+                 -position.y() :
+                 position.x()) / _config.item_weight());
+            Index i1 = static_cast<Index>((vertical ?
+                                           window.height() - position.y() :
+                                           window.width()  + position.x()) / _config.item_weight());
             if (i1 >= _model->size()) {
                 i1 = static_cast<Index>(_model->size()) - 1;
             }
-            
-            // std::cout << "i0: " << i0 << "  i1: " << i1 << " pos: " << _position << std::endl;
-            
-            //
-            // all right
-            //
-            // std::vector<I> items;
-            // items.reserve(i1-i0+1);
-            for (auto i=i0;i<=i1;++i) {
-                // std::cout << i << std::endl;
-                auto elem_p = _geometry_map(i, _config, i == _selectedIndex);
-                auto &g = _root.g();
-                g.data(_model->key(i)); // associate key
-                g.transform(llsg::Transform().translate(_config.vertical() ?
-                                                        llsg::Vec2(0, _config.window().height() - (i+1) * _config.item_weight()) :
-                                                        llsg::Vec2(i * _config.item_weight(), 0)));
-                g.append(std::move(elem_p));
+            if (i0 > i1) {
+                i0 = i1;
             }
-            _root.identity().translate({-_config.position().x(),-_config.position().y()});
-            
+        
+
+            { // prepare geometry of items
+                // std::cout << "i0: " << i0 << "  i1: " << i1 << " pos: " << _position << std::endl;
+                for (auto i=i0;i<=i1;++i) {
+                    // std::cout << i << std::endl;
+                    auto elem_p = _geometry_map(i, _config, i == _selectedIndex);
+                    auto &g = _root.g();
+                    g.data(_model->key(i)); // associate key
+
+                    g.transform(llsg::Transform()
+                                .translate(vertical ?
+                                           llsg::Vec2(0, window.height() - (i+1) * _config.item_weight()) :
+                                           llsg::Vec2(i * _config.item_weight(), 0)));
+                    g.append(std::move(elem_p));
+                }
+                _root.identity().translate({-position.x(),-position.y()});
+            }
+        
+            { // prepare scroller (draw two rectangles if needed)
+                _scroller_root.removeAll();
+                auto length         = _model->size() * _config.item_weight();
+                auto visible_length = (i1 - i0 + 1)  * _config.item_weight();
+                if (visible_length < length) {
+                    auto active_length    = (vertical ? window.height() : window.width());
+                
+                    auto cursor_length    = std::floor(visible_length/length * active_length);
+                    auto cursor_pos       = (i0 * _config.item_weight())/length * active_length;
+                    auto cursor_width     = 6.0f;
+                
+                    auto bar_width        = 10.0f;
+                    auto bar_pos          = _config.vertical() ? llsg::Vec2{window.width()-bar_width,0} : llsg::Vec2{0,0};
+                    auto bar_size         = _config.vertical() ? llsg::Vec2{bar_width,window.height()} : llsg::Vec2{window.width(),bar_width};
+                
+                    auto cursor_margin    = (bar_width-cursor_width)/2.0f;
+                
+                    llsg::Vec2 p0; //    { _window.min() };
+                    auto size = (vertical ? 
+                                 llsg::Vec2 {cursor_width,cursor_length} : 
+                                 llsg::Vec2 {cursor_length,cursor_width});
+                    if (_config.vertical()) {
+                        p0.xinc(window.width() - bar_width + cursor_margin);
+                        p0.yinc(window.height() - cursor_pos - cursor_length);
+                    }
+                    else {
+                        p0.xinc(cursor_pos);
+                        p0.yinc(cursor_margin);
+                    }
+                    _scroller_root
+                        .rect()
+                        .pos(bar_pos)
+                        .size(bar_size)
+                        .data(std::string("bar"))
+                        .style()
+                        .color()
+                        .reset(llsg::Color{0.5f,0.5f,0.5f,1.0f});
+                
+                    _scroller_root
+                        .rect()
+                        .pos(p0)
+                        .size(size)
+                        .data(std::string("cursor"))
+                        .style().color().reset(llsg::Color{1.0f,1.0f,1.0f,1.0f});
+                }
+            }
+        
             _dirty = false;
-        }
+
+        } // _prepare
         
     } // list
     
