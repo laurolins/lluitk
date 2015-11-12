@@ -311,6 +311,9 @@ namespace lluitk {
         void List<M>::render() {
             auto& window = _config.window();
 
+            if (window.width() == 0 || window.height() == 0)
+                return;
+
             if (_dirty)
                 prepare();
             
