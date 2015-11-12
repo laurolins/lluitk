@@ -214,7 +214,7 @@ namespace lluitk {
             
             assert(_config.vertical());
             
-            std::cerr << "new list size: " << window << std::endl;
+            // std::cerr << "new list size: " << window << std::endl;
             
             _config.window(window);
 
