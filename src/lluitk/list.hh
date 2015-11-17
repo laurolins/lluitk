@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include "base.hh"
 #include "event.hh"
 #include "app.hh"
