@@ -31,7 +31,7 @@ namespace lluitk {
         double SpeedupWheel::speedup(llsg::Vec2 move) {
             auto current_ts = std::chrono::high_resolution_clock::now().time_since_epoch().count();;
             
-            wheelos() << (current_ts - _starttime) << "|" << move.y() << "|" << RENDER_LOOP_ITERATON << std::endl;
+            // wheelos() << (current_ts - _starttime) << "|" << move.y() << "|" << RENDER_LOOP_ITERATON << std::endl;
             
             if (move != _move) {
                 _factor  = 1.0;
