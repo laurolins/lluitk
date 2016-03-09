@@ -1,3 +1,3 @@
 [submodule "submodules/llsg"]
 	path = submodules/llsg
-	url = git@github.com/laurolins/llsg
+	url = git@github.com:laurolins/llsg
