@@ -19,15 +19,14 @@
 #include "llsg/transition.hh"
 
 
-
+using typename lluitk::list::Size;
+    
+using typename lluitk::list::Index;
+    
 struct Model {
     
     using key_type = std::string;
 
-    using Size  = typename lluitk::list::Size;
-    
-    using Index = typename lluitk::list::Index;
-    
     Model() {
         for (int i=0;i<3;++i) {
             _items.push_back(std::string("item ") + std::to_string(i+1));
