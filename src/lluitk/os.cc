@@ -34,6 +34,7 @@ namespace lluitk {
             glfwWindowHint(GLFW_VISIBLE, visible ? GL_TRUE : GL_FALSE);
             glfwWindowHint(GLFW_DECORATED, decorated ? GL_TRUE : GL_FALSE);
 			glfwWindowHint(GLFW_RESIZABLE, decorated ? GL_TRUE : GL_FALSE);
+            glfwSwapInterval(0);
             
             auto window = glfwCreateWindow(width, height, "", NULL, (parent ? glfwwin(parent->handle) : NULL));
             if (!window) {

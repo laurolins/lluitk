@@ -28,7 +28,7 @@ struct Model {
     using key_type = std::string;
 
     Model() {
-        for (int i=0;i<3;++i) {
+        for (int i=0;i<300;++i) {
             _items.push_back(std::string("item ") + std::to_string(i+1));
         }
     }
