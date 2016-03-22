@@ -682,16 +682,16 @@ namespace lluitk {
     void Grid::onMouseMove(const App &app) {
         auto mouse_pos = app.current_event_info.mouse_position;
         if (gesture.resizing) {
-            std::cout << "Moving Splitter!" << std::endl;
+//            std::cout << "Moving Splitter!" << std::endl;
             
             gesture.p1 = llsg::Vec2{(double)mouse_pos.x(), (double)mouse_pos.y()};
-            auto delta = gesture.p1 - gesture.p0;
-            if (gesture.splitter.horizontal()) {
-                std::cerr << "Add dy: " << delta.y() << std::endl;
-            }
-            else if (gesture.splitter.vertical()) {
-                std::cerr << "Add dx: " << delta.x() << std::endl;
-            }
+//            auto delta = gesture.p1 - gesture.p0;
+//            if (gesture.splitter.horizontal()) {
+//                std::cerr << "Add dy: " << delta.y() << std::endl;
+//            }
+//            else if (gesture.splitter.vertical()) {
+//                std::cerr << "Add dx: " << delta.x() << std::endl;
+//            }
             canvas.markDirty();
         }
         else if (movableSplitters()) {
