@@ -26,6 +26,10 @@ namespace lluitk {
         Microseconds timestamp() const { return _timestamp; }
         EventInfo& timestamp(Microseconds t) { _timestamp = t; return *this; }
         
+        bool left_button() const { return button == event::MOUSE_BUTTON_LEFT; }
+        bool right_button() const { return button == event::MOUSE_BUTTON_RIGHT; }
+        bool middle_button() const { return button == event::MOUSE_BUTTON_MIDDLE; }
+        
         event::EventType event_type;
         Point  mouse_press_position;
         Point  mouse_release_position;
