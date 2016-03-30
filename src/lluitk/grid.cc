@@ -670,6 +670,7 @@ namespace lluitk {
         std::cerr << "splitter: " << splitter.index << "  type: " << splitter.kind << std::endl;
         
         app.lock(this);
+        app.finishEventProcessing();
         
         gesture.resizing = true;
         gesture.splitter = splitter;
@@ -714,6 +715,8 @@ namespace lluitk {
     void Grid::onMouseRelease(const App &app) {
         if (gesture.resizing) {
             app.lock(); // unlock
+            app.finishEventProcessing();
+
             applyGesture();
             gesture.resizing = false;
             
