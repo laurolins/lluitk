@@ -256,7 +256,7 @@ namespace lluitk {
         
         auto it = children();
         Widget* child;
-        while (it.next(child)) {
+        while ((child =it.next())) {
             child->pre_render();
         }
     }
@@ -271,7 +271,7 @@ namespace lluitk {
         
         auto it = children();
         Widget* child;
-        while (it.next(child)) {
+        while ((child=it.next())) {
             child->render();
         }
 
@@ -327,10 +327,6 @@ namespace lluitk {
         return window.contains(p);
     }
 
-    WidgetIterator Grid::children() const {
-        return WidgetIterator(new iterator(cell_map));
-    }
-    
     void Grid::layout() {
         
         auto spread = [](std::vector<Segment> &segments, Length length) {
@@ -725,26 +721,11 @@ namespace lluitk {
             std::cout << "Finished Resizing!" << std::endl;
         }
     }
-
-    //--------------------------------------------------------------------------
-    // Grid::iterator
-    //--------------------------------------------------------------------------
-
-    Grid::iterator::iterator(const container_type &container):
-    current(container.cbegin()),
-    end(container.cend())
-    {}
     
-    bool Grid::iterator::next(Widget* &widget) {
-        if (current != end) {
-            widget = current->second;
-            ++current;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    //
+    // can be used with any container behaves like the std containers
+    // with cbegin, cend and ++it
+    //
 
 
 }

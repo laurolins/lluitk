@@ -168,8 +168,8 @@ namespace lluitk {
                     // update
                     update = false;
                     Widget *child = nullptr;
-                    auto it = active_widget->children();
-                    while (it.next(child)) {
+                    auto it = active_widget->reverse_children(); // needs to process in reverse order here
+                    while ((child = it.next())) {
                         if (child->contains(p)) {
                             active_widget = child;
                             update = true;

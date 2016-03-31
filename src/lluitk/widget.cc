@@ -21,7 +21,7 @@ namespace lluitk {
         
         std::vector<Widget*> children;
         Widget* child;
-        while (iter.next(child)) {
+        while ((child = iter.next())) {
             children.push_back(child);
         }
         

@@ -20,7 +20,7 @@ namespace lluitk {
     
     struct BaseWidgetIterator {
         virtual ~BaseWidgetIterator() {}
-        virtual bool next(Widget* &next_widget) { return false; }
+        virtual Widget* next() { return nullptr; }
     };
     
     //------------------------------------------------------------------------------
@@ -29,11 +29,10 @@ namespace lluitk {
     
     struct WidgetIterator {
     public:
-        WidgetIterator(BaseWidgetIterator *it):
-        it(it)
-        {}
+        WidgetIterator() = default;
+        WidgetIterator(BaseWidgetIterator *it): it(it) {}
         ~WidgetIterator() { delete it; };
-        bool next(Widget* &next_widget) { return it->next(next_widget); }
+        Widget* next() { return (it) ? it->next() : nullptr; }
     public:
         BaseWidgetIterator *it { nullptr };
     };
@@ -46,7 +45,13 @@ namespace lluitk {
     public:
         
         virtual bool           contains(const Point& p) const = 0;
-        virtual WidgetIterator children() const { return WidgetIterator(new BaseWidgetIterator()); }
+        
+        // bottom-up (rendering order)
+        virtual WidgetIterator children() const { return WidgetIterator(); }
+        
+        // top-down (event processing priority)
+        virtual WidgetIterator reverse_children() const { return WidgetIterator(); }
+        
         virtual Widget*        parent() const = 0;
         virtual void           parent(Widget* parent) = 0;
         
@@ -93,7 +98,7 @@ namespace lluitk {
         std::vector<Widget*> stack;
     };
     
-    
-    
+
+
     
 }

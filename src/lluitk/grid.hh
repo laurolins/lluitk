@@ -149,28 +149,80 @@ namespace lluitk {
         bool  _clear                  { false };
     };
     
+    //----------------------------------------------------------------------------
+    // WidgetContainerterator
+    //----------------------------------------------------------------------------
+    
+    //
+    // can be used with any container behaves like the std containers
+    // with cbegin, cend and ++it
+    //
+    template <typename Iter>
+    struct WidgetMapIterator: public BaseWidgetIterator {
+    public:
+        Iter _current;
+        Iter _end;
+    public:
+        WidgetMapIterator()=default;
+        WidgetMapIterator(Iter begin, Iter end): _current(begin), _end(end) {}
+        Widget* next() {
+            if (_current != _end) {
+                auto result = _current->second;
+                ++_current;
+                return result;
+            }
+            else {
+                return nullptr;
+            }
+        }
+    };
+    
     //---------------------------------------------------------
     // Grid
-    //---------------------------------------------------------
-    
+    //---------------------------------------------------------    
     
     struct Grid: public SimpleWidget {
     public:
-        
-        //
-        struct iterator: public BaseWidgetIterator {
+        struct forward_iterator: public BaseWidgetIterator {
         public:
-            using container_type = std::map<GridPoint, Widget*>;
-            using base_iter_type = decltype(std::declval<container_type>().cbegin());
+            using it_type = decltype(std::map<GridPoint, Widget*>().cbegin());
         public:
-            iterator()=default;
-            iterator(const container_type &container);
-            bool next(Widget* &next_widget);
+            forward_iterator(it_type begin, it_type end): _current(begin), _end(end){}
+            Widget* next() {
+                if (_current != _end) {
+                    auto result = _current->second;
+                    ++_current;
+                    return result;
+                }
+                else {
+                    return nullptr;
+                }
+            }
         public:
-            base_iter_type current;
-            base_iter_type end;
+            it_type _current;
+            it_type _end;
         };
-    
+
+        struct backward_iterator: public BaseWidgetIterator {
+        public:
+            using it_type = decltype(std::map<GridPoint, Widget*>().crbegin());
+        public:
+            backward_iterator(it_type begin, it_type end): _current(begin), _end(end){}
+            Widget* next() {
+                if (_current != _end) {
+                    auto result = _current->second;
+                    ++_current;
+                    return result;
+                }
+                else {
+                    return nullptr;
+                }
+            }
+        public:
+            it_type _current;
+            it_type _end;
+        };
+
     public:
         
         Grid() = default;
@@ -186,7 +238,8 @@ namespace lluitk {
 
         bool contains(const Point& p) const;
         
-        WidgetIterator children() const;
+        WidgetIterator children() const { return WidgetIterator(new forward_iterator(cell_map.cbegin(), cell_map.cend())); }
+        WidgetIterator reverse_children() const  { return  WidgetIterator(new backward_iterator(cell_map.crbegin(), cell_map.crend())); }
 
         void setCellWidget(const GridPoint& cell, Widget* widget);
 
