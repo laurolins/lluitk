@@ -690,6 +690,7 @@ namespace lluitk {
 //                std::cerr << "Add dx: " << delta.x() << std::endl;
 //            }
             canvas.markDirty();
+            app.finishEventProcessing();
         }
         else if (movableSplitters()) {
             llsg::GeometricTests g;
@@ -705,6 +706,7 @@ namespace lluitk {
                 gesture.hover_splitter = Splitter{0,Splitter::NONE};
                 canvas.markDirty();
             }
+            // app.finishEventProcessing();
         }
     }
 
