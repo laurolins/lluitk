@@ -44,7 +44,7 @@ namespace lluitk {
     struct Widget {
     public:
         
-        virtual bool           contains(const Point& p) const = 0;
+        virtual bool           contains(const Point& p) const { return false; }
         
         // bottom-up (rendering order)
         virtual WidgetIterator children() const { return WidgetIterator(); }
@@ -52,8 +52,8 @@ namespace lluitk {
         // top-down (event processing priority)
         virtual WidgetIterator reverse_children() const { return WidgetIterator(); }
         
-        virtual Widget*        parent() const = 0;
-        virtual void           parent(Widget* parent) = 0;
+        virtual Widget*        parent() const { return nullptr; }
+        virtual void           parent(Widget* parent) { };
         
         template <typename T>
         T* as() {

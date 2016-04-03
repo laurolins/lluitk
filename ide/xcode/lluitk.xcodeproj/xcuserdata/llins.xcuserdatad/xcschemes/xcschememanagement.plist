@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>example-grid2.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>example-list.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>ED5562BA1AFBD8C0007D6CF6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EDEEE9CE1CB08BF70037425A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
