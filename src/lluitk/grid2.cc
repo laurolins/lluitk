@@ -107,9 +107,9 @@ namespace lluitk {
                 // triggers the release of node
                 node->parent()->set(node->index(), nullptr); // commit suicide... hehe
             }
+            dirty(true);
         }
 
-        
         Weights merge_weights(const Weights &w0, const Weights &w1, DivisionType dt) {
             Weights result;
             if (dt == HORIZONTAL) {
@@ -148,7 +148,11 @@ namespace lluitk {
         
         // compute window sizes of all slots and
         // divisions (mid-rectangle)
-        void Grid2::compute_sizes(const Window& window) {
+        void Grid2::update() {
+            
+            if (!dirty()) return;
+            
+            auto window = _window;
             
             // compute sum of weights, then linearly distribute through the window
             std::function<void(Node*)> update_weights;
@@ -174,7 +178,7 @@ namespace lluitk {
                     auto w0 = node0->weights();
                     auto w1 = node1->weights();
                     auto w = merge_weights(w0,w1,division->type());
-                    w.fixed = w.fixed + (division->type() == HORIZONTAL ? Vec2(that->border_size,0) : Vec2(0,that->border_size));
+                    w.fixed = w.fixed + (division->type() == HORIZONTAL ? Vec2(that->border_size(),0) : Vec2(0,that->border_size()));
                     node->weights(w);
                 }
             };
@@ -201,9 +205,9 @@ namespace lluitk {
                         auto w0 = node0->weights().fixed.x() + node0->weights().variable.x() * xcoef;
                         auto w1 = node1->weights().fixed.x() + node1->weights().variable.x() * xcoef;
                         
-                        update_window(node0, Window(area.x(),area.y(),w0,area.height()));
-                        node->window(Window(node0->window().X(),area.y(),that->border_size,area.height()));
-                        update_window(node1, Window(node->window().X(),area.y(),w1,area.height()));
+                        update_window (node0, Window(area.x(),            area.y(), w0,                 area.height()));
+                        node->window  (       Window(area.x() + w0,       area.y(), that->border_size(),  area.height()));
+                        update_window (node1, Window(node->window().X(),  area.y(), w1,                 area.height()));
                     }
                     else { // vertical dt
                         auto h  = area.height();
@@ -211,23 +215,50 @@ namespace lluitk {
                         auto h0 = node0->weights().fixed.y() + node0->weights().variable.y() * ycoef;
                         auto h1 = node1->weights().fixed.y() + node1->weights().variable.y() * ycoef;
                         
-                        update_window(node1, Window(area.x(),area.y(),area.width(),h1));
-                        node->window(Window(area.x(),node1->window().Y(),area.width(),that->border_size));
-                        update_window(node0, Window(area.x(),node->window().Y(),area.width(),h0));
+                        update_window ( node1, Window(area.x(), area.y(),            area.width(), h1                ));
+                        node->window  (        Window(area.x(), area.y() + h1,       area.width(), that->border_size() ));
+                        update_window ( node0, Window(area.x(), node->window().Y(),  area.width(), h0                ));
                     }
                 }
             };
             
-            update_window(_root.get(),Window(window.xy() + Vec2(margin_size), window.XY() - Vec2(margin_size)));
+            update_window(_root.get(),Window(window.xy() + Vec2(margin_size()), window.XY() - Vec2(margin_size())));
+            
+            dirty(false);
             
         }
 
+        WidgetIterator Grid2::children()         const { return WidgetIterator(new NodeWidgetIterator(const_cast<Node*>(_root.get()))); }
         
-        //----------
-        // Iterator
-        //----------
+        WidgetIterator Grid2::reverse_children() const { return WidgetIterator(new NodeWidgetIterator(const_cast<Node*>(_root.get()))); }
         
-        Node* Iterator::next() {
+        void Grid2::sizeHint(const Window &window) {
+            this->window(window);
+            this->update();
+            NodeIterator it(_root.get());
+            Node* node;
+            while ((node = it.next())) {
+                if (node->is_slot() && node->as_slot()->widget()) {
+                    node->as_slot()->widget()->sizeHint(node->window());
+                }
+            }
+        }
+        
+        void Grid2::render() {
+            auto it = children();
+            Widget *w;
+            // int count = 0;
+            while ((w=it.next())) {
+                // sstd::cout << count++ << std::endl;
+                w->render();
+            }
+        }
+        
+        //--------------
+        // NodeIterator
+        //--------------
+        
+        Node* NodeIterator::next() {
             if (!_stack.size()) return nullptr;
             auto top = _stack.back();
             _stack.pop_back();
@@ -239,6 +270,19 @@ namespace lluitk {
             }
         }
         
+        //--------------------
+        // NodeWidgetIterator
+        //--------------------
+        
+        Widget* NodeWidgetIterator::next() {
+            while (true) {
+                auto node = _iter.next();
+                if (!node) return nullptr;
+                if (node->is_slot() && node->as_slot()->widget()) {
+                    return node->as_slot()->widget();
+                }
+            }
+        }
         
     } // grid2
 

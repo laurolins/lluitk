@@ -178,6 +178,8 @@ namespace lluitk {
             
         };
         
+        
+        
 
         //-------
         // Grid2
@@ -187,39 +189,71 @@ namespace lluitk {
         public:
             NodeUniquePtr _root; // has to delete node on destruction
             bool _dirty; // one some node becomes visible/invisible or some
+
             // weight grows, there should be a recalculation of
             // the slot sizes
             Window _window;
             
+            // when things don't fit, what do we do?
+            int _border_size { 5 }; // { 10 }; // division size
+            int _margin_size { 5 }; // { 5 }; // outsize margin
+            
         public:
             Grid2() = default;
+            
             bool dirty() const { return _dirty; }
             void dirty(bool flag) { _dirty = flag; }
+
+            int border_size() const { return _border_size; }
+            int margin_size() const { return _margin_size; }
+
+            void border_size(int b) { _border_size = b; dirty(true); }
+            void margin_size(int m) { _margin_size = m; dirty(true); }
 
             // return the slot
             Slot* insert(Widget *widget, Node* at=nullptr, DivisionType dt=HORIZONTAL);
             void remove(Node* node);
             
-            // compute window sizes of all slots
-            void compute_sizes(const Window& window);
+            void window(const Window& w) { _window=w; dirty(true); }
+            const Window& window() const { return _window; }
             
-            // when things don't fit, what do we do?
-            int border_size { 10 }; // division size
-            int margin_size { 5 }; // outsize margin
-        };
-        
+            void render();
+            
+            // compute window sizes of all slots
+            void update();
 
-        //----------
-        // Iterator
-        //----------
+        public:
+            
+            bool contains(const Point& p) const { return _window.contains(p); }
+            
+            WidgetIterator children() const;
+            WidgetIterator reverse_children() const;
+            
+            void sizeHint(const Window &window);
+
+        };
+
+        //--------------
+        // NodeIterator
+        //--------------
         
-        struct Iterator {
-            Iterator(Node *n) { _stack.push_back(n); }
+        struct NodeIterator {
+            NodeIterator() = default;
+            NodeIterator(Node *n) { if (n) _stack.push_back(n); }
             Node* next();
             std::vector<Node*> _stack;
         };
         
-
+        //----------------
+        // WidgetIterator
+        //----------------
+        
+        struct NodeWidgetIterator: public BaseWidgetIterator {
+            NodeWidgetIterator() = default;
+            NodeWidgetIterator(Node *n): _iter(n) {}
+            Widget* next();
+            NodeIterator _iter;
+        };
 
         
     } // grid2

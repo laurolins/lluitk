@@ -8,17 +8,18 @@ int main() {
     
     auto slot1 = grid.insert(nullptr);
     auto slot2 = grid.insert(nullptr);
-    auto slot3 = grid.insert(nullptr,slot2->node(),VERTICAL);
+    auto slot3 = grid.insert(nullptr);
     
-    grid.compute_sizes(lluitk::Window(0,0,100,100));
 
+    grid.window({0.0,0.0,300.0,100.0});
+    grid.update();
     // auto slot2 = grid.insert(w2);
     // auto slot3 = grid.insert(w3);
     
     
     // reorganize later
     
-    Iterator it(grid._root.get());
+    NodeIterator it(grid._root.get());
     Node* u;
     while ( (u = it.next()) ) {
         std::cout << (u->is_division() ? (u->as_division()->type() == HORIZONTAL ? "division(H) " : "division(V) ") : "slot: ") << u->window() << std::endl;

@@ -76,6 +76,7 @@
 		EDEEE9E71CB08BF70037425A /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED341C6D1B99E77600CF5F25 /* libfreetype.dylib */; };
 		EDEEE9ED1CB08C430037425A /* example_grid2.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDEEE9CC1CB08BED0037425A /* example_grid2.cc */; };
 		EDEEE9EE1CB08C4B0037425A /* grid2.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDEEE9CA1CB08BC50037425A /* grid2.cc */; };
+		EDEEE9EF1CB1D3460037425A /* grid2.cc in Sources */ = {isa = PBXBuildFile; fileRef = EDEEE9CA1CB08BC50037425A /* grid2.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -230,6 +231,8 @@
 			children = (
 				EDEEE9C91CB08BC50037425A /* grid2.hh */,
 				EDEEE9CA1CB08BC50037425A /* grid2.cc */,
+				ED5535B41AFEBF960043F8C6 /* grid.hh */,
+				ED5535B51AFEBF960043F8C6 /* grid.cc */,
 				EDC0F7531BF1675B006A0032 /* list.hh */,
 				EDC0F7541BF1675B006A0032 /* list.cc */,
 				EDA6E0161AFFE23000D63075 /* geom.hh */,
@@ -240,8 +243,6 @@
 				EDA6E0101AFFDA4900D63075 /* style.cc */,
 				ED5535B71AFECF620043F8C6 /* canvas.hh */,
 				ED5535B81AFECF620043F8C6 /* canvas.cc */,
-				ED5535B41AFEBF960043F8C6 /* grid.hh */,
-				ED5535B51AFEBF960043F8C6 /* grid.cc */,
 				ED5562FD1AFC0098007D6CF6 /* os.hh */,
 				ED5562FE1AFC0098007D6CF6 /* os.cc */,
 				ED5562FA1AFBEB2C007D6CF6 /* textedit.hh */,
@@ -451,6 +452,7 @@
 				ED5562F61AFBE222007D6CF6 /* app.cc in Sources */,
 				ED5562F51AFBE222007D6CF6 /* widget.cc in Sources */,
 				EDA6E0111AFFDA4900D63075 /* style.cc in Sources */,
+				EDEEE9EF1CB1D3460037425A /* grid2.cc in Sources */,
 				ED5535B91AFECF620043F8C6 /* canvas.cc in Sources */,
 				ED5562FC1AFBEB2C007D6CF6 /* textedit.cc in Sources */,
 				EDC0F7501BF16645006A0032 /* example_textedit.cc in Sources */,

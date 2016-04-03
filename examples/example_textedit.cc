@@ -7,7 +7,7 @@
 #include "lluitk/app.hh"
 #include "lluitk/textedit.hh"
 #include "lluitk/event.hh"
-#include "lluitk/grid.hh"
+#include "lluitk/grid2.hh"
 #include "lluitk/os.hh"
 
 #include "llsg/transition.hh"
@@ -26,20 +26,18 @@ int main() {
     lluitk::TextEdit textedits[3];
 
     // grid widget
-    lluitk::Grid     grid({1,3});
+    lluitk::grid2::Grid2 grid;
+    
+    grid.border_size(5);
+    grid.margin_size(5);
     
     textedits[0].style().fontSize().reset(lluitk::FontSize{24});
     // textedits[0].style().typeface().reset(lluitk::Typeface{"Monaco"});
     
     //
-    grid.setCellWidget({0,0}, &textedits[0]);
-    grid.setCellWidget({0,1}, &textedits[1]);
-    grid.setCellWidget({0,2}, &textedits[2]);
-    
-    grid.setExternalHandleFixedSize(30).setInternalHandleFixedSize(30);
-    
-    
-    grid.movableSplitters(false);
+    grid.insert(&textedits[0]);
+    grid.insert(&textedits[1]);
+    grid.insert(&textedits[2]);
     
     // create a container widget
     // grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{200,200}});
