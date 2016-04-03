@@ -5,8 +5,6 @@ namespace lluitk {
     
     namespace grid2 {
         
-        
-        
         //------
         // Node
         //------
@@ -73,6 +71,7 @@ namespace lluitk {
         Slot* Grid2::insert(Widget* w, Node* at, DivisionType dt) {
             Slot* new_slot = new Slot();
             new_slot->widget(w);
+            new_slot->node()->weights().variable = Vec2(1.0,1.0);
             
             // if grid is empty, insert into root
             if (!_root) {
@@ -111,23 +110,10 @@ namespace lluitk {
         }
 
         
-        struct Weights {
-            Weights() = default;
-            Weights(const Vec2 &f, const Vec2& v): fixed(f), variable(v), empty(false) {}
-            operator bool() const { return !empty; }
-            Vec2 variable;
-            Vec2 fixed;
-            bool empty { true };
-            
-        };
-        
-        
         Weights merge_weights(const Weights &w0, const Weights &w1, DivisionType dt) {
-            assert(w0 && w1);
             Weights result;
             if (dt == HORIZONTAL) {
                 // linear on the horizontal
-                result.empty = false;
                 result.variable.x(w0.variable.x() + w1.variable.x());
                 result.fixed.x(w0.fixed.x() + w1.fixed.x());
                 
@@ -143,7 +129,6 @@ namespace lluitk {
             }
             else if (dt == VERTICAL) {
                 // linear on the horizontal
-                result.empty = false;
                 result.variable.y(w0.variable.y() + w1.variable.y());
                 result.fixed.y(w0.fixed.y() + w1.fixed.y());
                 
@@ -166,19 +151,16 @@ namespace lluitk {
         void Grid2::compute_sizes(const Window& window) {
             
             // compute sum of weights, then linearly distribute through the window
-            std::function<Weights(Node*)> get_weights;
-            std::function<void(Node*,const Vec2&, const Vec2&)> update_window;
+            std::function<void(Node*)> update_weights;
+            std::function<void(Node*,const Window&)> update_window;
             
             auto that = this;
             
             // updates the variable division weights for a 2nd pass
             // fixing the window position and size of all slots and
             // (separation bars)
-            get_weights = [&get_weights,that](Node* node) {
-                if (!node->visible()) {
-                    return Weights(); // empty
-                }
-                else if (node->is_division()) {
+            update_weights = [&update_weights,that](Node* node) {
+                if (node->is_division()) {
                     auto division = node->as_division();
 
                     auto node0 = division->get(0);
@@ -186,46 +168,23 @@ namespace lluitk {
                     
                     assert(node0 && node1 && "Invariant not being obeyed: every division has two slots");
 
-                    auto w0 = get_weights(node0);
-                    auto w1 = get_weights(node1);
-                    
-                    if (w0 && w1) {
-                        auto w = merge_weights(w0,w1,division->type());
-                        w.fixed = w.fixed + (division->type() == HORIZONTAL ? Vec2(that->border_size,0) : Vec2(0,that->border_size));
-                        node->weight(w.variable);
-                        return w;
-                    }
-                    else if (w0) { node->weight(w0.variable); return w0; }
-                    else if (w1) { node->weight(w1.variable); return w1; }
-                    else { node->weight(Vec2(0,0)); return Weights(); }
+                    update_weights(node0); // bottom up weights update
+                    update_weights(node1);
+                
+                    auto w0 = node0->weights();
+                    auto w1 = node1->weights();
+                    auto w = merge_weights(w0,w1,division->type());
+                    w.fixed = w.fixed + (division->type() == HORIZONTAL ? Vec2(that->border_size,0) : Vec2(0,that->border_size));
+                    node->weights(w);
                 }
-                else if (node->is_slot()) {
-                    return Weights(Vec2(0,0),node->weight());
-                }
-                assert(0 && "invalid case!");
             };
             
             
-            Weights weights;
-            if (_root) {
-                weights = get_weights(_root.get());
-            }
+            if (_root) { update_weights(_root.get()); }
             
-            std::cout << "fix: " << weights.fixed << std::endl;
-            std::cout << "var: " << weights.variable << std::endl;
-            
-            double xcoef = (window.width()  - weights.fixed.x() - 2*margin_size) / weights.variable.x();
-            double ycoef = (window.height() - weights.fixed.y() - 2*margin_size) / weights.variable.y();
-            
-            // let's say everything fits together
-            
-            update_window = [&update_window,xcoef,ycoef,that](Node* node, const Vec2& pos, const Vec2& scale) {
-                if (!node->visible()) { node->window(Window(0,0,0,0)); }
+            update_window = [&update_window,that](Node* node, const Window& area) {
                 if (node->is_slot()) {
-                    node->window(Window(pos.x(),
-                                        pos.y(),
-                                        xcoef * node->weight().x() * scale.x(),
-                                        ycoef * node->weight().y() * scale.y()));
+                    node->window(area);
                 }
                 else if (node->is_division()) {
                     auto division = node->as_division();
@@ -237,33 +196,29 @@ namespace lluitk {
 
                     // set mid rectangle as the window of a division
                     if (dt == HORIZONTAL) {
+                        auto w  = area.width();
+                        auto xcoef = (w - node->weights().fixed.x()) / node->weights().variable.x();
+                        auto w0 = node0->weights().fixed.x() + node0->weights().variable.x() * xcoef;
+                        auto w1 = node1->weights().fixed.x() + node1->weights().variable.x() * xcoef;
                         
-                        // expand unbalanced weights
-                        auto h0 = node0->weight().y();
-                        auto h1 = node1->weight().y();
-                        auto scale0 = Vec2(scale.x(), scale.y() * ((h0 < h1) ? h1/h0 : 1.0) );
-                        auto scale1 = Vec2(scale.x(), scale.y() * ((h1 < h0) ? h0/h1 : 1.0) );
-                        
-                        update_window(node0,pos,scale0);
-                        node->window(Window(node0->window().X(),pos.y(),that->border_size,node0->window().height()));
-                        update_window(node1,node->window().Xy(),scale1);
+                        update_window(node0, Window(area.x(),area.y(),w0,area.height()));
+                        node->window(Window(node0->window().X(),area.y(),that->border_size,area.height()));
+                        update_window(node1, Window(node->window().X(),area.y(),w1,area.height()));
                     }
                     else { // vertical dt
-
-                        // expand unbalanced weights
-                        auto w0 = node0->weight().x();
-                        auto w1 = node1->weight().x();
-                        auto scale0 = Vec2(scale.x() * ((w0 < w1) ? w1/w0 : 1.0), scale.y());
-                        auto scale1 = Vec2(scale.x() * ((w1 < w0) ? w0/w1 : 1.0), scale.y());
+                        auto h  = area.height();
+                        auto ycoef = (h - node->weights().fixed.y()) / node->weights().variable.y();
+                        auto h0 = node0->weights().fixed.y() + node0->weights().variable.y() * ycoef;
+                        auto h1 = node1->weights().fixed.y() + node1->weights().variable.y() * ycoef;
                         
-                        update_window(node1,pos,scale1);
-                        node->window(Window(pos.x(),node1->window().Y(),node1->window().width(),that->border_size));
-                        update_window(node0,node->window().xY(),scale0);
+                        update_window(node1, Window(area.x(),area.y(),area.width(),h1));
+                        node->window(Window(area.x(),node1->window().Y(),area.width(),that->border_size));
+                        update_window(node0, Window(area.x(),node->window().Y(),area.width(),h0));
                     }
                 }
             };
             
-            update_window(_root.get(),window.xy() + Vec2(margin_size),{1.0,1.0});
+            update_window(_root.get(),Window(window.xy() + Vec2(margin_size), window.XY() - Vec2(margin_size)));
             
         }
 

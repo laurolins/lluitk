@@ -60,11 +60,21 @@ namespace lluitk {
             
         };
         
-        
-        
+
         enum NodeType     { SLOT, DIVISION       };
         enum DivisionType { HORIZONTAL, VERTICAL };
         
+
+        //---------
+        // Weights
+        //---------
+        
+        struct Weights {
+            Weights() = default;
+            Weights(const Vec2 &f, const Vec2& v): fixed(f), variable(v) {}
+            Vec2 variable;
+            Vec2 fixed;
+        };
         
         //-------
         // Node
@@ -78,7 +88,7 @@ namespace lluitk {
 
             Window    _window;             // once not dirty, window of this slot
 
-            Vec2      _weight { 1.0 };     // slot weights are user defined, Division weights are computed
+            Weights   _weights;            // slot weights are user defined, Division weights are computed
 
             NodeType  _node_type;
 
@@ -113,8 +123,9 @@ namespace lluitk {
             int index() const { return _index; }
             void index(int index) { _index = index; }
         
-            Vec2    weight() const { return _weight; }
-            void    weight(const Vec2& w) { _weight=w; }
+            const Weights& weights() const { return _weights; }
+            Weights& weights() { return _weights; }
+            void     weights(const Weights& w) { _weights=w; }
         };
         
         //-------
