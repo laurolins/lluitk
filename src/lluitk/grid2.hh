@@ -164,7 +164,8 @@ namespace lluitk {
             Node* node() { return &_node; }
             
             Node* get(int index)  { assert(index>=0 && index<2); return _children[index].get(); }
-            
+            const Node* get(int index) const { assert(index>=0 && index<2); return _children[index].get(); }
+
             // overwrites current node (reclaim all memory
             // downstream of the current node at "index").
             void  set(int index, Node* n);
@@ -175,6 +176,8 @@ namespace lluitk {
 
             DivisionType type() const { return _type; }
             void type(DivisionType t) { _type=t; }
+            
+            Window separator_window() const;
             
         };
         
@@ -198,8 +201,15 @@ namespace lluitk {
             int _border_size { 5 }; // { 10 }; // division size
             int _margin_size { 5 }; // { 5 }; // outsize margin
             
+            // draw invisible shapes to quickly figure
+            // mouse events
+            llsg::Group _scene_root;
+            bool        _resizing { false };
+            Division*   _resizing_division { nullptr };
+            Vec2        _resizing_weight_per_pixel;
+            
         public:
-            Grid2() = default;
+            Grid2() { _scene_root.style().color().reset({1.0f}); }
             
             bool dirty() const { return _dirty; }
             void dirty(bool flag) { _dirty = flag; }
@@ -219,8 +229,16 @@ namespace lluitk {
             
             void render();
             
+            void swap_widgets(Slot *s1, Slot *s2) { auto aux = s1->widget(); s1->widget(s2->widget()); s2->widget(aux); }
+            
             // compute window sizes of all slots
             void update();
+            
+        public:
+            
+            void onMousePress(const lluitk::App &app);
+            void onMouseMove(const lluitk::App &app);
+            void onMouseRelease(const lluitk::App &app);
 
         public:
             
@@ -243,6 +261,7 @@ namespace lluitk {
             Node* next();
             std::vector<Node*> _stack;
         };
+
         
         //----------------
         // WidgetIterator

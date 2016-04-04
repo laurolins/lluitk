@@ -24,6 +24,9 @@ int main() {
     
     // create a container widget
     lluitk::TextEdit textedits[3];
+    textedits[0].style().bgcolor().reset({1.0f,0.7f,0.7f});
+    textedits[1].style().bgcolor().reset({0.7f,1.0f,0.7f});
+    textedits[2].style().bgcolor().reset({0.7f,0.7f,1.0f});
 
     // grid widget
     lluitk::grid2::Grid2 grid;
