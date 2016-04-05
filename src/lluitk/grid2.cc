@@ -525,21 +525,50 @@ namespace lluitk {
                 Vec2 delta_weight(_resizing_weight_per_pixel.x() * delta_px.x(),
                                   _resizing_weight_per_pixel.y() * delta_px.y());
                 
+                
+                
+                
+                
                 auto dt = _resizing_division->type();
+                
+                // figure out the minimum current weight in the negative direction
+                double min_weight = 1e50;
+                const double EPSILON = 1e-6;
+                if (dt == HORIZONTAL) {
+                    if (delta_weight.x() < 0) {
+                        ExtremeSlotIterator it(_resizing_division->get(0), HORIZONTAL, 1);
+                        Slot* slot; while ((slot=it.next())) { min_weight = std::min(slot->node()->weights().variable.x(),min_weight); }
+                        if (min_weight + delta_weight.x() < EPSILON) delta_weight.x(0.0);
+                    } else {
+                        ExtremeSlotIterator it(_resizing_division->get(1), HORIZONTAL, 0);
+                        Slot* slot; while ((slot=it.next())) { min_weight = std::min(slot->node()->weights().variable.x(),min_weight); }
+                        delta_weight.x(std::max(-min_weight, delta_weight.x()));
+                        if (min_weight - delta_weight.x() < EPSILON) delta_weight.x(0.0);
+                    }
+//                    std::cout << min_weight << std::endl;
+                }
+                else { // (dt == VERTICAL)
+                    if (delta_weight.y() < 0) {
+                        ExtremeSlotIterator it(_resizing_division->get(1), VERTICAL, 0);
+                        Slot* slot; while ((slot=it.next())) { min_weight = std::min(slot->node()->weights().variable.y(),min_weight); }
+                        if (min_weight + delta_weight.y() < EPSILON) delta_weight.y(0.0);
+                    } else {
+                        ExtremeSlotIterator it(_resizing_division->get(0), VERTICAL, 1);
+                        Slot* slot; while ((slot=it.next())) { min_weight = std::min(slot->node()->weights().variable.y(),min_weight); }
+                        if (min_weight - delta_weight.y() < EPSILON) delta_weight.y(0.0);
+                    }
+                }
+
+
+                // apply weight change
                 if (dt == HORIZONTAL) {
                     {
                         ExtremeSlotIterator it(_resizing_division->get(0), HORIZONTAL, 1);
-                        Slot* slot;
-                        while ((slot=it.next())) {
-                            slot->node()->weights().variable.xinc(delta_weight.x());
-                        }
+                        Slot* slot; while ((slot=it.next())) { slot->node()->weights().variable.xinc(delta_weight.x()); }
                     }
                     {
                         ExtremeSlotIterator it(_resizing_division->get(1), HORIZONTAL, 0);
-                        Slot* slot;
-                        while ((slot=it.next())) {
-                            slot->node()->weights().variable.xinc(-delta_weight.x());
-                        }
+                        Slot* slot; while ((slot=it.next())) { slot->node()->weights().variable.xinc(-delta_weight.x()); }
                     }
                     dirty(true);
                     this->sizeHint(_window);
@@ -547,17 +576,11 @@ namespace lluitk {
                 else { // if (dt == VERTICAL) {
                     {
                         ExtremeSlotIterator it(_resizing_division->get(1), VERTICAL, 0);
-                        Slot* slot;
-                        while ((slot=it.next())) {
-                            slot->node()->weights().variable.yinc(delta_weight.y());
-                        }
+                        Slot* slot; while ((slot=it.next())) { slot->node()->weights().variable.yinc(delta_weight.y()); }
                     }
                     {
                         ExtremeSlotIterator it(_resizing_division->get(0), VERTICAL, 1);
-                        Slot* slot;
-                        while ((slot=it.next())) {
-                            slot->node()->weights().variable.yinc(-delta_weight.y());
-                        }
+                        Slot* slot; while ((slot=it.next())) { slot->node()->weights().variable.yinc(-delta_weight.y()); }
                     }
                     dirty(true);
                     this->sizeHint(_window);

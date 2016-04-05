@@ -32,6 +32,8 @@ namespace lluitk {
             prepareCanvas();
         }
         
+        if (_window.width() <= 0.0 || _window.height() <= 0.0) return;
+        
         auto &renderer = llsg::opengl::getRenderer();
         
         // llsg::print(std::cerr, canvas.root);
