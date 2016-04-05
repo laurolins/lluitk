@@ -23,15 +23,17 @@ int main() {
     });
     
     // create a container widget
-    lluitk::TextEdit textedits[3];
+    lluitk::TextEdit textedits[5];
     textedits[0].style().bgcolor().reset({1.0f,0.7f,0.7f});
     textedits[1].style().bgcolor().reset({0.7f,1.0f,0.7f});
     textedits[2].style().bgcolor().reset({0.7f,0.7f,1.0f});
+    textedits[3].style().bgcolor().reset({1.0f,1.0f,0.7f});
+    textedits[4].style().bgcolor().reset({0.7f,1.0f,1.0f});
 
     // grid widget
     lluitk::grid2::Grid2 grid;
     
-    grid.border_size(5);
+    grid.border_size(20);
     grid.margin_size(5);
     
     textedits[0].style().fontSize().reset(lluitk::FontSize{24});
@@ -41,6 +43,8 @@ int main() {
     grid.insert(&textedits[0]);
     grid.insert(&textedits[1]);
     grid.insert(&textedits[2]);
+    grid.insert(&textedits[3]);
+    grid.insert(&textedits[4]);
     
     // create a container widget
     // grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{200,200}});

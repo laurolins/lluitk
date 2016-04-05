@@ -14,6 +14,7 @@ namespace lluitk {
         
         NodeUniquePtr::~NodeUniquePtr() {
             if (_node) { // release memory in the right way before deallocation
+                // std::cout << "deleting node: " << (void*) this << std::endl;
                 if(_node->is_slot()) { delete _node->as_slot(); }
                 else if(_node->is_division()) { delete _node->as_division(); }
                 else { assert(0 && "~NodeUniquePtr() not valid!"); }
@@ -294,6 +295,110 @@ namespace lluitk {
             dirty(false);
             
         }
+        
+        Division* Grid2::localize_division(Division *d) {
+            
+            auto dt = d->type();
+            
+            Division* side0_prev = d;
+            Node*     side0_node = d->get(0);
+            while (side0_node->is_division() && side0_node->as_division()->type() == dt) {
+                side0_prev = side0_node->as_division();
+                side0_node = side0_prev->get(1);
+            }
+
+            Division* side1_prev = d;
+            Node*     side1_node = d->get(1);
+            while (side1_node->is_division() && side1_node->as_division()->type() == dt) {
+                side1_prev = side1_node->as_division();
+                side1_node = side1_prev->get(0);
+            }
+            
+            dirty(true);
+            
+            // (I) case (0,0): it is already a local division nothing needs to be done
+            if (side0_prev == d && side1_prev == d) {
+                // std::cout << "case I" << std::endl;
+                dirty(false); return d;
+            }
+            
+            // (II) case (1+,1+) there will be a rotation
+            else if (side0_prev != d && side1_prev !=d) {
+                
+                // std::cout << "case II" << std::endl;
+
+                auto beta = side1_prev->get(1);
+
+                side0_prev->release(1); // side0_node
+                side1_prev->release(0); // side1_node
+                side1_prev->release(1); // beta
+                
+                // release side1_prev from its parent
+                auto side1_prev_parent = side1_prev->node()->parent();
+                auto side1_prev_index  = side1_prev->node()->index();
+                side1_prev_parent->release(side1_prev_index); // pps1
+                
+                // reattach things
+                side1_prev_parent->set(side1_prev_index,beta);
+
+                side0_prev->set(1, side1_prev->node());
+                
+                side1_prev->set(0, side0_node);
+                side1_prev->set(1, side1_node);
+
+                return side1_prev;
+            }
+            
+            // (III) case (1+,0) there will be a rotation
+            else if (side1_prev == d) {
+                
+                // std::cout << "case III" << std::endl;
+                
+                auto alpha = side0_prev->get(0);
+                side0_prev->release(0);
+                
+                // release side0_prev from its parent
+                auto side0_prev_parent = side0_prev->node()->parent();
+                auto side0_prev_index  = side0_prev->node()->index();
+                side0_prev_parent->release(side0_prev_index);
+                
+                side0_prev->release(1);
+                side0_prev->set(0, side0_node);
+                
+                side0_prev_parent->set(side0_prev_index, alpha);
+                
+                side1_prev->release(1);
+                side1_prev->set(1, side0_prev->node());
+
+                side0_prev->set(1, side1_node);
+                return side0_prev;
+            }
+            
+            // (IV) case (0,1+) there will be a rotation
+            else  { // (side1_prev == d)
+
+                // std::cout << "case IV" << std::endl;
+
+                auto beta = side1_prev->get(1);
+                side1_prev->release(1);
+                
+                // release side0_prev from its parent
+                auto side1_prev_parent = side1_prev->node()->parent();
+                auto side1_prev_index  = side1_prev->node()->index();
+                side1_prev_parent->release(side1_prev_index);
+                
+                side1_prev->release(0);
+                side1_prev->set(1, side1_node);
+                
+                side1_prev_parent->set(side1_prev_index, beta);
+                
+                side0_prev->release(0);
+                side0_prev->set(0, side1_prev->node());
+
+                side1_prev->set(0, side0_node);
+                return side1_prev;
+            }
+        }
 
         WidgetIterator Grid2::children()         const { return WidgetIterator(new NodeWidgetIterator(const_cast<Node*>(_root.get()))); }
         
@@ -373,23 +478,34 @@ namespace lluitk {
                     else {
                         auto dt = node->as_division()->type();
                         if (app.current_event_info.modifiers.shift) {
-                            division->type(dt == HORIZONTAL ? VERTICAL : HORIZONTAL);
+                            auto localized_division = this->localize_division(division);
+                            localized_division->type(dt == HORIZONTAL ? VERTICAL : HORIZONTAL);
                             sizeHint(_window);
                             app.finishEventProcessing();
                         }
                         else {
-                            if (dt == HORIZONTAL) {
-                                auto s1 = ExtremeSlotIterator(division->get(0), HORIZONTAL, 1).next();
-                                auto s2 = ExtremeSlotIterator(division->get(1), HORIZONTAL, 0).next();
-                                assert(s1 && s2 && "valid slots");
-                                swap_widgets(s1,s2);
+                            
+                            
+                            auto dt = division->type();
+                            
+                            Division* side0_prev = division;
+                            Node*     side0_node = division->get(0);
+                            while (side0_node->is_division() && side0_node->as_division()->type() == dt) {
+                                side0_prev = side0_node->as_division();
+                                side0_node = side0_prev->get(1);
                             }
-                            else {
-                                auto s1 = ExtremeSlotIterator(division->get(1), HORIZONTAL, 0).next();
-                                auto s2 = ExtremeSlotIterator(division->get(0), HORIZONTAL, 1).next();
-                                assert(s1 && s2 && "valid slots");
-                                swap_widgets(s1,s2);
+                            
+                            Division* side1_prev = division;
+                            Node*     side1_node = division->get(1);
+                            while (side1_node->is_division() && side1_node->as_division()->type() == dt) {
+                                side1_prev = side1_node->as_division();
+                                side1_node = side1_prev->get(0);
                             }
+                            
+                            if (division != side0_prev) { side0_prev->release(1); } else { division->release(0); }
+                            if (division != side1_prev) { side1_prev->release(0); } else { division->release(1); }
+                            if (division != side0_prev) { side0_prev->set(1,side1_node); } else { division->set(0,side1_node); }
+                            if (division != side1_prev) { side1_prev->set(0,side0_node); } else { division->set(1,side0_node); }
                             this->sizeHint(_window);
                             app.finishEventProcessing();
                         }

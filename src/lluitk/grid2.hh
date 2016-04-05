@@ -106,6 +106,7 @@ namespace lluitk {
             void   visible(bool f) { _status = f ? 0x1 : 0; }
 
             Division* parent() { return _parent; }
+            const Division* parent() const { return _parent; }
             void parent(Division* d) { _parent = d; }
 
             NodeType node_type() const { return _node_type; }
@@ -233,6 +234,14 @@ namespace lluitk {
             
             // compute window sizes of all slots
             void update();
+
+            //
+            // a division which is part of a chain of
+            // same type divisions will be rotated to the
+            // bottom of the chain (example usage: local
+            // rotation of areas)
+            //
+            Division* localize_division(Division *d);
             
         public:
             
