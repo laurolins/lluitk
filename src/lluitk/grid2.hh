@@ -45,7 +45,7 @@ namespace lluitk {
 //            void reset(Slot *slot) { this->~NodeUniquePtr(); _node = (Node*) slot; }
 //            void reset(Division *division) { this->~NodeUniquePtr(); _node = (Node*) division; }
 
-            void release() { _node = nullptr; }
+            Node* release() { auto result=_node; _node = nullptr; return result; }
             
             operator bool() const { return _node != nullptr; }
             
@@ -151,7 +151,7 @@ namespace lluitk {
             void widget(Widget* w) { _widget = w; }
             
             int user_number() const { return _user_number; }
-            void user_number(int user_number) { _user_number = user_number; }s
+            void user_number(int user_number) { _user_number = user_number; }
 
         };
         
@@ -217,6 +217,9 @@ namespace lluitk {
             
             bool dirty() const { return _dirty; }
             void dirty(bool flag) { _dirty = flag; }
+            
+            Node* root() { return _root.get(); }
+            const Node* root() const { return _root.get(); }
 
             int border_size() const { return _border_size; }
             int margin_size() const { return _margin_size; }
@@ -300,6 +303,19 @@ namespace lluitk {
             Widget* next();
             NodeIterator _iter;
         };
+        
+        
+        //-------------------------
+        // Generate grid from code
+        //-------------------------
+        
+        //
+        // not that all slots will have no widget pointer
+        // it is just the layout that is recovered as well
+        // as user_numbers for the slots
+        //
+        int parse(const char *code, Grid2& output);
+
 
         
     } // grid2

@@ -18,17 +18,12 @@ int main() {
     
     auto app = lluitk::App();
     
-    lluitk::os::event().callback([&app]( const ::lluitk::event::Event& e) {
-        app.processEvent(e);
-    });
+    const std::vector<llsg::Color> colors = {"#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"};
     
     // create a container widget
-    lluitk::TextEdit textedits[5];
-    textedits[0].style().bgcolor().reset({1.0f,0.7f,0.7f});
-    textedits[1].style().bgcolor().reset({0.7f,1.0f,0.7f});
-    textedits[2].style().bgcolor().reset({0.7f,0.7f,1.0f});
-    textedits[3].style().bgcolor().reset({1.0f,1.0f,0.7f});
-    textedits[4].style().bgcolor().reset({0.7f,1.0f,1.0f});
+    const int n = 3;
+    lluitk::TextEdit textedits[n];
+    for (auto i=0;i<n;++i) textedits[i].style().bgcolor().reset(colors[i]);
 
     // grid widget
     lluitk::grid2::Grid2 grid;
@@ -40,11 +35,7 @@ int main() {
     // textedits[0].style().typeface().reset(lluitk::Typeface{"Monaco"});
     
     //
-    grid.insert(&textedits[0]);
-    grid.insert(&textedits[1]);
-    grid.insert(&textedits[2]);
-    grid.insert(&textedits[3]);
-    grid.insert(&textedits[4]);
+    for (auto i=0;i<n;++i) { grid.insert(&textedits[i], i); }
     
     // create a container widget
     // grid.sizeHint(lluitk::Window{lluitk::Point{0,0},lluitk::Point{200,200}});
@@ -65,8 +56,42 @@ int main() {
     // set coef for retina display
     // llsg::opengl::getRenderer()._resolution_factor = window.window_to_framebuffer_factor;
     
+    bool saved = false;
+    char buffer[5000];
+    lluitk::os::event().callback([&app,&buffer,&grid,&saved,&textedits]( const ::lluitk::event::Event& e) {
+        if (e.getType() == lluitk::event::EVENT_KEY_PRESS && e.asKeyPress().key == lluitk::event::KEY_S) {
+            auto n = grid.code(&buffer[0], 5000);
+            std::cout << buffer << std::endl;
+            std::cout << "Saved grid layout size if " << n << std::endl;
+            saved = true;
+        }
+        else if (e.getType() == lluitk::event::EVENT_KEY_PRESS && e.asKeyPress().key == lluitk::event::KEY_L) {
+            if (saved) {
+                lluitk::grid2::Grid2 local_grid;
+                auto error = lluitk::grid2::parse(buffer, local_grid);
+                if (!error) {
+                    // swap local grid
+                    auto window = grid.window();
+                    std::swap(grid, local_grid);
+                    lluitk::grid2::NodeIterator it(grid.root());
+                    lluitk::grid2::Node* node;
+                    while ((node = it.next())) {
+                        if (node->is_slot()) {
+                            node->as_slot()->widget(&textedits[node->as_slot()->user_number()]);
+                        }
+                    }
+                    grid.sizeHint(window);
+                }
+                else { std::cout << "error: " << error << std::endl; }
+            }
+        }
+        else {
+            app.processEvent(e);
+        }
+    });
     
     
+    // app.
     
     // schedule transition
 
@@ -81,12 +106,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
         
         glViewport(0,0,window.framebuffer_width,window.framebuffer_height);
-        
-        // glShadeModel(GL_SMOOTH);
-        // glEnable(GL_MULTISAMPLE);
-        // glEnable( GL_POLYGON_SMOOTH );
-        // glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-        // glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
         
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();

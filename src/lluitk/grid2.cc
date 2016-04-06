@@ -4,6 +4,8 @@
 
 #include "llsg/llsg_opengl.hh"
 
+#include <sstream>
+
 namespace lluitk {
     
     namespace grid2 {
@@ -610,48 +612,51 @@ namespace lluitk {
             
             // the empty grid will be represented by "g border_size margin_size "
             std::stringstream ss;
-            ss << "g " << margin_size() << " " << border_size();
-            if (!_root) { ss << " 0"; }
-            else {
+            ss << (_root ? "g " : "e ") << margin_size() << " " << border_size();
+            if (_root) {
                 std::vector<Node*> stack;
                 stack.push_back(_root.get());
                 while (!stack.empty()) {
                     auto node = stack.back();
                     stack.pop_back();
                     if (node->is_division()) {
-                        stack.push_back(node->as_division().get(1))
-                        stack.push_back(node->as_division().get(0))
+                        stack.push_back(node->as_division()->get(1));
+                        stack.push_back(node->as_division()->get(0));
                         ss << " " << (node->as_division()->type() == HORIZONTAL ? "h" : "v");
                     }
                     else {
-                        ss << " s" << node->weights().variable.x() << " " node->weights().variable.y() << " " << node->slot()->user_number();
+                        ss << " s " << node->weights().variable.x() << " " << node->weights().variable.y() << " " << node->as_slot()->user_number();
                     }
                 }
             }
-            
+
+            ss.seekp(0, std::ios::end);
+            int size = (int) ss.tellp();
+
             // copy as much as we can to buffer
             if (buffer) {
                 ss.read(buffer,buffer_size-1);
-                buffer[buffer_size]-1 = 0; // make sure it is null terminated
+                buffer[buffer_size-1] = 0; // make sure it is null terminated
             }
             
-            int size = (int) ss.tellp();
+            
             return size;
         }
         
         //
         // returns problem code, if one happens
+        // otherwise return zero
         //
-        int Grid2::parse(char *code) {
+        int parse(const char *code, Grid2& output) {
             
             struct Token {
                 Token() = default;
                 Token(int p): begin(p), end(p) {}
-                void grow() { ++end }
+                void grow() { ++end; }
                 operator bool() { return begin < end; }
                 int begin { 0 };
-                int end { 0 }
-            }
+                int end { 0 };
+            };
             
             //
             // simple grammar
@@ -661,15 +666,16 @@ namespace lluitk {
             //
             int pos = 0;
             auto next_token = [code, &pos]() {
+                while (code[pos] && code[pos] == ' ') ++pos;
                 Token tok(pos);
                 while (code[pos] && code[pos] != ' ') {
                     tok.grow();
                     ++pos;
                 }
-                return result;
-            }
+                return tok;
+            };
             
-            enum Error { MISSING_TOKENS=1, NUMBER_PROBLEM=2 };
+            enum Error { MISSING_TOKENS=1, NUMBER_PROBLEM=2, INVALID_SYNTAX=3, EXTRA_TOKENS=4 };
 
             // function
             
@@ -679,67 +685,96 @@ namespace lluitk {
             std::function<int(NodeUniquePtr&)> N;
             
             // fill in grid
-            auto G = [&next_token, &result, &N]() {
+            auto G = [&next_token, &result, code, &N]() {
                 
                 auto tok_kind   = next_token();
                 auto tok_margin = next_token();
                 auto tok_border = next_token();
                 
                 if (!tok_kind || !tok_margin || !tok_border)
-                    return MISSING_TOKENS;
-                
-                auto margin = std::stoi(std::string(&code[tok_margin.begin],&code[tok_margin.end]));
-                auto border = std::stoi(std::string(&code[tok_border.begin],&code[tok_border.end]));
-                
-                result.margin_size(margin);
-                result.border_size(border);
+                    return (int) MISSING_TOKENS;
 
-                if (code[tok_kind] == 'g') {
+                try {
+                    auto margin = std::stoi(std::string(&code[tok_margin.begin],&code[tok_margin.end]));
+                    auto border = std::stoi(std::string(&code[tok_border.begin],&code[tok_border.end]));
+                    result.margin_size(margin);
+                    result.border_size(border);
+                } catch (...) {
+                    return (int) NUMBER_PROBLEM;
+                }
+
+                auto grid_status = code[tok_kind.begin];
+                if (grid_status == 'g') {
                     auto error = N(result._root); // store root on the result
-                    return error;
+                    if (!error && next_token()) {
+                        return (int) EXTRA_TOKENS;
+                    }
+                    else {
+                        return error;
+                    }
+                }
+                else if (grid_status == 'e') {
+                    if (next_token()) { return (int) EXTRA_TOKENS; }
+                    else { return 0; }
                 }
                 else { // 'e' empty grid (no node at all)
-                    return 0; // done
-                }
-            }
-            
-            N = [&code, &next_token](NodeUniquePtr &result) {
-                
-                auto type = next_token();
-                
-                if (!type) return MISSING_TOKENS;
-                
-                if (code[type.begin] == 'h') { // HORIZONTAL DIVISION
-                    
-                }
-                else if (code[type.begin] == 'v') { // VERTICAL DIVISION
-                    
-                }
-                else if (code[type.begin] == 's') { // SLOT
-
-                    auto xweight     = next_token();
-                    auto yweight     = next_token();
-                    auto user_number = next_token();
-
-                    
-                    auto margin_value = std::stoi(std::string(&code[margin.begin],&code[margin.end]));
-                    auto border_value = std::stoi(std::string(&code[margin.begin],&code[margin.end]));
-                    
-                    result.margin_size(margin_value);
-                    result.border_size(border_value);
-                    
+                    return (int) INVALID_SYNTAX; // done
                 }
             };
             
+            N = [&code, &next_token, &N](NodeUniquePtr &result) {
+                
+                auto type = next_token();
+                
+                if (!type) return (int) MISSING_TOKENS;
+                
+                auto node_type = code[type.begin];
+                if (node_type == 'h' || node_type =='v') { // HORIZONTAL DIVISION
+                    result.reset((new Division())->node());
+                    result->as_division()->type(node_type == 'h' ? HORIZONTAL : VERTICAL);
+                    
+                    NodeUniquePtr child_0, child_1;
+                    
+                    auto error_0 = N(child_0);
+                    if (error_0) return error_0;
+                    
+                    auto error_1 = N(child_1);
+                    if (error_1) return error_1;
+                    
+                    result->as_division()->set(0, child_0.release());
+                    result->as_division()->set(1, child_1.release());
+                    
+                    return 0;
+                }
+                else if (code[type.begin] == 's') { // SLOT
+
+                    auto tok_xweight     = next_token();
+                    auto tok_yweight     = next_token();
+                    auto tok_user_number = next_token();
+                    
+                    result.reset((new Slot())->node());
+                    
+                    try {
+                        auto xweight = std::stof(std::string(&code[tok_xweight.begin],&code[tok_xweight.end]));
+                        auto yweight = std::stof(std::string(&code[tok_yweight.begin],&code[tok_yweight.end]));
+                        auto user_number = std::stoi(std::string(&code[tok_user_number.begin],&code[tok_user_number.end]));
+                        result->weights().variable.x(xweight);
+                        result->weights().variable.y(yweight);
+                        result->as_slot()->user_number(user_number);
+                    } catch (...) {
+                        return (int) NUMBER_PROBLEM;
+                    }
+                    
+                    return 0;
+                }
+                else { return (int) INVALID_SYNTAX; }
+            };
             
+            auto error = G();
             
+            if (!error) { std::swap(result, output); }
             
-            
-            
-            
-            
-            
-            
+            return error;
         }
 
         
