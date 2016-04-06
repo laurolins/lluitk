@@ -117,9 +117,10 @@ namespace lluitk {
         // Grid2
         //-------
         
-        Slot* Grid2::insert(Widget* w, Node* at, DivisionType dt) {
+        Slot* Grid2::insert(Widget* w, int user_number, Node* at, DivisionType dt) {
             Slot* new_slot = new Slot();
             new_slot->widget(w);
+            new_slot->user_number(user_number);
             new_slot->node()->weights().variable = Vec2(1.0,1.0);
             
             // if grid is empty, insert into root
@@ -597,6 +598,150 @@ namespace lluitk {
                 app.finishEventProcessing();
             }
         }
+        
+        int Grid2::code(char *buffer, int buffer_size) {
+            
+            //
+            // simple grammar
+            //
+            // G : "g" <margin> <border> N ( "0" | N )
+            // N : ("h"|"v") N N | "s" <x weight> <y weight> <user number>
+            //
+            
+            // the empty grid will be represented by "g border_size margin_size "
+            std::stringstream ss;
+            ss << "g " << margin_size() << " " << border_size();
+            if (!_root) { ss << " 0"; }
+            else {
+                std::vector<Node*> stack;
+                stack.push_back(_root.get());
+                while (!stack.empty()) {
+                    auto node = stack.back();
+                    stack.pop_back();
+                    if (node->is_division()) {
+                        stack.push_back(node->as_division().get(1))
+                        stack.push_back(node->as_division().get(0))
+                        ss << " " << (node->as_division()->type() == HORIZONTAL ? "h" : "v");
+                    }
+                    else {
+                        ss << " s" << node->weights().variable.x() << " " node->weights().variable.y() << " " << node->slot()->user_number();
+                    }
+                }
+            }
+            
+            // copy as much as we can to buffer
+            if (buffer) {
+                ss.read(buffer,buffer_size-1);
+                buffer[buffer_size]-1 = 0; // make sure it is null terminated
+            }
+            
+            int size = (int) ss.tellp();
+            return size;
+        }
+        
+        //
+        // returns problem code, if one happens
+        //
+        int Grid2::parse(char *code) {
+            
+            struct Token {
+                Token() = default;
+                Token(int p): begin(p), end(p) {}
+                void grow() { ++end }
+                operator bool() { return begin < end; }
+                int begin { 0 };
+                int end { 0 }
+            }
+            
+            //
+            // simple grammar
+            //
+            // G : "g" <margin> <border> N | "e" <margin> <border>
+            // N : ("h"|"v") N N | "s" <x weight> <y weight> <user number>
+            //
+            int pos = 0;
+            auto next_token = [code, &pos]() {
+                Token tok(pos);
+                while (code[pos] && code[pos] != ' ') {
+                    tok.grow();
+                    ++pos;
+                }
+                return result;
+            }
+            
+            enum Error { MISSING_TOKENS=1, NUMBER_PROBLEM=2 };
+
+            // function
+            
+            Grid2 result;
+            
+            // generate node
+            std::function<int(NodeUniquePtr&)> N;
+            
+            // fill in grid
+            auto G = [&next_token, &result, &N]() {
+                
+                auto tok_kind   = next_token();
+                auto tok_margin = next_token();
+                auto tok_border = next_token();
+                
+                if (!tok_kind || !tok_margin || !tok_border)
+                    return MISSING_TOKENS;
+                
+                auto margin = std::stoi(std::string(&code[tok_margin.begin],&code[tok_margin.end]));
+                auto border = std::stoi(std::string(&code[tok_border.begin],&code[tok_border.end]));
+                
+                result.margin_size(margin);
+                result.border_size(border);
+
+                if (code[tok_kind] == 'g') {
+                    auto error = N(result._root); // store root on the result
+                    return error;
+                }
+                else { // 'e' empty grid (no node at all)
+                    return 0; // done
+                }
+            }
+            
+            N = [&code, &next_token](NodeUniquePtr &result) {
+                
+                auto type = next_token();
+                
+                if (!type) return MISSING_TOKENS;
+                
+                if (code[type.begin] == 'h') { // HORIZONTAL DIVISION
+                    
+                }
+                else if (code[type.begin] == 'v') { // VERTICAL DIVISION
+                    
+                }
+                else if (code[type.begin] == 's') { // SLOT
+
+                    auto xweight     = next_token();
+                    auto yweight     = next_token();
+                    auto user_number = next_token();
+
+                    
+                    auto margin_value = std::stoi(std::string(&code[margin.begin],&code[margin.end]));
+                    auto border_value = std::stoi(std::string(&code[margin.begin],&code[margin.end]));
+                    
+                    result.margin_size(margin_value);
+                    result.border_size(border_value);
+                    
+                }
+            };
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+
         
         //--------------
         // NodeIterator

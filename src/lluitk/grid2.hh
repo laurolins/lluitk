@@ -138,6 +138,9 @@ namespace lluitk {
             Node      _node; // assumes it starts with Node
             Widget*   _widget { nullptr }; // actual content of this slot
             
+            // a number a user defined; can be used to restore saved layouts
+            int       _user_number { -1 };
+            
         public:
             Slot(): _node(SLOT) {}
             
@@ -146,6 +149,9 @@ namespace lluitk {
 
             Widget* widget() const { return _widget; }
             void widget(Widget* w) { _widget = w; }
+            
+            int user_number() const { return _user_number; }
+            void user_number(int user_number) { _user_number = user_number; }s
 
         };
         
@@ -182,9 +188,6 @@ namespace lluitk {
             
         };
         
-        
-        
-
         //-------
         // Grid2
         //-------
@@ -222,7 +225,7 @@ namespace lluitk {
             void margin_size(int m) { _margin_size = m; dirty(true); }
 
             // return the slot
-            Slot* insert(Widget *widget, Node* at=nullptr, DivisionType dt=HORIZONTAL);
+            Slot* insert(Widget *widget, int user_number=-1, Node* at=nullptr, DivisionType dt=HORIZONTAL);
             void remove(Node* node);
             
             void window(const Window& w) { _window=w; dirty(true); }
@@ -242,6 +245,21 @@ namespace lluitk {
             // rotation of areas)
             //
             Division* localize_division(Division *d);
+
+            //
+            // ascii string representation of the grid's current states
+            // returns the code size (if greater than buffer_size, the
+            // filled buffer is incomplete). Avoid allocation
+            // responsibilities
+            //
+            int code(char *buffer=nullptr, int buffer_size=0);
+            
+            //
+            // null terminated buffer with the code for which we
+            // want to use to initialize the grid, all previous
+            // grid info will be erased
+            //
+            // void reset(const char* code);
             
         public:
             
