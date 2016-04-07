@@ -186,6 +186,8 @@ namespace lluitk {
             
             Window separator_window() const;
             
+            Node* other(Node *node);
+            
         };
         
         //-------
@@ -230,7 +232,9 @@ namespace lluitk {
             // return the slot
             Slot* insert(Widget *widget, int user_number=-1, Node* at=nullptr, DivisionType dt=HORIZONTAL);
             void remove(Node* node);
-            
+
+            void remove_and_simplify(Node* node);
+
             void window(const Window& w) { _window=w; dirty(true); }
             const Window& window() const { return _window; }
             

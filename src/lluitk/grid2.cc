@@ -79,6 +79,13 @@ namespace lluitk {
             }
         }
         
+        Node* Division::other(Node *node) {
+            if (_children[0].get() == node) { return _children[1].get(); }
+            else if (_children[1].get() == node) { return _children[0].get(); }
+            assert(0 && "not matching assumptions of Division::other");
+            return nullptr;
+        }
+        
         //---------------------
         // ExtremeNodeIterator
         //---------------------
@@ -162,6 +169,43 @@ namespace lluitk {
             dirty(true);
         }
 
+        void Grid2::remove_and_simplify(Node* node) {
+            assert(node && _root && "Grid::remove problem!");
+            if (node == _root.get()) { // it is the root?
+            
+                _root.reset(); // clear everything
+            
+            }
+            else { // parent exists
+
+                assert(node->parent() && "Grid::remove problem!");
+                
+                // overwrite with nullptr
+                // triggers the release of node
+                auto parent       = node->parent();
+                auto parent_index = parent->as_node().index();
+
+                auto sibling      = parent->other(node);
+                assert(sibling && "not matching assumption of remove_and_simplify");
+
+                parent->release(sibling->index()); // keep reference to sibling (will replace parent)
+
+                if (parent_index >= 0) { // ther eis a grandparent
+                    auto parent_index = parent->as_node().index();
+                    if (parent_index >= 0) {
+                        auto grandpa = parent->as_node().parent();
+                        grandpa->release(parent_index);
+                        grandpa->set(parent_index, sibling); // should erase parent
+                    }
+                    else {
+                        _root.reset(sibling);
+                    }
+                }
+            }
+            dirty(true);
+        }
+
+        
         Weights merge_weights(const Weights &w0, const Weights &w1, DivisionType dt) {
             Weights result;
             if (dt == HORIZONTAL) {
