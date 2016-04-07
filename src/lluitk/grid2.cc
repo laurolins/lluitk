@@ -486,9 +486,12 @@ namespace lluitk {
                             sizeHint(_window);
                             app.finishEventProcessing();
                         }
+                        else if (app.current_event_info.modifiers.control) {
+                            division->type(dt == HORIZONTAL ? VERTICAL : HORIZONTAL);
+                            sizeHint(_window);
+                            app.finishEventProcessing();
+                        }
                         else {
-                            
-                            
                             auto dt = division->type();
                             
                             Division* side0_prev = division;
