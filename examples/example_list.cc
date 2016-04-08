@@ -19,10 +19,6 @@
 #include "llsg/transition.hh"
 
 
-using typename lluitk::list::Size;
-    
-using typename lluitk::list::Index;
-    
 struct Model {
     
     using key_type = std::string;
@@ -33,12 +29,12 @@ struct Model {
         }
     }
     
-    lluitk::list::Size size() const { return static_cast<Size>(_items.size()); }
+    int size() const { return (int) _items.size(); }
     
-    key_type           key(Index index) const { return _items.at(static_cast<size_t>(index)); }
+    key_type           key(int index) const { return _items.at(static_cast<size_t>(index)); }
     
     // map index into a geometrical element
-    std::unique_ptr<llsg::Element> geometry(Index index, const lluitk::list::ListConfig& config, bool selected) const {
+    std::unique_ptr<llsg::Element> geometry(int index, const lluitk::list::ListConfig& config) const {
 
         auto k = key(index);
         
@@ -53,7 +49,7 @@ struct Model {
         .size({config.window().width(),config.item_weight()})
         .style()
         .color()
-        .reset(llsg::Color{selected ? 0.5f : 1.0f});
+        .reset(llsg::Color{config.focus_index() == index ? 0.5f : 1.0f});
 
         g
         .text()
@@ -75,24 +71,22 @@ int main() {
 
     using Key        = typename Model::key_type;
     using Lst        = lluitk::list::List<Model>;
-    using Index      = lluitk::list::Index;
-    using ListConfig = lluitk::list::ListConfig;
-    using GeomMap    = Lst::geometry_map_type;
     
-    GeomMap geomMap = [&model](Index index, const ListConfig& config, bool selected) {
-        return model.geometry(index, config, selected);
+    auto gen_geom = (lluitk::list::GenerateGeometryCallback) [&model](int index, const lluitk::list::ListConfig& config) {
+        return model.geometry(index, config);
     };
     
     Lst lst;
     lst.root().style().fontSize().reset(20);
     lst.item_weight(30);
     
-    lst.register_trigger_function([](const Lst& list) {
+    lst.trigger_callback([](const Lst& list) {
         if (list.selectect_index() >= 0)
             std::cout << list.model()->key(list.selectect_index()) << std::endl;
     });
     
-    lst.geometryMap(geomMap).model(&model);
+    lst.generate_geometry_callback(gen_geom);
+    lst.model(&model);
 
     auto &window = lluitk::os::graphics().window(200,200);
     

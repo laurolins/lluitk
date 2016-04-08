@@ -29,21 +29,17 @@ namespace lluitk {
         
         Division* Node::split(DivisionType d) {
 
-            auto index = _index;
-            
-            auto parent = this->parent();
-            if (parent) {
-                parent->release(_index);
-            }
+            auto old_index = _index;
+            auto parent    = this->parent();
+            if (parent) { parent->release(_index); }
             
             // more explicit code of the wiring
             auto division = new Division();
-            division->set(0,this); // set
+            division->set(0,this); // changes _index
+            
             division->type(d);
             
-            if (parent) {
-                parent->set(index, division->node());
-            }
+            if (parent) { parent->set(old_index, division->node()); }
             
             return division;
         }
@@ -141,14 +137,12 @@ namespace lluitk {
                 if (!at) at = _root.get();
                 bool is_root = (at == _root.get());
                 
-                // check if division has an empty
                 if (is_root) _root.release();
                 
                 auto division = at->split(dt);
+                division->set(1,new_slot->node());
                 
                 if (is_root)_root.reset(division->node());
-                
-                division->set(1,new_slot->node());
             }
 
             dirty(true);
@@ -191,15 +185,12 @@ namespace lluitk {
                 parent->release(sibling->index()); // keep reference to sibling (will replace parent)
 
                 if (parent_index >= 0) { // ther eis a grandparent
-                    auto parent_index = parent->as_node().index();
-                    if (parent_index >= 0) {
-                        auto grandpa = parent->as_node().parent();
-                        grandpa->release(parent_index);
-                        grandpa->set(parent_index, sibling); // should erase parent
-                    }
-                    else {
-                        _root.reset(sibling);
-                    }
+                    auto grandpa = parent->as_node().parent();
+                    grandpa->release(parent_index);
+                    grandpa->set(parent_index, sibling); // should erase parent
+                }
+                else {
+                    _root.reset(sibling);
                 }
             }
             dirty(true);
@@ -283,6 +274,7 @@ namespace lluitk {
             if (_root) { update_weights(_root.get()); }
             
             update_window = [&update_window,that](Node* node, const Window& area) {
+                if (!node) return;
                 node->window(area);
                 if (node->is_division()) {
                     auto division = node->as_division();

@@ -7,19 +7,18 @@ namespace lluitk {
     
     namespace list {
         
-        static std::uint64_t RENDER_LOOP_ITERATON = 0;
+        // sstatic std::uint64_t RENDER_LOOP_ITERATON = 0;
         
-        static std::ofstream& wheelos() {
-            static std::unique_ptr<std::ofstream> ptr;
-            if (!ptr) {
-                ptr.reset(new std::ofstream("/Users/llins/Desktop/wheel.psv"));
-                auto &os = *ptr.get();
-                os << "time|delta|iter" << std::endl;
-            }
-            return *ptr.get();
-        }
+//        static std::ofstream& wheelos() {
+//            static std::unique_ptr<std::ofstream> ptr;
+//            if (!ptr) {
+//                ptr.reset(new std::ofstream("/Users/llins/Desktop/wheel.psv"));
+//                auto &os = *ptr.get();
+//                os << "time|delta|iter" << std::endl;
+//            }
+//            return *ptr.get();
+//        }
         
-
         //----------------
         // SpeedupWheel
         //----------------
