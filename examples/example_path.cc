@@ -26,7 +26,7 @@ public:
     
     lluitk::Window _window;
     
-    float _line_width { 100.0f };
+    float _line_width { 200.0f };
     float _period     { 15.0f };
     
     bool _dragging { false };

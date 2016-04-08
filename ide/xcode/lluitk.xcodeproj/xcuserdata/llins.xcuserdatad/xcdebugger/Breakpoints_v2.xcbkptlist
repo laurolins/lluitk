@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../submodules/llsg/src/llsg/llsg_opengl.cc"
-            timestampString = "481786329.642391"
+            timestampString = "481824187.938193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1619"
-            endingLineNumber = "1619"
+            startingLineNumber = "1578"
+            endingLineNumber = "1578"
             landmarkName = "PathPatternRenderer::run(const Subpath&amp; subpath, const Transform&amp; transform, const PathPattern&amp; pattern, float line_width)"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,59 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../submodules/llsg/src/llsg/llsg_opengl.cc"
-            timestampString = "481786329.642391"
+            timestampString = "481824187.938193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1576"
-            endingLineNumber = "1576"
-            landmarkName = "PathPatternRenderer::run(const Subpath&amp; subpath, const Transform&amp; transform, const PathPattern&amp; pattern, float line_width)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../submodules/llsg/src/llsg/llsg_opengl.cc"
-            timestampString = "481786329.642391"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1628"
-            endingLineNumber = "1628"
-            landmarkName = "PathPatternRenderer::run(const Subpath&amp; subpath, const Transform&amp; transform, const PathPattern&amp; pattern, float line_width)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../submodules/llsg/src/llsg/llsg_opengl.cc"
-            timestampString = "481786356.599008"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1641"
-            endingLineNumber = "1641"
-            landmarkName = "PathPatternRenderer::run(const Subpath&amp; subpath, const Transform&amp; transform, const PathPattern&amp; pattern, float line_width)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../submodules/llsg/src/llsg/llsg_opengl.cc"
-            timestampString = "481786377.084252"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1506"
-            endingLineNumber = "1506"
+            startingLineNumber = "1508"
+            endingLineNumber = "1508"
             landmarkName = "PathPatternRenderer::run(const Subpath&amp; subpath, const Transform&amp; transform, const PathPattern&amp; pattern, float line_width)"
             landmarkType = "5">
          </BreakpointContent>
