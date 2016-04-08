@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "lluitk::grid2::ExtremeSlotIterator::next():grid2.cc">
+      </ContextState>
+      <ContextState
+         contextName = "lluitk::grid2::Grid2::update()::$_0::operator()(lluitk::grid2::Node*) const:grid2.cc">
+      </ContextState>
+      <ContextState
+         contextName = "lluitk::grid2::Grid2::onMouseMove(lluitk::App const&amp;):grid2.cc">
+         <PersistentStrings>
+            <PersistentString
+               value = "(lluitk::grid2::Division*)$12-&gt;_children[0]._node">
+            </PersistentString>
+            <PersistentString
+               value = "(lluitk::grid2::Division*)this-&gt;_root._node">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "lluitk::grid2::Grid2::update():grid2.cc">
+         <PersistentStrings>
+            <PersistentString
+               value = "(lluitk::grid2::Division*)this-&gt;_root._node">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "lluitk::grid2::Grid2::onMousePress(lluitk::App const&amp;):grid2.cc">
+         <PersistentStrings>
+            <PersistentString
+               value = "(lluitk::grid2::Division*)this-&gt;_root._node">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
