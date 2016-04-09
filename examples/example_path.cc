@@ -26,7 +26,7 @@ public:
     
     lluitk::Window _window;
     
-    float _line_width { 200.0f };
+    float _line_width { 30.0f };
     float _period     { 15.0f };
     
     bool _dragging { false };
@@ -52,7 +52,7 @@ public:
             // prepare scene
             _group.removeAll();
 
-            auto n = 2;
+            auto n = 5;
 
             Vec2 margin(30,30);
             Window plot_area(_window.xy() + margin, _window.XY() - margin);
