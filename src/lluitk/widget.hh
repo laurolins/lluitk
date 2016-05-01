@@ -30,11 +30,18 @@ namespace lluitk {
     struct WidgetIterator {
     public:
         WidgetIterator() = default;
-        WidgetIterator(BaseWidgetIterator *it): it(it) {}
-        ~WidgetIterator() { delete it; };
-        Widget* next() { return (it) ? it->next() : nullptr; }
+        
+        WidgetIterator(const WidgetIterator& w) = delete;
+        WidgetIterator& operator=(const WidgetIterator& w) = delete;
+
+        WidgetIterator(WidgetIterator&& other) { std::swap(_iter,other._iter); }
+        WidgetIterator& operator=(WidgetIterator&& other)  { std::swap(_iter,other._iter); return *this; }
+
+        WidgetIterator(BaseWidgetIterator *it): _iter(it) {}
+        ~WidgetIterator() { delete _iter; };
+        Widget* next() { return (_iter) ? _iter->next() : nullptr; }
     public:
-        BaseWidgetIterator *it { nullptr };
+        BaseWidgetIterator *_iter { nullptr };
     };
     
     //------------------------------------------------------------------------------
@@ -50,7 +57,7 @@ namespace lluitk {
         virtual WidgetIterator children() const { return WidgetIterator(); }
         
         // top-down (event processing priority)
-        virtual WidgetIterator reverse_children() const { return WidgetIterator(); }
+        virtual WidgetIterator reverse_children() const { return children(); }
         
         virtual Widget*        parent() const { return nullptr; }
         virtual void           parent(Widget* parent) { };
